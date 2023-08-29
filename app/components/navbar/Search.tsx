@@ -33,7 +33,7 @@ const Search = () => {
       }
       return `${diff} Days`;
     }
-    return 'Any Week'
+    return 'Anytime'
   }, [startDate, endDate])
 
   return (
