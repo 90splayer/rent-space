@@ -18,7 +18,7 @@ import ClientOnly from "../ClientOnly";
 
 interface ListingCardProps {
   data: SafeListing;
-  order: SafeOrder;
+  order?: SafeOrder;
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
