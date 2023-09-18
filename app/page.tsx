@@ -2,12 +2,14 @@ export const dynamic = 'force-dynamic'
 import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 import EmptyState from "@/app/components/EmptyState";
+import homeimage from "@/public/images/spacehome.jpg";
 
 import getListings, { 
   IListingsParams
 } from "@/app/actions/getListings";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import ClientOnly from "./components/ClientOnly";
+import Search from "./components/navbar/Search";
 
 interface HomeProps {
   searchParams: IListingsParams
@@ -27,6 +29,13 @@ const Home = async ({ searchParams }: HomeProps) => {
 
   return (
     <ClientOnly>
+      <div className="h-[50vh] w-full text-white -mt-14 bg-[url('/images/space.png')] " >
+            <div className="flex flex-col items-center justify-center h-full w-full gap-y-4">
+              <h1 className="font-bold text-3xl">Find your space</h1>
+              <p>Want to create and chill, rent a space for as long as you want</p>
+              <Search/>
+            </div>
+        </div>
       <Container>
         <div 
           className="

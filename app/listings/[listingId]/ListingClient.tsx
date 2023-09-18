@@ -4,7 +4,7 @@ import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Range } from "react-date-range";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { differenceInDays, eachDayOfInterval } from 'date-fns';
 
 import useLoginModal from "@/app/hooks/useLoginModal";
@@ -15,6 +15,7 @@ import { categories } from "@/app/components/navbar/Categories";
 import ListingHead from "@/app/components/listings/ListingHead";
 import ListingInfo from "@/app/components/listings/ListingInfo";
 import ListingReservation from "@/app/components/listings/ListingReservation";
+import Stripe from "stripe";
 
 const initialDateRange = {
   startDate: new Date(),
@@ -37,6 +38,28 @@ const ListingClient: React.FC<ListingClientProps> = ({
 }) => {
   const loginModal = useLoginModal();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(listing.price);
+  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+
+  useEffect(() => {
+    if(searchParams?.get("success")){
+      toast.success("Payment completed");
+    }
+
+    if(searchParams?.get("canceled")){
+      toast.error("something went wrong");
+    }
+  }, [searchParams,
+    totalPrice, 
+    dateRange, 
+    listing?.id,
+    router,
+    currentUser,
+    loginModal
+  ])
 
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
@@ -58,42 +81,42 @@ const ListingClient: React.FC<ListingClientProps> = ({
       items.label === listing.category);
   }, [listing.category]);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(listing.price);
-  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+  
 
-  const onCreateReservation = useCallback(() => {
-      if (!currentUser) {
-        return loginModal.onOpen();
-      }
-      setIsLoading(true);
+  const onCreateReservation = async () => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+    setIsLoading(true);
 
-      axios.post('/api/reservations', {
+    
+    const response = await axios.post('/api/checkout', {
         totalPrice,
         startDate: dateRange.startDate,
         endDate: dateRange.endDate,
         listingId: listing?.id
       })
-      .then(() => {
-        toast.success('Listing reserved!');
-        setDateRange(initialDateRange);
-        router.push('/trips');
-      })
-      .catch(() => {
-        toast.error('Something went wrong.');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      })
-  },
-  [
-    totalPrice, 
-    dateRange, 
-    listing?.id,
-    router,
-    currentUser,
-    loginModal
-  ]);
+      
+      // axios.post('/api/reservations', {
+      //   totalPrice,
+      //   startDate: dateRange.startDate,
+      //   endDate: dateRange.endDate,
+      //   listingId: listing?.id
+      // })
+      // .then(() => {
+      //   toast.success('Listing reserved!');
+      //   setDateRange(initialDateRange);
+      // })
+      // .catch(() => {
+      //   toast.error('Something went wrong.');
+      // })
+      // .finally(() => {
+      //   setIsLoading(false);
+      // })
+      
+
+      window.location = response.data.url;
+  };
 
   useEffect(() => {
     if (dateRange.startDate && dateRange.endDate) {

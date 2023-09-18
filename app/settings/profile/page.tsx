@@ -3,33 +3,30 @@ import EmptyState from "@/app/components/EmptyState";
 import ClientOnly from "@/app/components/ClientOnly";
 
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import getListings from "@/app/actions/getListings";
 import getReservations from "@/app/actions/getReservations";
+import ProfileClient from "./ProfileClient";
 
-import TripsClient from "./ReservationsClient";
-import ReservationsClient from "./ReservationsClient";
-
-const ReservationsPage = async () => {
+const ProfilePage = async () => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return (
-      <ClientOnly> 
-        <EmptyState
-          title="Unauthorized"
-          subtitle="Please login"
-        />
-      </ClientOnly>
-    )
+    return <EmptyState
+      title="Unauthorized"
+      subtitle="Please login"
+    />
   }
+  
 
+  const listings = await getListings({ userId: currentUser.id });
   const reservations = await getReservations({ authorId: currentUser.id });
 
-  if (reservations.length === 0) {
+  if (listings.length === 0) {
     return (
       <ClientOnly>
         <EmptyState
-          title="No reservations found"
-          subtitle="Looks like you have no reservations on your properties."
+          title="No properties found"
+          subtitle="Looks like you have no properties."
         />
       </ClientOnly>
     );
@@ -37,12 +34,12 @@ const ReservationsPage = async () => {
 
   return (
     <ClientOnly>
-      <ReservationsClient
-        orders={reservations}
+      <ProfileClient
         currentUser={currentUser}
+        listings={listings}
       />
     </ClientOnly>
   );
 }
  
-export default ReservationsPage;
+export default ProfilePage;

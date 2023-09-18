@@ -19,7 +19,7 @@ const Search = () => {
     if(locationValue){
       return getByValue(locationValue as string)?.label;
     }
-    return 'Anywhere';
+    return 'Location';
   }, [getByValue, locationValue])
 
   const durationLabel = useMemo(() => {
@@ -33,7 +33,7 @@ const Search = () => {
       }
       return `${diff} Days`;
     }
-    return 'Anytime'
+    return 'Time'
   }, [startDate, endDate])
 
   return (
@@ -46,13 +46,13 @@ const Search = () => {
      <div
      className="flex flex-row items-center justify-between"
      >
-        <div className="text-sm font-semibold px-6 border-r-[1px]">
+        <div className="text-sm font-semibold px-6 ">
             {locationLabel}
         </div>
-        {/* <div className="hidden sm:block text-sm font-semibold px-6 border-x-[1px] flex-1 text-center">
-            Anyweek
-        </div> */}
-        <div className="text-sm pl-6 pr-2 text-gray-600 flex flex-row items-center gap-3">
+        <div className="hidden sm:block text-sm font-semibold px-6 border-x-[1px] flex-1 text-center">
+            Feature
+        </div>
+        <div className="text-sm pl-6 pr-2 text-white-400 flex flex-row items-center gap-3">
             <div className="hidden sm:block">
                 {durationLabel}
             </div>

@@ -8,8 +8,8 @@ import { format } from 'date-fns';
 import useCountries from "@/app/hooks/useCountries";
 import { 
   SafeListing, 
-  SafeReservation, 
-  SafeUser 
+  SafeUser,
+  SafeOrder 
 } from "@/app/types";
 
 import HeartButton from "../HeartButton";
@@ -18,22 +18,24 @@ import ClientOnly from "../ClientOnly";
 
 interface ListingCardProps {
   data: SafeListing;
-  reservation?: SafeReservation;
+  order: SafeOrder;
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
   actionId?: string;
+  className?: string;
   currentUser?: SafeUser | null
 };
 
 const ListingCard: React.FC<ListingCardProps> = ({
   data,
-  reservation,
+  order,
   onAction,
   disabled,
   actionLabel,
   actionId = '',
   currentUser,
+  className=''
 }) => {
   const router = useRouter();
   const { getByValue } = useCountries();
@@ -52,28 +54,28 @@ const ListingCard: React.FC<ListingCardProps> = ({
   }, [disabled, onAction, actionId]);
 
   const price = useMemo(() => {
-    if (reservation) {
-      return reservation.totalPrice;
+    if (order) {
+      return order.totalPrice;
     }
 
     return data.price;
-  }, [reservation, data.price]);
+  }, [order, data.price, order?.totalPrice]);
 
   const reservationDate = useMemo(() => {
-    if (!reservation) {
+    if (!order) {
       return null;
     }
   
-    const start = new Date(reservation.startDate);
-    const end = new Date(reservation.endDate);
+    const start = new Date(order.startDate);
+    const end = new Date(order.endDate);
 
     return `${format(start, 'PP')} - ${format(end, 'PP')}`;
-  }, [reservation]);
+  }, [order]);
 
   return (
     <div 
       onClick={() => router.push(`/listings/${data.id}`)} 
-      className="col-span-1 cursor-pointer group"
+      className={`col-span-1 cursor-pointer group ${className}`}
     >
       <div className="flex flex-col gap-2 w-full">
         <div 
@@ -123,7 +125,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <div className="font-semibold">
             $ {price}
           </div>
-          {!reservation && (
+          {!order && (
             <div className="font-light">day</div>
           )}
         </div>

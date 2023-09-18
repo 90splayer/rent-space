@@ -60,6 +60,10 @@ interface UserMenuProps {
                     {currentUser ? (
                         <>
                         <MenuItem 
+                        onClick={() => {router.push("/settings"); toggleOpen();}}
+                        label='Settings'
+                        />
+                        <MenuItem 
                         onClick={() => {router.push("/trips"); toggleOpen();}}
                         label='My Trips'
                         />

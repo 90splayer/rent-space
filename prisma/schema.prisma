@@ -24,6 +24,7 @@ model User{
   accounts Account[]
   listings Listing[]
   reservations Reservation[]
+  orders Order[]
 }
 
 model Account {
@@ -58,9 +59,11 @@ model Listing{
   locationValue String
   userId String @db.ObjectId
   price Int
+  orderItems  OrderItem[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
+  orders Order[]
 }
 
 model Reservation {
@@ -74,4 +77,33 @@ model Reservation {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id        String    @id @default(uuid()) @map("_id")
+  userId String @db.ObjectId
+  listingId  String   @db.ObjectId
+  orderItems OrderItem[] // Relation to OrderItem model
+  isPaid     Boolean   @default(false)
+  startDate  DateTime
+  endDate    DateTime 
+  totalPrice  Int
+  phone      String    @default("")
+  address    String    @default("")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())  @map("_id")
+  orderId   String  // Foreign Key to Order
+  order     Order   @relation(fields: [orderId], references: [id])
+  listingId String  @db.ObjectId// Foreign Key to Product
+  listing   Listing @relation(fields: [listingId], references: [id])
+
+  @@index([orderId])
+  @@index([listingId])
 }

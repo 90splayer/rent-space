@@ -5,19 +5,19 @@ import axios from "axios";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { SafeReservation, SafeUser } from "@/app/types";
+import {  SafeUser, SafeOrder } from "@/app/types";
 
 import Heading from "@/app/components/Heading";
 import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 
 interface TripsClientProps {
-  reservations: SafeReservation[],
+  orders: SafeOrder[],
   currentUser?: SafeUser | null,
 }
 
 const TripsClient: React.FC<TripsClientProps> = ({
-  reservations,
+  orders,
   currentUser
 }) => {
   const router = useRouter();
@@ -58,11 +58,11 @@ const TripsClient: React.FC<TripsClientProps> = ({
           gap-8
         "
       >
-        {reservations.map((reservation: any) => (
+        {orders.map((reservation: any) => (
           <ListingCard
             key={reservation.id}
             data={reservation.listing}
-            reservation={reservation}
+            order={reservation}
             actionId={reservation.id}
             onAction={onCancel}
             disabled={deletingId === reservation.id}

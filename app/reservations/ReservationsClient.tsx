@@ -5,20 +5,19 @@ import axios from "axios";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { SafeReservation, SafeUser } from "@/app/types"
+import { SafeReservation, SafeUser, SafeOrder } from "@/app/types"
 ;
 import Heading from "@/app/components/Heading";
 import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
 
 interface ReservationsClientProps {
-  reservations: SafeReservation[],
   currentUser?: SafeUser | null,
+  orders: SafeOrder[]
 }
 
 const ReservationsClient: React.FC<ReservationsClientProps> = ({
-  reservations,
-  currentUser
+  currentUser, orders
 }) => {
   const router = useRouter();
   const [deletingId, setDeletingId] = useState('');
@@ -32,7 +31,7 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
       router.refresh();
     })
     .catch(() => {
-      toast.error('Something went wrong.')
+      toast.error('Cancel went wrong.')
     })
     .finally(() => {
       setDeletingId('');
@@ -58,14 +57,14 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
           gap-8
         "
       >
-        {reservations.map((reservation: any) => (
+        {orders.map((order: any) => (
           <ListingCard
-            key={reservation.id}
-            data={reservation.listing}
-            reservation={reservation}
-            actionId={reservation.id}
+            key={order.id}
+            data={order.listing}
+            order={order}
+            actionId={order.id}
             onAction={onCancel}
-            disabled={deletingId === reservation.id}
+            disabled={deletingId === order.id}
             actionLabel="Cancel guest reservation"
             currentUser={currentUser}
           />

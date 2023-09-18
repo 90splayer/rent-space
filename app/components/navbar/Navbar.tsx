@@ -23,8 +23,6 @@ const Navbar: React.FC<NavbarProps> = ({
                 <div
                 className='flex flex-row items-center justify-between gap-3 md:gap-0'
                 >
-                    
-                    <Search/>
                     <Logo/>
                     <UserMenu currentUser={currentUser} />
                 </div>
@@ -32,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({
             </Container>
 
         </div>
-        <Categories/>
+        
     </div>
   )
 }
