@@ -29,10 +29,10 @@ const Home = async ({ searchParams }: HomeProps) => {
 
   return (
     <ClientOnly>
-      <div className="h-[50vh] w-full text-white -mt-14 bg-[url('/images/space.png')] " >
-            <div className="flex flex-col items-center justify-center h-full w-full gap-y-4">
+      <div className="h-[50vh] w-full text-white -mt-14 bg-[url('/images/space.png')]">
+            <div className="flex flex-col items-center justify-center h-full w-full gap-y-4 ">
               <h1 className="font-bold text-3xl">Find your space</h1>
-              <p>Want to create and chill, rent a space for as long as you want</p>
+              <p className="text-center">Want to create and chill, rent a space for as long as you want</p>
               <Search/>
             </div>
         </div>

@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { format } from 'date-fns';
+import {AdvancedImage} from '@cloudinary/react';
+import {Cloudinary} from "@cloudinary/url-gen";
 
 import useCountries from "@/app/hooks/useCountries";
 import { 
@@ -82,6 +84,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           className="
             aspect-square 
             w-full 
+            h-[30vh]
             relative 
             overflow-hidden 
             rounded-xl
