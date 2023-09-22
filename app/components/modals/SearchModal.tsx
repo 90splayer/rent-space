@@ -10,7 +10,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import useSearchModal from "@/app/hooks/useSearchModal";
 
 import Modal from "./Modal";
+import { categories } from "../navbar/Categories";
 import Calendar from "../inputs/Calendar";
+import CategoryInput from '../inputs/CategoryInput';
 import Counter from "../inputs/Counter";
 import CountrySelect, { 
   CountrySelectValue
@@ -18,9 +20,9 @@ import CountrySelect, {
 import Heading from '../Heading';
 
 enum STEPS {
-  LOCATION = 0,
-  DATE = 1,
-//   INFO = 2,
+  CATEGORY = 0,
+  LOCATION = 1,
+  DATE = 2,
 }
 
 const SearchModal = () => {
@@ -28,10 +30,10 @@ const SearchModal = () => {
   const searchModal = useSearchModal();
   const params = useSearchParams();
 
-  const [step, setStep] = useState(STEPS.LOCATION);
+  const [step, setStep] = useState(STEPS.CATEGORY);
 
   const [location, setLocation] = useState<CountrySelectValue>();
-//   const [guestCount, setGuestCount] = useState(1);
+  const [category, setCategory] = useState('');
 //   const [roomCount, setRoomCount] = useState(1);
 //   const [bathroomCount, setBathroomCount] = useState(1);
   const [dateRange, setDateRange] = useState<Range>({
@@ -66,6 +68,7 @@ const SearchModal = () => {
     const updatedQuery: any = {
       ...currentQuery,
       locationValue: location?.value,
+      category,
     //   guestCount,
     //   roomCount,
     //   bathroomCount
@@ -84,7 +87,7 @@ const SearchModal = () => {
       query: updatedQuery,
     }, { skipNull: true });
 
-    setStep(STEPS.LOCATION);
+    setStep(STEPS.CATEGORY);
     searchModal.onClose();
     router.push(url);
   }, 
@@ -110,26 +113,40 @@ const SearchModal = () => {
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
-    if (step === STEPS.LOCATION) {
+    if (step === STEPS.CATEGORY) {
       return undefined
     }
 
     return 'Back'
   }, [step]);
 
-  let bodyContent = (
+  let bodyContent =  (
     <div className="flex flex-col gap-8">
       <Heading
-        title="Where do you wanna go?"
-        subtitle="Find the perfect location!"
+        title="Which of these best describes your space?"
+        subtitle="Pick a category"
       />
-      <CountrySelect 
-        value={location} 
-        onChange={(value) => 
-          setLocation(value as CountrySelectValue)} 
-      />
-      <hr />
-      <Map center={location?.latlng} />
+      <div 
+        className="
+          grid 
+          grid-cols-1 
+          md:grid-cols-2 
+          gap-3
+          max-h-[50vh]
+          overflow-y-auto
+        "
+      >
+        {categories.map((item) => (
+            <div key={item.label} className="col-span-1">
+               <CategoryInput
+               onClick={(value) => setCategory(value)}
+               selected={category == item.label}
+               label={item.label}
+               icon={item.icon}
+               />
+            </div>
+        ))}
+      </div>
     </div>
   )
 
@@ -148,38 +165,23 @@ const SearchModal = () => {
     )
   }
 
-//   if (step === STEPS.INFO) {
-//     bodyContent = (
-//       <div className="flex flex-col gap-8">
-//         <Heading
-//           title="More information"
-//           subtitle="Find your perfect place!"
-//         />
-//         <Counter 
-//           onChange={(value) => setGuestCount(value)}
-//           value={guestCount}
-//           title="Guests" 
-//           subtitle="How many guests are coming?"
-//         />
-//         <hr />
-//         <Counter 
-//           onChange={(value) => setRoomCount(value)}
-//           value={roomCount}
-//           title="Rooms" 
-//           subtitle="How many rooms do you need?"
-//         />        
-//         <hr />
-//         <Counter 
-//           onChange={(value) => {
-//             setBathroomCount(value)
-//           }}
-//           value={bathroomCount}
-//           title="Bathrooms"
-//           subtitle="How many bahtrooms do you need?"
-//         />
-//       </div>
-//     )
-//   }
+  if (step === STEPS.LOCATION){
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Where do you wanna go?"
+          subtitle="Find the perfect location!"
+        />
+        <CountrySelect 
+          value={location} 
+          onChange={(value) => 
+            setLocation(value as CountrySelectValue)} 
+        />
+        <hr />
+        <Map center={location?.latlng} />
+      </div>
+    )
+  }
 
 
   return (
@@ -189,7 +191,7 @@ const SearchModal = () => {
       actionLabel={actionLabel}
       onSubmit={onSubmit}
       secondaryActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS.LOCATION ? undefined : onBack}
+      secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
       onClose={searchModal.onClose}
       body={bodyContent}
     />

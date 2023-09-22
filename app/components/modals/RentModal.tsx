@@ -37,6 +37,7 @@ const RentModal = () => {
       handleSubmit,
       setValue,
       watch,
+      
       formState: {
         errors,
       },

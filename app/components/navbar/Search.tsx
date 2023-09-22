@@ -14,6 +14,8 @@ const Search = () => {
   const locationValue = params?.get('locationValue');
   const startDate = params?.get('startDate');
   const endDate = params?.get('endDate');
+  const category = params?.get('category')
+
 
   const locationLabel = useMemo(() => {
     if(locationValue){
@@ -21,6 +23,13 @@ const Search = () => {
     }
     return 'Location';
   }, [getByValue, locationValue])
+
+  const categoryLabel = useMemo(() => {
+    if(category){
+      return (category as string);
+    }
+    return 'Category';
+  }, [category])
 
   const durationLabel = useMemo(() => {
     if (startDate && endDate){
@@ -47,10 +56,10 @@ const Search = () => {
      className="flex flex-row items-center justify-between"
      >
         <div className="text-sm font-semibold px-6 ">
-            {locationLabel}
+            {categoryLabel}
         </div>
         <div className="hidden sm:block text-sm font-semibold px-6 border-x-[1px] flex-1 text-center">
-            Feature
+         {locationLabel}
         </div>
         <div className="text-sm pl-6 pr-2 text-white-400 flex flex-row items-center gap-3">
             <div className="hidden sm:block">
