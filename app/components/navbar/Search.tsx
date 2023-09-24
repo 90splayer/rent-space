@@ -48,26 +48,30 @@ const Search = () => {
   return (
     <div
     onClick={searchModal.onOpen}
-    className='border-[1px]
-     w-full md:w-auto py-2 rounded-full
-     shadow-sm hover:shadow-md transition cursor-pointer'
+    className='
+     w-[80%] md:w-[60%] rounded-md
+     shadow-sm hover:shadow-md transition cursor-pointer bg-white'
     >
      <div
-     className="flex flex-row items-center justify-between"
+     className="flex-row items-center grid grid-cols-7"
      >
-        <div className="text-sm font-semibold px-6 ">
+        <div className="text-sm font-semibold border-blue-300
+        text-gray-700 col-span-2 text-center border-[4px] border-r-0 rounded-l-md py-2">
             {categoryLabel}
         </div>
-        <div className="hidden sm:block text-sm font-semibold px-6 border-x-[1px] flex-1 text-center">
+        <div className="block text-sm font-semibold  border-x-[1px] col-span-2 flex-1 
+        text-center text-gray-700  border-[4px] py-2 border-blue-300">
          {locationLabel}
         </div>
-        <div className="text-sm pl-6 pr-2 text-white-400 flex flex-row items-center gap-3">
-            <div className="hidden sm:block">
+        <div className="text-sm text-white-400 flex-row items-center col-span-3 grid grid-cols-3">
+            <div className="block font-semibold col-span-2 text-center text-gray-700  border-[4px] py-2 border-blue-300 border-x-0">
                 {durationLabel}
             </div>
-            <div className="bg-blue-500 rounded-full text-white p-2">
+            <span className="bg-gray-700 rounded-r-md flex items-center justify-around 
+            text-white col-span-1 text-center border-[4px] py-2 border-blue-300">
+             <p className='hidden lg:block'>Search</p> 
             <BiSearch size={18}/>
-            </div>
+            </span>
         </div>
 
      </div>
