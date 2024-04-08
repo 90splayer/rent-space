@@ -12,19 +12,57 @@ datasource db {
 
 model User{
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String?
-  email String? @unique
-  emailVerified DateTime?
+  fname String
+  lname String
+  email String @unique
+  emailVerified Boolean @default(false)
+  number Int?
+  numberVerified Boolean @default(false)
+  location String
   image String?
+  imageVerified Boolean @default(false)
+  governmentId String?
+  idVerified Boolean @default(false)
   hashedPassword String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   favoriteIds String[] @db.ObjectId
+  deactivate Boolean @default(false)
+  deactivatedAt DateTime ?
+  blocked Boolean @default(false)
 
   accounts Account[]
   listings Listing[]
   reservations Reservation[]
   orders Order[]
+}
+
+model Admin{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  fname String
+  lname String
+  email String @unique
+  emailVerified Boolean @default(false)
+  verified Boolean @default(false)
+  verifiedBy String?
+  hashedPassword String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deactivate Boolean @default(false)
+  deactivatedAt DateTime ?
+  blocked Boolean @default(false)
+
+}
+
+model Super{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  email String @unique
+  emailVerified Boolean @default(false)
+  hashedPassword String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
 }
 
 model Account {
@@ -50,20 +88,36 @@ model Listing{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   description String
-  imageSrc String
+  address  String
+  images  Image[]
   createdAt DateTime @default(now())
   category String
   roomCount Int
   bathroomCount Int
   guestCount Int
-  locationValue String
+  locationValue Int
   userId String @db.ObjectId
   price Int
+  available Boolean @default(true)
   orderItems  OrderItem[]
+  approved Boolean @default(false)
+  approvedBy String?
+  reported Boolean @default(false)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
   orders Order[]
+}
+
+model Image {
+  id          String   @id @default(uuid()) @map("_id")
+  listingId   String   @db.ObjectId
+  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url         String   // URL of the image
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([listingId])
 }
 
 model Reservation {
@@ -104,6 +158,4 @@ model OrderItem {
   listingId String  @db.ObjectId// Foreign Key to Product
   listing   Listing @relation(fields: [listingId], references: [id])
 
-  @@index([orderId])
-  @@index([listingId])
 }
