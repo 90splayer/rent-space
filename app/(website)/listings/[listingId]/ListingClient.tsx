@@ -27,7 +27,7 @@ interface ListingClientProps {
   reservations?: SafeReservation[];
   listing: SafeListing & {
     user: SafeUser;
-  };
+  }; 
   currentUser?: SafeUser | null;
 }
 
@@ -142,13 +142,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
         "
       >
         <div className="flex flex-col gap-6">
-          <ListingHead
+          {/* <ListingHead
             title={listing.title}
             imageSrc={listing.imageSrc}
-            locationValue={listing.locationValue}
             id={listing.id}
             currentUser={currentUser}
-          />
+          /> */}
           <div 
             className="
               grid 
@@ -158,7 +157,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
               mt-6
             "
           >
-            <ListingInfo
+            {/* <ListingInfo
               user={listing.user}
               category={category}
               description={listing.description}
@@ -166,7 +165,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
               guestCount={listing.guestCount}
               bathroomCount={listing.bathroomCount}
               locationValue={listing.locationValue}
-            />
+            /> */}
             <div 
               className="
                 order-first 

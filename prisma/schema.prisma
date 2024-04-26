@@ -23,6 +23,8 @@ model User{
   imageVerified Boolean @default(false)
   governmentId String?
   idVerified Boolean @default(false)
+  interests String[]
+  about  String?
   hashedPassword String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -35,6 +37,8 @@ model User{
   listings Listing[]
   reservations Reservation[]
   orders Order[]
+  reviews Reviews[]
+  feeback Feedback[]
 }
 
 model Admin{
@@ -88,25 +92,26 @@ model Listing{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   description String
-  address  String
+  size  Int
+  location  String
   images  Image[]
   createdAt DateTime @default(now())
   category String
   roomCount Int
   bathroomCount Int
   guestCount Int
-  locationValue Int
-  userId String @db.ObjectId
   price Int
   available Boolean @default(true)
   orderItems  OrderItem[]
   approved Boolean @default(false)
   approvedBy String?
   reported Boolean @default(false)
-
+  
+  userId String @db.ObjectId
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
   orders Order[]
+  reviews Reviews[]
 }
 
 model Image {
@@ -158,4 +163,25 @@ model OrderItem {
   listingId String  @db.ObjectId// Foreign Key to Product
   listing   Listing @relation(fields: [listingId], references: [id])
 
+}
+
+model Reviews{
+  id        String    @id @default(uuid()) @map("_id")
+  userId String @db.ObjectId
+  listingId  String   @db.ObjectId 
+  review String
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model Feedback{
+  id        String    @id @default(uuid()) @map("_id")
+  userId String @db.ObjectId
+  hostId String
+  feedback String
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

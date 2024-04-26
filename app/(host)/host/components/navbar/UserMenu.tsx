@@ -1,8 +1,8 @@
 'use client';
 import { AiOutlineMenu } from 'react-icons/ai';
-import Avatar from '../Avatar';
+import Avatar from './Avatar';
 import { useCallback, useState } from 'react';
-import MenuItem from './MenuItem';
+import UserMenuDropdown from './UserMenuDropdown';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
 import { User } from '.prisma/client';
@@ -32,8 +32,8 @@ interface UserMenuProps {
         if(!currentUser){
         return loginModal.onOpen();
         }
-        router.push('/host/upload');
-    }, [currentUser, loginModal]);
+        rentModal.onOpen();
+    }, [currentUser, loginModal, rentModal]);
 
   return (
     <div className='relative'>
@@ -59,39 +59,43 @@ interface UserMenuProps {
                 <div className='flex flex-col cursor-pointer'>
                     {currentUser ? (
                         <>
-                        <MenuItem 
-                        onClick={() => {router.push("/profile"); toggleOpen();}}
-                        label='Profile'
-                        />
-                        <MenuItem 
-                        onClick={() => {router.push("/trips"); toggleOpen();}}
-                        label='Trips'
-                        />
-                        <MenuItem 
-                        onClick={() => {router.push("/reservations"); toggleOpen();}}
-                        label='Reservations'
-                        />
-                        <MenuItem 
-                        onClick={() => {router.push("/properties"); toggleOpen();}}
-                        label='My Spaces'
-                        />
-                        <MenuItem 
+                        <UserMenuDropdown 
                         onClick={() => {router.push("/settings"); toggleOpen();}}
                         label='Settings'
                         />
+                        <UserMenuDropdown 
+                        onClick={() => {router.push("/trips"); toggleOpen();}}
+                        label='My Trips'
+                        />
+                        <UserMenuDropdown 
+                        onClick={() => {router.push("/favorites"); toggleOpen();}}
+                        label='My Favorites'
+                        />
+                        <UserMenuDropdown 
+                        onClick={() => {router.push("/reservations"); toggleOpen();}}
+                        label='My Reservations'
+                        />
+                        <UserMenuDropdown 
+                        onClick={() => {router.push("/properties"); toggleOpen();}}
+                        label='My Spaces'
+                        />
+                        <UserMenuDropdown 
+                        onClick={() => {rentModal.onOpen(); toggleOpen();}}
+                        label='Add Space'
+                        />
                         <hr/>
-                        <MenuItem 
+                        <UserMenuDropdown 
                         onClick={() => {signOut(); toggleOpen();}}
                         label='Logout'
                         />
                         </>
                     ) : (
                         <>
-                    <MenuItem 
+                    <UserMenuDropdown 
                     onClick={() => {loginModal.onOpen(); toggleOpen();}}
                     label='Login'
                     />
-                    <MenuItem 
+                    <UserMenuDropdown 
                     onClick={() => {registerModal.onOpen(); toggleOpen();}}
                     label='Sign up'
                     />

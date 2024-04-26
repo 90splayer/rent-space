@@ -84,11 +84,22 @@ const SettingsClient: React.FC<SettingsClientProps> = ({
 }) => {
   const router = useRouter();
 
+  function capitalizeFirstLetter(str: any) {
+    // Convert the string to lowercase
+    const lowerCaseStr = str.toLowerCase();
+    
+    // Capitalize the first letter
+    const capitalizedStr = lowerCaseStr.charAt(0).toUpperCase() + lowerCaseStr.slice(1);
+    
+    return capitalizedStr;
+  }
+
+  const fname = capitalizeFirstLetter(currentUser?.fname)
 
   return ( 
     <Container>
       <Heading
-        title={`Hello ${currentUser?.fname}`}
+        title={`Hello ${fname}`}
         subtitle='update space settings'
       />
       <div 

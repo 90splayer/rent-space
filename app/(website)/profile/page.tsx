@@ -21,16 +21,16 @@ const ProfilePage = async () => {
   const listings = await getListings({ userId: currentUser.id });
   const reservations = await getReservations({ authorId: currentUser.id });
 
-  if (listings.length === 0) {
-    return (
-      <ClientOnly>
-        <EmptyState
-          title="No properties found"
-          subtitle="Looks like you have no properties."
-        />
-      </ClientOnly>
-    );
-  }
+  // if (!listings || listings.length === 0) {
+  //   return (
+  //     <ClientOnly>
+  //       <EmptyState
+  //         title="No properties found"
+  //         subtitle="Looks like you have no properties."
+  //       />
+  //     </ClientOnly>
+  //   );
+  // }
 
   return (
     <ClientOnly>
