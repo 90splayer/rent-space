@@ -30,7 +30,6 @@ export async function POST(
     data: {
       title: name,
       images: image,
-      description: name,
       size,
       category,
       roomCount: room,

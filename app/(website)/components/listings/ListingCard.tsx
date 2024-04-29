@@ -17,9 +17,10 @@ import {
 import HeartButton from "../HeartButton";
 import Button from "../Button";
 import ClientOnly from "../ClientOnly";
+import { Image as Images, Listing } from "@prisma/client";
 
 interface ListingCardProps {
-  data: SafeListing;
+  data: Listing;
   order?: SafeOrder;
   onAction?: (id: string) => void;
   disabled?: boolean;
@@ -99,7 +100,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
               group-hover:scale-110 
               transition
             "
-            src={data.imageSrc}
+            src={images.url(0)}
             alt="Listing"
           /> */}
           <div className="

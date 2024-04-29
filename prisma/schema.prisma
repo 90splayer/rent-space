@@ -91,12 +91,13 @@ model Account {
 model Listing{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   title String
-  description String
+  description String?
   size  Int
   location  String
+  street String?
   images  Image[]
   createdAt DateTime @default(now())
-  category String
+  category String[]
   roomCount Int
   bathroomCount Int
   guestCount Int
