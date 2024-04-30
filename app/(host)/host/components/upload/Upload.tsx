@@ -6,12 +6,23 @@ import { categories } from '@/public/data/categories';
 import CategoryBox from '@/app/(website)/components/CategoryBox';
 import { IconType } from "react-icons";
 import Image from 'next/image';
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+  } from "@/components/ui/form"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import ImageUpload from '@/app/(website)/components/inputs/ImageUploads';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { statesng } from '@/public/data/nigeria-states';
+import { Input } from "@/components/ui/input";
 
 
 const formSchema = z.object({
@@ -41,9 +52,8 @@ const uploadPreset = "d9m4ivxo";
 const Upload = () => {
 
     const router = useRouter();
-    const [step, setStep] = useState(STEPS.NAMING);
     const [currentPage, setCurrentPage] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
     const [selectedImages, setSelectedImages] = useState<any[]>([]);
     const [selectedOption, setSelectedOption] = useState("");
@@ -51,40 +61,14 @@ const Upload = () => {
         name: '',
         category: selectedCategories,
         images: selectedImages,
-        location:'',
+        location: selectedOption,
         size: 100,
         room: 1,
         toilet: 1,
         guest: 2,
         price: 7000,
-        country: "",
-        city: selectedOption,
         // Add more fields as needed
       });
-
-      const { 
-        register, 
-        handleSubmit,
-        setValue,
-        watch,
-        
-        formState: {
-          errors,
-        },
-        reset,
-      } = useForm<UploadFormValues>({
-        defaultValues: {
-          name: "",
-          categories: [],
-          location: "",
-          guest: 1,
-          room: 1,
-          toilet: 1,
-          images: [],
-          price: 1,
-          description: '',
-        }
-      })
 
     const handleClick = (categoryLabel: any) => {
         if (selectedCategories.includes(categoryLabel)) {
@@ -97,51 +81,45 @@ const Upload = () => {
             }
         }
     };
-  
-    const handleInputChange = (e: any) => {
-      const { name, value } = e.target;
-      setFormData({
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData({
         ...formData,
         [name]: value,
-      });
-    };
+    });
+};
 
-    const handleSubmitt = async (e: { preventDefault: () => void }) => {
-        e.preventDefault();
-        setIsLoading(true);
-        try {
-            setFormData({
-                ...formData,
-                category: selectedCategories,
-                images: selectedImages,
-                city: selectedOption,
-              });
-          // Call your POST function with form data
-          await axios.post("/api/space", formData);
-          toast.success("Space uploaded successfully!");
-          setSelectedCategories([]);
-          setSelectedImages([]);
-          setSelectedOption("");
-          setFormData({
-            name: "",
-            category: [],
-            images: [],
-            location: "",
-            size: 100,
-            room: 1,
-            toilet: 1,
-            guest: 2,
-            price: 7000,
-            country: "",
-            city: "",
-          });
-        router.push("/");
-        } catch (error: any) {
-          toast.error(`${error.response.data}`);
-        }
-        setIsLoading(false);
-      };
-    
+const handleSubmit = async (e: { preventDefault: () => void }) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    // Call your POST function with form data
+    await axios.post("/api/space", formData);
+    toast.success("Space uploaded successfully!");
+    setSelectedOption("");
+    setFormData({
+      name: '',
+      category: selectedCategories,
+      images: selectedImages,
+      location: selectedOption,
+      size: 100,
+      room: 1,
+      toilet: 1,
+      guest: 2,
+      price: 7000,
+    });
+    setSelectedCategories([]);
+    setSelectedImages([]);
+    setSelectedOption("");
+   router.push("/");
+  } catch (error: any) {
+    toast.error(`${error.response.data}`);
+} finally {
+  setLoading(false);
+}
+};
+
 
     const nextPage = () => {
       setCurrentPage((prevPage) => prevPage + 1);
@@ -157,7 +135,7 @@ const Upload = () => {
             ...formData,
             category: selectedCategories,
             images: selectedImages,
-            city: selectedOption,
+            location: selectedOption,
           });
       };
 
@@ -169,20 +147,28 @@ const Upload = () => {
         setSelectedImages(selectedImages.filter((url) => url !== imageUrl));
       };
       
-      const handleSelectChange = (e: {
-        target: { value: React.SetStateAction<string> };
-      }) => {
-        setSelectedOption(e.target.value);
-      };
+      const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const { value } = e.target;
+        setSelectedOption(value);
+        setFormData({
+            ...formData,
+            location: value,
+        });
+    };
 
-      let body = ( <div className='w-full items-center justify-center flex gap-5 flex-col'>
+    let body
+
+    if (currentPage === 1){
+      body = ( <div className='w-full items-center justify-center flex gap-5 flex-col'>
       <h1 className="text-lg font-medium p-8 pt-6">Page 1: Space Information</h1>
       {/* Form fields for the first page */}
       <input
       className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/3 text-center"
         type="text"
         placeholder="Space Name"
-        {...register("name")} 
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
       />
        <div
       className="
@@ -231,8 +217,9 @@ const Upload = () => {
         Next
       </button>
     </div>)
+    }
 
-if (step === STEPS.VISUAL) {
+if (currentPage === 2) {
     body = (
         <div className='w-full items-center justify-center flex gap-5 flex-col'>
         <h1 className="text-lg font-medium p-8 pt-6">Page 2: Add Images to your space</h1>
@@ -241,7 +228,6 @@ if (step === STEPS.VISUAL) {
                 State
               </label>
               <select
-              onSelect={(value) => {}}
                 required
                 value={selectedOption}
                 onChange={handleSelectChange}
@@ -259,7 +245,7 @@ if (step === STEPS.VISUAL) {
             </div>
         <ImageUpload 
   value={selectedImages} 
-  disabled={isLoading} 
+  disabled={loading} 
   onChange={handleImageChange}
   onRemove={handleImageRemove}
   />
@@ -271,16 +257,16 @@ if (step === STEPS.VISUAL) {
          className={`
         text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
         `} onClick={prevPage}>Previous</button>
-        <button disabled={selectedImages.length < 1} className={`
+        <button disabled={selectedImages.length < 1 || selectedOption.length < 1} className={`
         text-white text-xs leading-[30px] rounded-lg px-4 py-1
-        ${(selectedImages.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
+        ${(selectedImages.length < 1 || selectedOption.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
         `} onClick={nextPage}>Next</button>
         </div>
       </div>
     );
   }
 
-  if (step === STEPS.NUMBERS) {
+  if (currentPage === 3) {
     body = (<div className='w-full items-center justify-center flex gap-5 flex-col'>
     <h1 className="text-lg font-medium p-8 pt-6">Page 3: Numerical Data</h1>
     <div className='flex flex-row items-center justify-center gap-5'>
@@ -293,7 +279,7 @@ if (step === STEPS.VISUAL) {
       type="number"
       name="size"
       value={formData.size}
-      onChange={handleInputChange}
+      onChange={handleChange}
       placeholder="Space size in foot"
     />
     </div>
@@ -306,7 +292,7 @@ if (step === STEPS.VISUAL) {
       type="number"
       name="room"
       value={formData.room}
-      onChange={handleInputChange}
+      onChange={handleChange}
       placeholder="Room count"
     />
     </div>
@@ -321,7 +307,7 @@ if (step === STEPS.VISUAL) {
       type="number"
       name="toilet"
       value={formData.toilet}
-      onChange={handleInputChange}
+      onChange={handleChange}
       placeholder="Toilet count"
     />
     </div>
@@ -334,7 +320,7 @@ if (step === STEPS.VISUAL) {
       type="number"
       name="guest"
       value={formData.guest}
-      onChange={handleInputChange}
+      onChange={handleChange}
       placeholder="Guest count"
     />
     </div>
@@ -348,7 +334,7 @@ if (step === STEPS.VISUAL) {
       type="number"
       name="price"
       value={formData.price}
-      onChange={handleInputChange}
+      onChange={handleChange}
       placeholder="Price per hour"
     />
     </div>
@@ -365,12 +351,13 @@ if (step === STEPS.VISUAL) {
   </div>)
   }
 
-  if (step === STEPS.SUMMARY) {
-    body = ( <div className='w-full items-center justify-center flex gap-5 flex-col'>
+  if (currentPage === 4) {
+    body = ( <div className='w-full items-center justify-center flex gap-5 flex-col mt-12'>
     {/* Display the submitted form data for confirmation */}
     <p>Space Name: {formData.name}</p>
     <p>Space Category: {formData.category}</p>
     <p>Space Location: {formData.location}</p>
+    <p>Space Images: {formData.images}</p>
     <p>Space Size: {formData.size}</p>
     <p>Space Room Count: {formData.room}</p>
     <p>Space Toilet Count: {formData.toilet}</p>
@@ -385,18 +372,196 @@ if (step === STEPS.VISUAL) {
     <button className={`
     text-white text-xs leading-[30px] rounded-lg px-4 py-1
     ${'bg-blue-500'}
-    `} onClick={handleSubmitt}>Submit</button>
+    `} type="submit">Submit</button>
     </div>
   </div>)
   }
 
   
   return (
-    <form className=" w-full pt-16">
-   <div className="p-6 flex">
-      {body}
-    </div>
-  </form>
+   <>
+   <form onSubmit={handleSubmit} className="flex">
+    {body}
+   </form>
+    {/* <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+          <FormField
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Images</FormLabel>
+                  <FormControl>
+                    <ImageUpload 
+                      value={field.value.map((image) => image.url)} 
+                      disabled={loading} 
+                      onChange={(url) => field.onChange([...field.value, { url }])}
+                      onRemove={(url) => field.onChange([...field.value.filter((current) => current.url !== url)])}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          <div className="md:grid md:grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input disabled={loading} placeholder="Space name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input type="number" disabled={loading} placeholder="9.99" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Location</FormLabel>
+                  <Select disabled={loading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger >
+                        <SelectValue defaultValue={field.value} placeholder="Select a category"/>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {statesng.map((state, index) => (
+                        <SelectItem
+                        key={index}
+                        value={state}
+                        >
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sizeId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Size</FormLabel>
+                  <Select disabled={loading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger >
+                        <SelectValue defaultValue={field.value} placeholder="Select a size"/>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {sizes.map((size) => (
+                        <SelectItem
+                        key={size.id}
+                        value={size.id}
+                        >
+                          {size.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="colorId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Color</FormLabel>
+                  <Select disabled={loading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger >
+                        <SelectValue defaultValue={field.value} placeholder="Select a color"/>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {colors.map((color) => (
+                        <SelectItem
+                        key={color.id}
+                        value={color.id}
+                        >
+                          {color.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isFeatured"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox 
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Featured
+                    </FormLabel>
+                    <FormDescription>
+                      This product will appear on the home page
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isArchived"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox 
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Archived
+                    </FormLabel>
+                    <FormDescription>
+                      This product will not appear anywhere in the store
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button disabled={loading} className="ml-auto" type="submit">
+            {action}
+          </Button>
+        </form>
+      </Form> */}
+      </>
   )
 }
 

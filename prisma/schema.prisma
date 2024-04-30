@@ -95,7 +95,7 @@ model Listing{
   size  Int
   location  String
   street String?
-  images  Image[]
+  images  String[]
   createdAt DateTime @default(now())
   category String[]
   roomCount Int
@@ -113,17 +113,6 @@ model Listing{
   reservations Reservation[]
   orders Order[]
   reviews Reviews[]
-}
-
-model Image {
-  id          String   @id @default(uuid()) @map("_id")
-  listingId   String   @db.ObjectId
-  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  url         String   // URL of the image
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([listingId])
 }
 
 model Reservation {

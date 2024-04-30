@@ -16,20 +16,20 @@ export async function POST(
   const body = await request.json();
   const { 
     name,
-    image,
-    location,
-    size,
-    category,
-    room,
-    toilet,
-    guest,
-    price,
+      category,
+      images,
+      location,
+      size,
+      room,
+      toilet,
+      guest,
+      price,
    } = body;
 
   const listing = await prisma.listing.create({
     data: {
       title: name,
-      images: image,
+      images: images,
       size,
       category,
       roomCount: room,

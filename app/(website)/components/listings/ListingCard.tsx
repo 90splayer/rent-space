@@ -17,7 +17,7 @@ import {
 import HeartButton from "../HeartButton";
 import Button from "../Button";
 import ClientOnly from "../ClientOnly";
-import { Image as Images, Listing } from "@prisma/client";
+import { Listing } from "@prisma/client";
 
 interface ListingCardProps {
   data: Listing;
@@ -91,7 +91,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             rounded-xl
           "
         >
-          {/* <Image
+          <Image
             fill
             className="
               object-cover 
@@ -100,9 +100,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
               group-hover:scale-110 
               transition
             "
-            src={images.url(0)}
+            src={data.images[0]}
             alt="Listing"
-          /> */}
+          />
           <div className="
             absolute
             top-3

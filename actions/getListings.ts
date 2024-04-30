@@ -82,9 +82,6 @@ export default async function getListings(
       where: query,
       orderBy: {
         createdAt: 'desc'
-      },
-      include: {
-        images: true
       }
     });
 
