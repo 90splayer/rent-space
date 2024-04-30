@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { BsArrowLeft } from "react-icons/bs";
 
-const page = ({ params }: { params: { token: string } }) => {
+const Page = ({ params }: { params: { token: string } }) => {
   const [formData, setFormData] = useState({ password: "", confirm: "" });
   const [response, setResponse] = useState(null);
   const router = useRouter();
@@ -143,4 +143,4 @@ const page = ({ params }: { params: { token: string } }) => {
   );
 };
 
-export default page;
+export default Page;

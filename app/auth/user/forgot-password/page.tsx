@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { BsArrowLeft } from "react-icons/bs";
 
-const page = () => {
+const Page = () => {
   const [formData, setFormData] = useState({ mail: "" });
   const [sentMail, setSentMail] = useState(false);
   const [response, setResponse] = useState(null);
@@ -131,4 +131,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
