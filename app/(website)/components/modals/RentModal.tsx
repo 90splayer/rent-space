@@ -204,10 +204,10 @@ const RentModal = () => {
               title="Add a photo of your space"
               subtitle="Show guests what your space looks like!"
             />
-            <ImageUpload
+            {/* <ImageUpload
               onChange={(value) => setCustomValue('imageSrc', value)}
               value={imageSrc}
-            />
+            /> */}
           </div>
         )
       }
