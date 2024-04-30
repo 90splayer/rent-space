@@ -31,20 +31,21 @@ export async function POST(
     }
   });
 
-  const listing = await prisma.listing.create({
-    data: {
-      title,
-      description,
-      imageSrc,
-      category,
-      roomCount,
-      bathroomCount,
-      guestCount,
-      locationValue: location.value,
-      price: parseInt(price, 10),
-      userId: currentUser.id
-    }
-  });
+  // const listing = await prisma.listing.create({
+  //   data: {
+  //     title,
+  //     description,
+  //     images: imageSrc,
+  //     category,
+  //     roomCount,
+  //     bathroomCount,
+  //     guestCount,
+  //     size:
+  //     location: location.value,
+  //     price: parseInt(price, 10),
+  //     userId: currentUser.id
+  //   }
+  // });
 
-  return NextResponse.json(listing);
+  // return NextResponse.json(listing);
 }
