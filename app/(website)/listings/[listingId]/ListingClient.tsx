@@ -142,12 +142,13 @@ const ListingClient: React.FC<ListingClientProps> = ({
         "
       >
         <div className="flex flex-col gap-6">
-          {/* <ListingHead
+          <ListingHead
+          locationValue={listing.location}
             title={listing.title}
-            imageSrc={listing.imageSrc}
+            imageSrc={listing.images[0]}
             id={listing.id}
             currentUser={currentUser}
-          /> */}
+          />
           <div 
             className="
               grid 
@@ -157,15 +158,15 @@ const ListingClient: React.FC<ListingClientProps> = ({
               mt-6
             "
           >
-            {/* <ListingInfo
+            <ListingInfo
               user={listing.user}
-              category={category}
-              description={listing.description}
+              category={listing.category}
+              description={listing.description? listing.description : ""}
               roomCount={listing.roomCount}
               guestCount={listing.guestCount}
               bathroomCount={listing.bathroomCount}
-              locationValue={listing.locationValue}
-            /> */}
+              locationValue={listing.title}
+            />
             <div 
               className="
                 order-first 
