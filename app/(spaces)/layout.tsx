@@ -5,7 +5,7 @@ import ToasterProvider from '../providers/ToasterProvider'
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/AuthOptions";
 import Provider from "../providers/AuthProvider";
-import Navbar from "./host/components/navbar/Navbar";
+import Navbar from "./spaces/components/navbar/Navbar";
 import getCurrentUser from "@/actions/getCurrentUser";
 
 const inter = Inter({ subsets: ["latin"] });

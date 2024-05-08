@@ -9,6 +9,7 @@ import ListingCard from "@/app/(website)/components/listings/ListingCard";
 import Link from "next/link";
 import Image from "next/image";
 import placeholder from "@/public/images/placeholder.jpg"
+import { User } from "@prisma/client";
 
 
 

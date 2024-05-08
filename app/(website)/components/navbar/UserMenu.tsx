@@ -32,7 +32,7 @@ interface UserMenuProps {
         if(!currentUser){
         return loginModal.onOpen();
         }
-        router.push('/host/upload');
+        router.push('/spaces/upload');
     }, [currentUser, loginModal]);
 
   return (
@@ -60,24 +60,16 @@ interface UserMenuProps {
                     {currentUser ? (
                         <>
                         <MenuItem 
-                        onClick={() => {router.push("/profile"); toggleOpen();}}
-                        label='Profile'
-                        />
-                        <MenuItem 
-                        onClick={() => {router.push("/trips"); toggleOpen();}}
-                        label='Trips'
-                        />
-                        <MenuItem 
-                        onClick={() => {router.push("/reservations"); toggleOpen();}}
-                        label='Reservations'
-                        />
-                        <MenuItem 
-                        onClick={() => {router.push("/properties"); toggleOpen();}}
+                        onClick={() => {router.push("/spaces"); toggleOpen();}}
                         label='My Spaces'
                         />
                         <MenuItem 
+                        onClick={() => {router.push("/reservations"); toggleOpen();}}
+                        label='Trips'
+                        />
+                        <MenuItem 
                         onClick={() => {router.push("/settings"); toggleOpen();}}
-                        label='Settings'
+                        label='Account'
                         />
                         <hr/>
                         <MenuItem 

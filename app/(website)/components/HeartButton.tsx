@@ -6,6 +6,7 @@ import useFavorite from "@/app/hooks/useFavorite";
 import { SafeUser } from "@/app/types";
 
 import ClientOnly from "./ClientOnly";
+import { User } from "@prisma/client";
 
 interface HeartButtonProps {
   listingId: string

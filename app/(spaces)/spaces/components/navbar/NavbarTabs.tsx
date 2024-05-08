@@ -9,28 +9,23 @@ const NavbarTabs = () => {
     const tabs = [
         {
             id: 1,
-            name: "Today",
-            link: "/host"
+            name: "Spaces",
+            link: "/spaces"
         },
         {
             id: 2,
-            name: "Calendar",
-            link: "/host/calendar"
+            name: "Messages",
+            link: "/spaces/messages"
         },
         {
-            id: 1,
-            name: "Listings",
-            link: "/host/listings"
+            id: 3,
+            name: "Reservations",
+            link: "/spaces/reservations"
         },
         {
-            id: 1,
-            name: "Inbox",
-            link: "/host/inbox"
-        },
-        {
-            id: 1,
-            name: "Menu",
-            link: "/host/menu"
+            id: 4,
+            name: "Insights",
+            link: "/spaces/insights"
         },
     ]
   return (

@@ -17,7 +17,7 @@ import {
 import HeartButton from "../HeartButton";
 import Button from "../Button";
 import ClientOnly from "../ClientOnly";
-import { Listing } from "@prisma/client";
+import { Listing, User } from "@prisma/client";
 
 interface ListingCardProps {
   data: Listing;
@@ -80,12 +80,12 @@ const ListingCard: React.FC<ListingCardProps> = ({
       onClick={() => router.push(`/listings/${data.id}`)} 
       className={`col-span-1 cursor-pointer group ${className}`}
     >
-      <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-col gap-2 w-full items-center justify-center">
         <div 
           className="
             aspect-square 
-            w-full 
-            h-[30vh]
+            w-[325px] 
+            h-[155px]
             relative 
             overflow-hidden 
             rounded-xl
@@ -114,8 +114,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
             />
           </div>
         </div>
-        <div className="font-semibold text-lg">
-          {data.title}
+        <div className="w-[325px] flex flex-row items-center justify-between">
+          <div className="text-base">{data.location}</div>
+          <div className="text-sm flex text-right">N{price}/hr</div>
         </div>
         <div className="flex flex-row justify-between">
         {/* <div className="font-light text-neutral-500">
@@ -124,14 +125,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
         <div className="font-light text-neutral-500">
         {reservationDate}
         </div>
-        </div>
-        <div className="flex flex-row items-center gap-1">
-          <div className="font-semibold">
-            $ {price}
-          </div>
-          {!order && (
-            <div className="font-light">day</div>
-          )}
         </div>
         {onAction && actionLabel && (
           <Button

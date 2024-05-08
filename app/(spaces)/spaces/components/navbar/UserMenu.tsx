@@ -42,7 +42,7 @@ interface UserMenuProps {
             onClick={onRent}
             className='hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-blue-100 transition cursor-pointer'
             >
-                Add Space
+               +
             </div>
             <div
             onClick={toggleOpen}
@@ -61,27 +61,23 @@ interface UserMenuProps {
                         <>
                         <UserMenuDropdown 
                         onClick={() => {router.push("/settings"); toggleOpen();}}
-                        label='Settings'
+                        label='Account'
                         />
                         <UserMenuDropdown 
-                        onClick={() => {router.push("/trips"); toggleOpen();}}
-                        label='My Trips'
+                        onClick={() => {router.push("/spaces/insights/earnings"); toggleOpen();}}
+                        label='Earnings'
                         />
                         <UserMenuDropdown 
-                        onClick={() => {router.push("/favorites"); toggleOpen();}}
-                        label='My Favorites'
+                        onClick={() => {router.push("/spaces/upload"); toggleOpen();}}
+                        label='New Space'
                         />
                         <UserMenuDropdown 
-                        onClick={() => {router.push("/reservations"); toggleOpen();}}
-                        label='My Reservations'
+                        onClick={() => {router.push("/spaces/guide"); toggleOpen();}}
+                        label='Space Guide'
                         />
                         <UserMenuDropdown 
-                        onClick={() => {router.push("/properties"); toggleOpen();}}
-                        label='My Spaces'
-                        />
-                        <UserMenuDropdown 
-                        onClick={() => {rentModal.onOpen(); toggleOpen();}}
-                        label='Add Space'
+                        onClick={() => {router.push("/spaces/resources"); toggleOpen();}}
+                        label='Resources'
                         />
                         <hr/>
                         <UserMenuDropdown 

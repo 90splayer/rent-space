@@ -109,15 +109,14 @@ const Categories = () => {
   }
 
   return (
-    <Container>
       <div
         className="
-          pt-4
           flex 
           flex-row 
           items-center 
           justify-between
           overflow-x-auto
+          w-full py-4
         "
       >
         {categories.map((item) => (
@@ -129,7 +128,6 @@ const Categories = () => {
           />
         ))}
       </div>
-    </Container>
   );
 }
  
