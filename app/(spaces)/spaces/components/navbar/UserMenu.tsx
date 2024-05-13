@@ -10,6 +10,7 @@ import { signOut } from 'next-auth/react';
 import { SafeUser } from '@/app/types';
 import useRentModal from '@/app/hooks/useRentModal';
 import { useRouter } from 'next/navigation';
+import { CiCirclePlus } from 'react-icons/ci';
 
 interface UserMenuProps {
     currentUser?: SafeUser | null;
@@ -42,7 +43,7 @@ interface UserMenuProps {
             onClick={onRent}
             className='hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-blue-100 transition cursor-pointer'
             >
-               +
+            <CiCirclePlus size={24}/>
             </div>
             <div
             onClick={toggleOpen}

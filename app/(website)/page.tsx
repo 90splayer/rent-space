@@ -9,7 +9,6 @@ import getListings, {
 } from "@/actions/getListings";
 import getCurrentUser from "@/actions/getCurrentUser";
 import ClientOnly from "./components/ClientOnly";
-import Search from "./components/navbar/Search";
 import Categories from "./components/navbar/Categories";
 
 interface HomeProps {
