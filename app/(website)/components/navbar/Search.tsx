@@ -1,82 +1,80 @@
 'use client';
-import useSearchModal from '@/app/hooks/useSearchModal';
-import {BiSearch} from 'react-icons/bi'
-import { useSearchParams } from 'next/navigation';
-import useCountries from '@/app/hooks/useCountries';
-import { useMemo } from 'react';
-import { differenceInDays } from 'date-fns';
 
-const Search = () => {
-  const searchModal = useSearchModal();
-  const params = useSearchParams();
-  const { getByValue } = useCountries();
+import { Listing } from '@prisma/client';
+import { useState, useRef } from 'react';
+import { BiSearch } from 'react-icons/bi';
+import { MdLocationPin } from 'react-icons/md';
 
-  const locationValue = params?.get('locationValue');
-  const startDate = params?.get('startDate');
-  const endDate = params?.get('endDate');
-  const category = params?.get('category')
-
-
-  const locationLabel = useMemo(() => {
-    if(locationValue){
-      return getByValue(locationValue as string)?.label;
-    }
-    return 'Location';
-  }, [getByValue, locationValue])
-
-  const categoryLabel = useMemo(() => {
-    if(category){
-      return (category as string);
-    }
-    return 'Category';
-  }, [category])
-
-  const durationLabel = useMemo(() => {
-    if (startDate && endDate){
-      const start = new Date(startDate as string);
-      const end = new Date(endDate as string);
-      let diff = differenceInDays(end, start);
-
-      if (diff==0){
-        diff = 1
-      }
-      return `${diff} Days`;
-    }
-    return 'Time'
-  }, [startDate, endDate])
-
-  return (
-    <div
-    onClick={searchModal.onOpen}
-    className='
-     w-[80%] md:w-[60%] rounded-md
-     shadow-sm hover:shadow-md transition cursor-pointer bg-white'
-    >
-     <div
-     className="flex-row items-center grid grid-cols-7"
-     >
-        <div className="text-sm font-semibold border-blue-300
-        text-gray-700 col-span-2 text-center border-[4px] border-r-0 rounded-l-md py-2">
-            {categoryLabel}
-        </div>
-        <div className="block text-sm font-semibold  border-x-[1px] col-span-2 flex-1 
-        text-center text-gray-700  border-[4px] py-2 border-blue-300">
-         {locationLabel}
-        </div>
-        <div className="text-sm text-white-400 flex-row items-center col-span-3 grid grid-cols-3">
-            <div className="block font-semibold col-span-2 text-center text-gray-700  border-[4px] py-2 border-blue-300 border-x-0">
-                {durationLabel}
-            </div>
-            <span className="bg-gray-700 rounded-r-md flex items-center justify-around 
-            text-white col-span-1 text-center border-[4px] py-2 border-blue-300">
-             <p className='hidden lg:block'>Search</p> 
-            <BiSearch size={18}/>
-            </span>
-        </div>
-
-     </div>
-    </div>
-  )
+interface IParams{
+  listings : Listing[]
 }
 
-export default Search
+const Search: React.FC<IParams> = ({ listings })  => {
+  const [input, setInput] = useState("");
+  const [select, setSelect] = useState(false);
+  const [searchResults, setSearchResults] = useState<typeof listings>([]);
+  const [search, setSearch] = useState(false);
+  const [location, setLocation] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSearchClick = () => {
+    setSearch(true);
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchTerm = e.target.value.toLowerCase();
+    setInput(e.target.value);
+    // Filter newsItem based on search term
+    const filteredListings = listings.filter((listing) =>
+      listing.title.toLowerCase().includes(searchTerm) ||
+      listing.category[0].toLowerCase().includes(searchTerm) ||
+      listing.description?.toLowerCase().includes(searchTerm)
+    );
+    setSearchResults(filteredListings);
+    setSelect(true);
+  };
+
+  const handleBlur = () => {
+    setSearch(false);
+  };
+
+  const renderListings = searchResults.length > 0 ? searchResults : listings;
+
+  return (
+    <div className="rounded-2xl border border-gray-300 flex flex-row items-center justify-center shadow-sm hover:shadow-md transition cursor-pointer bg-white divide-solid divide-x text-sm">
+      <span
+        className="flex items-center justify-between gap-2 text-center p-2"
+        onClick={handleSearchClick}
+      >
+        <BiSearch size={18} />
+        {search && (
+          <input
+            ref={inputRef}
+            onChange={handleChange}
+            value={input}
+            id="search"
+            name="search"
+            required
+            type="text"
+            placeholder=""
+            className="appearance-none text-small bg-transparent font-semibold w-12 outline-none placeholder:text-gray-400"
+            onBlur={handleBlur}
+          />
+        )}
+      </span>
+      <span
+        className="flex items-center justify-between gap-2 text-center p-2"
+        onClick={() => setLocation(!location)}
+      >
+        <MdLocationPin size={18} />
+      </span>
+    </div>
+  );
+};
+
+export default Search;

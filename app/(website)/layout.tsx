@@ -12,6 +12,8 @@ import RentModal from './components/modals/RentModal'
 import SearchModal from './components/modals/SearchModal'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/utils/AuthOptions'
+import getListings from '@/actions/getListings'
+import prisma from "@/lib/prismadb";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,6 +33,11 @@ export default async function RootLayout({
 }) {
   const currentUser = await getCurrentUser();
   const session = await getServerSession(authOptions);
+  const listings = await prisma.listing.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
 
   return (
     <html lang="en">
@@ -41,7 +48,7 @@ export default async function RootLayout({
         <RentModal/>
         <LoginModal/>
         <RegisterModal/>
-        <Navbar currentUser={currentUser}/>
+        <Navbar currentUser={currentUser} listings={listings}/>
         <div className=' pt-20'>
         {children}
         </div>

@@ -1,4 +1,5 @@
 'use client';
+import { Listing } from '@prisma/client';
 import Container from '../Container'
 import Categories from './Categories';
 import Logo from './Logo'
@@ -8,10 +9,11 @@ import { SafeUser } from '@/app/types';
 
 interface NavbarProps{
   currentUser?: SafeUser | null;
+  listings : Listing[];
 }
 
 const Navbar: React.FC<NavbarProps> = ({
-  currentUser
+  currentUser, listings
 }) => {
 
   return (
@@ -24,6 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 className='flex flex-row items-center justify-between gap-3 md:gap-0'
                 >
                     <Logo/>
+                    <Search listings={listings}/>
                     <UserMenu currentUser={currentUser} />
                 </div>
 
