@@ -1,7 +1,8 @@
+
 import { SafeListing, SafeUser } from '@/app/types';
-import { User } from '@prisma/client';
 import Link from 'next/link';
 import React from 'react'
+import SpaceCard from '../listings/SpaceCard';
 
 interface HomeProps {
     currentUser?: SafeUser | null;
@@ -40,7 +41,24 @@ interface HomeProps {
             >
                 Add Space
             </Link>
-            </div> : <div></div>}
+            </div> : <div 
+          className="
+            pb-24
+            grid 
+            grid-cols-1 
+            sm:grid-cols-2 
+            lg:grid-cols-3 
+            gap-8
+            items-center justify-center
+          "
+        >
+          {listings?.map((listing: any) => (
+            <SpaceCard
+              key={listing.id}
+              data={listing}
+            />
+          ))}
+        </div>}
         </div>
     </div>
   )

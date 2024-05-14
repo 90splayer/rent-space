@@ -46,7 +46,7 @@ export default async function RootLayout({
         <Provider session={session}>
           <ToasterProvider />
           <Navbar currentUser={currentUser}/>
-            <div className="min-h-screen p-4 md:p-6 2xl:p-10 bg-dashboard">
+            <div className="min-h-screen p-4 md:p-6 2xl:p-10 mt-20">
               {children}
             </div>
         </Provider>

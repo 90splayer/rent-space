@@ -33,8 +33,8 @@ interface UserMenuProps {
         if(!currentUser){
         return loginModal.onOpen();
         }
-        rentModal.onOpen();
-    }, [currentUser, loginModal, rentModal]);
+        router.push('/spaces/upload');
+    }, [currentUser, loginModal]);
 
   return (
     <div className='relative'>

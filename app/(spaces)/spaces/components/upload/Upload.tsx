@@ -112,7 +112,7 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
     setSelectedCategories([]);
     setSelectedImages([]);
     setSelectedOption("");
-   router.push("/");
+   router.push("/spaces");
   } catch (error: any) {
     toast.error(`${error.response.data}`);
 } finally {

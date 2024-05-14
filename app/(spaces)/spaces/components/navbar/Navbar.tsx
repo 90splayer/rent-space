@@ -15,18 +15,14 @@ const Navbar: React.FC<NavbarProps> = ({
 }) => {
 
   return (
-    <div className='fixed w-full bg-white z-10 shadow-sm'>
-        <div
-        className='p-4 border-b-[1px]'
-        >
+    <div className='fixed top-0 w-full bg-white z-10 shadow-sm'>
                 <div
-                className='flex flex-row items-center justify-between gap-3 md:gap-0'
+                className='p-4 border-b-[1px] flex flex-row items-center justify-between gap-3 md:gap-0'
                 >
                     <Logo/>
                     <NavbarTabs/>
                     <UserMenu currentUser={currentUser} />
-                </div>
-        </div>   
+                </div> 
     </div>
   )
 }

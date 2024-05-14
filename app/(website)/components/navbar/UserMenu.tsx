@@ -2,7 +2,7 @@
 import { AiOutlineMenu } from 'react-icons/ai';
 import Avatar from '../Avatar';
 import { useCallback, useState } from 'react';
-import { CiCirclePlus } from "react-icons/ci";
+import { MdWorkspacesOutline } from "react-icons/md";
 import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
@@ -33,7 +33,7 @@ interface UserMenuProps {
         if(!currentUser){
         return loginModal.onOpen();
         }
-        router.push('/spaces/upload');
+        router.push('/spaces');
     }, [currentUser, loginModal]);
 
   return (
@@ -43,7 +43,7 @@ interface UserMenuProps {
             onClick={onRent}
             className='hidden md:block text-sm font-semibold p-2 rounded-full hover:bg-blue-100 transition cursor-pointer'
             >
-            <CiCirclePlus size={24}/>
+            <MdWorkspacesOutline size={24}/>
             </div>
             <div
             onClick={toggleOpen}

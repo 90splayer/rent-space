@@ -3,6 +3,7 @@ import Home from './components/home/Home'
 import getCurrentUser from '@/actions/getCurrentUser';
 import getListings from '@/actions/getListings';
 import EmptyState from '@/app/(website)/components/EmptyState';
+import getHostListings from '@/actions/getHostListings';
 
 const page = async() => {
 
@@ -17,7 +18,7 @@ const page = async() => {
   }
   
 
-  const listings = await getListings({ userId: currentUser.id });
+  const listings = await getHostListings();
 
   return (
     <div>
