@@ -121,7 +121,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
     const interval = 1 // in hours
 
     if(startDate <= new Date()){
-      const result = endOfHour(startDate)
+      const result = endOfHour(new Date())
       const start = add(result, {hours: 3})
       const beginning = addMilliseconds(start, 1)
 
