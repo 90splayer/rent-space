@@ -28,8 +28,9 @@ const SpaceReservation: React.FC<
   disabledDates
 }) => {
   return ( 
+    
     <div 
-      className="
+      className=" w-full
       bg-white 
         rounded-xl 
         border-[1px]
@@ -51,7 +52,7 @@ const SpaceReservation: React.FC<
         value={dateRange}
         disabledDates={disabledDates}
         onChange={(value) => 
-          onChangeDate(value.selection)}
+        onChangeDate(value.selection)}
       />
       <hr />
       <div className="p-4">

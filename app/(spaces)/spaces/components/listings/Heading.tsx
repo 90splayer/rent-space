@@ -9,7 +9,7 @@ const Heading: React.FC<HeadingProps> = ({
     title, location
 }) => {
   return (
-    <div className="flex flex-row items-center justify-between">
+    <div className="w-full flex flex-row items-center justify-between">
         <div className="flex flex-col items-start justify-start gap-1">
         <h1 className="text-xl font-bold">
             {title}

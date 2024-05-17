@@ -27,7 +27,7 @@ interface HomeProps {
       const fname = capitalizeFirstLetter(currentUser?.fname)
 
   return (
-    <div className='flex flex-col w-full items-start justify-start mt-32 px-16'>
+    <div className='flex flex-col w-full items-start justify-start mt-4 px-16'>
         <div className='flex flex-col items-start justify-start gap-7'>
             <div className='flex flex-col items-start justify-start gap-2'>
             <h1 className='text-3xl font-semibold'>Welcome, {fname}!</h1>
