@@ -42,7 +42,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   }
 
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-5">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-5">
     <div className="mb-4 flex items-center gap-4">
       {value.map((url) => (
         <div key={url} className="relative w-[200px] h-[200px] rounded-md overflow-hidden">

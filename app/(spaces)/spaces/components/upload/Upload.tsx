@@ -3,20 +3,6 @@
 import * as z from "zod"
 import { useState, useCallback } from 'react';
 import { categories } from '@/public/data/categories';
-import CategoryBox from '@/app/(website)/components/CategoryBox';
-import { IconType } from "react-icons";
-import Image from 'next/image';
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-  } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import ImageUpload from '@/app/(website)/components/inputs/ImageUploads';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -52,7 +38,7 @@ const uploadPreset = "d9m4ivxo";
 const Upload = () => {
 
     const router = useRouter();
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(2);
     const [loading, setLoading] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
     const [selectedImages, setSelectedImages] = useState<any[]>([]);
@@ -159,21 +145,22 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
     let body
 
     if (currentPage === 1){
-      body = ( <div className='w-full items-center justify-center flex gap-5 flex-col'>
-      <h1 className="text-lg font-medium p-8 pt-6">Page 1: Space Information</h1>
-      {/* Form fields for the first page */}
-      <input
-      className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/3 text-center"
-        type="text"
-        placeholder="Space Name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-      />
-       <div
-      className="
+      body = (<div className="w-full flex flex-col gap-3 items-center justify-start">
+         <div className='w-full grid grid-cols-10'>
+     <div className=" col-span-6 w-full flex flex-col gap-3 items-start justify-start">
+     <h1 className="text-gray-500 font-light text-base">Add images of your space. Images are viewed in landscape</h1>
+     <ImageUpload value={selectedImages} 
+     disabled={loading} 
+     onChange={handleImageChange}
+     onRemove={handleImageRemove}
+     />
+     </div>
+      <div className="col-span-4 flex flex-col gap-3 w-full items-center">
+        <h1 className="text-gray-500 font-light text-base">Select up to 3 specs that match your space</h1>
+      <div
+      className=" 
         pt-4
-        w-1/3
+        w-full
         flex 
         flex-row
         flex-wrap 
@@ -207,23 +194,37 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
        </div>
       ))}
     </div>
-      
-      {/* Navigation buttons */}
-      <button disabled={!formData.name || selectedCategories.length < 1}
+      </div>
+    </div>
+     {/* Navigation buttons */}
+     <button disabled={selectedImages.length < 1 || selectedCategories.length < 1}
       className={`
       text-white text-xs leading-[30px] rounded-lg px-4 py-1
-      ${(!formData.name || selectedCategories.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
+      ${(selectedCategories.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
       `} onClick={nextPage}>
         Next
       </button>
     </div>)
     }
 
+    
 if (currentPage === 2) {
     body = (
-        <div className='w-full items-center justify-center flex gap-5 flex-col'>
-        <h1 className="text-lg font-medium p-8 pt-6">Page 2: Add Images to your space</h1>
-        <div className="flex flex-col gap-1">
+        <div className='w-full grid lg:grid-cols-9 grid-cols-1 gap-5 items-start'>
+          <div className="flex flex-col col-span-3 w-full">
+          <label className="text-[12px] text-blue-300 font-medium">
+                Space Name
+              </label>
+          <input
+              className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+              type="text"
+              placeholder="Space Name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex flex-col col-span-3 w-full gap-1">
               <label className="text-[12px] text-blue-300 font-medium">
                 State
               </label>
@@ -242,13 +243,63 @@ if (currentPage === 2) {
                   </option>
                 ))}
               </select>
+             
+           
+    
             </div>
-        <ImageUpload 
-  value={selectedImages} 
-  disabled={loading} 
-  onChange={handleImageChange}
-  onRemove={handleImageRemove}
-  />
+    <div className="flex flex-col gap-1 items-center justify-center col-span-3">
+          <label className="text-[12px] text-blue-300 font-medium">
+            Size
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+      type="number"
+      name="size"
+      value={formData.size}
+      onChange={handleChange}
+      placeholder="Space size in foot"
+    />
+    </div>
+    <div className="flex flex-col gap-1 items-center justify-center col-span-3">
+          <label className="text-[12px] text-blue-300 font-medium">
+            Toilet
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+      type="number"
+      name="toilet"
+      value={formData.toilet}
+      onChange={handleChange}
+      placeholder="Toilet count"
+    />
+    </div>
+    <div className="flex flex-col gap-1 items-center justify-center col-span-3">
+          <label className="text-[12px] text-blue-300 font-medium">
+            Guest
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+      type="number"
+      name="guest"
+      value={formData.guest}
+      onChange={handleChange}
+      placeholder="Guest count"
+    />
+    </div>
+    <div className="flex flex-col gap-1 items-center justify-center col-span-3">
+          <label className="text-[12px] text-blue-300 font-medium">
+            Price per hour
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+      type="number"
+      name="price"
+      value={formData.price}
+      onChange={handleChange}
+      placeholder="Price per hour"
+    />
+    </div>
+     
         {/* Form fields for the second page */}
         {/* Add your additional fields here */}
         {/* Navigation buttons */}
@@ -259,7 +310,7 @@ if (currentPage === 2) {
         `} onClick={prevPage}>Previous</button>
         <button disabled={selectedImages.length < 1 || selectedOption.length < 1} className={`
         text-white text-xs leading-[30px] rounded-lg px-4 py-1
-        ${(selectedImages.length < 1 || selectedOption.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
+        ${(!formData.name || selectedOption.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
         `} onClick={nextPage}>Next</button>
         </div>
       </div>
@@ -270,19 +321,7 @@ if (currentPage === 2) {
     body = (<div className='w-full items-center justify-center flex gap-5 flex-col'>
     <h1 className="text-lg font-medium p-8 pt-6">Page 3: Numerical Data</h1>
     <div className='flex flex-row items-center justify-center gap-5'>
-    <div className="flex flex-col gap-1 items-center justify-center">
-          <label className="text-[12px] text-blue-300 font-medium">
-            Size
-          </label>
-    <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/2 text-center"
-      type="number"
-      name="size"
-      value={formData.size}
-      onChange={handleChange}
-      placeholder="Space size in foot"
-    />
-    </div>
+   
     <div className="flex flex-col gap-1 items-center justify-center">
           <label className="text-[12px] text-blue-300 font-medium">
             Rooms
@@ -298,46 +337,9 @@ if (currentPage === 2) {
     </div>
     </div>
     <div className='flex flex-row items-center justify-center gap-5'>
-    <div className="flex flex-col gap-1 items-center justify-center">
-          <label className="text-[12px] text-blue-300 font-medium">
-            Toilet
-          </label>
-    <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/2 text-center"
-      type="number"
-      name="toilet"
-      value={formData.toilet}
-      onChange={handleChange}
-      placeholder="Toilet count"
-    />
+    
     </div>
-    <div className="flex flex-col gap-1 items-center justify-center">
-          <label className="text-[12px] text-blue-300 font-medium">
-            Guest
-          </label>
-    <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/2 text-center"
-      type="number"
-      name="guest"
-      value={formData.guest}
-      onChange={handleChange}
-      placeholder="Guest count"
-    />
-    </div>
-    </div>
-    <div className="flex flex-col gap-1 items-center justify-center">
-          <label className="text-[12px] text-blue-300 font-medium">
-            Price per hour
-          </label>
-    <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/2 text-center"
-      type="number"
-      name="price"
-      value={formData.price}
-      onChange={handleChange}
-      placeholder="Price per hour"
-    />
-    </div>
+    
     <div className='flex flex-row items-center justify-center gap-5'>
     <button 
      className={`
@@ -380,187 +382,9 @@ if (currentPage === 2) {
   
   return (
    <>
-   <form onSubmit={handleSubmit} className="flex">
+   <form onSubmit={handleSubmit} className="flex border rounded-md p-4">
     {body}
    </form>
-    {/* <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-          <FormField
-              control={form.control}
-              name="images"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Images</FormLabel>
-                  <FormControl>
-                    <ImageUpload 
-                      value={field.value.map((image) => image.url)} 
-                      disabled={loading} 
-                      onChange={(url) => field.onChange([...field.value, { url }])}
-                      onRemove={(url) => field.onChange([...field.value.filter((current) => current.url !== url)])}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          <div className="md:grid md:grid-cols-3 gap-8">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder="Space name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <Input type="number" disabled={loading} placeholder="9.99" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Location</FormLabel>
-                  <Select disabled={loading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger >
-                        <SelectValue defaultValue={field.value} placeholder="Select a category"/>
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {statesng.map((state, index) => (
-                        <SelectItem
-                        key={index}
-                        value={state}
-                        >
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="sizeId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Size</FormLabel>
-                  <Select disabled={loading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger >
-                        <SelectValue defaultValue={field.value} placeholder="Select a size"/>
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {sizes.map((size) => (
-                        <SelectItem
-                        key={size.id}
-                        value={size.id}
-                        >
-                          {size.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="colorId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Color</FormLabel>
-                  <Select disabled={loading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger >
-                        <SelectValue defaultValue={field.value} placeholder="Select a color"/>
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {colors.map((color) => (
-                        <SelectItem
-                        key={color.id}
-                        value={color.id}
-                        >
-                          {color.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="isFeatured"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox 
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      Featured
-                    </FormLabel>
-                    <FormDescription>
-                      This product will appear on the home page
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="isArchived"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox 
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      Archived
-                    </FormLabel>
-                    <FormDescription>
-                      This product will not appear anywhere in the store
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-          </div>
-          <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
-          </Button>
-        </form>
-      </Form> */}
       </>
   )
 }
