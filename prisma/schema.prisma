@@ -92,22 +92,23 @@ model Listing{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   description String?
-  size  Int
+  sizel  Int
+  sizeb  Int
   location  String
   street String?
   images  String[]
   createdAt DateTime @default(now())
   category String[]
   roomCount Int
-  bathroomCount Int
-  guestCount Int
+  bathroomCount Int?
+  guestCount Int?
   price Int
   available Boolean @default(true)
   orderItems  OrderItem[]
   approved Boolean @default(false)
   approvedBy String?
   reported Boolean @default(false)
-  minHours Int @default(3)
+  minHours Int
   
   userId String @db.ObjectId
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -122,6 +123,7 @@ model Reservation {
   listingId String @db.ObjectId
   startDate DateTime
   endDate DateTime
+  duration Int
   totalPrice Int
   createdAt DateTime @default(now())
 

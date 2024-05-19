@@ -8,7 +8,8 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { statesng } from '@/public/data/nigeria-states';
-import { Input } from "@/components/ui/input";
+import { IoArrowForwardCircleOutline, IoArrowBackCircleOutline } from "react-icons/io5";
+import Image from "next/image";
 
 
 const formSchema = z.object({
@@ -38,7 +39,7 @@ const uploadPreset = "d9m4ivxo";
 const Upload = () => {
 
     const router = useRouter();
-    const [currentPage, setCurrentPage] = useState(2);
+    const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
     const [selectedImages, setSelectedImages] = useState<any[]>([]);
@@ -48,12 +49,12 @@ const Upload = () => {
         category: selectedCategories,
         images: selectedImages,
         location: selectedOption,
-        size: 100,
+        sizel: 100,
+        sizeb: 100,
         room: 1,
-        toilet: 1,
-        guest: 2,
+        address: '',
+        hours: 3,
         price: 7000,
-        // Add more fields as needed
       });
 
     const handleClick = (categoryLabel: any) => {
@@ -89,10 +90,11 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
       category: selectedCategories,
       images: selectedImages,
       location: selectedOption,
-      size: 100,
+      sizel: 100,
+      sizeb: 100,
       room: 1,
-      toilet: 1,
-      guest: 2,
+      address: '',
+      hours: 3,
       price: 7000,
     });
     setSelectedCategories([]);
@@ -210,7 +212,8 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
     
 if (currentPage === 2) {
     body = (
-        <div className='w-full grid lg:grid-cols-9 grid-cols-1 gap-5 items-start'>
+      <div className="flex flex-col items-center justify-start gap-8 w-full">
+       <div className='w-full grid lg:grid-cols-9 grid-cols-1 gap-5 items-start'>
           <div className="flex flex-col col-span-3 w-full">
           <label className="text-[12px] text-blue-300 font-medium">
                 Space Name
@@ -243,50 +246,63 @@ if (currentPage === 2) {
                   </option>
                 ))}
               </select>
-             
-           
-    
             </div>
-    <div className="flex flex-col gap-1 items-center justify-center col-span-3">
+    <div className="flex flex-col gap-1 items-start justify-center col-span-3">
           <label className="text-[12px] text-blue-300 font-medium">
+            Address
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+      type="text"
+      name="address"
+      value={formData.address}
+      onChange={handleChange}
+      placeholder="Address"
+    />
+    </div>
+    <div className="grid grid-cols-7 gap-2 lg:gap-0 col-span-3">
+        <div className="col-span-5 flex flex-col items-start">
+        <label className="text-[12px] text-blue-300 font-medium">
             Size
           </label>
+          <div className="flex flex-row items-center justify-start w-full gap-3">
     <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/3 text-center"
       type="number"
-      name="size"
-      value={formData.size}
+      name="sizel"
+      value={formData.sizel}
       onChange={handleChange}
-      placeholder="Space size in foot"
+      placeholder="lenght in foot"
     />
-    </div>
-    <div className="flex flex-col gap-1 items-center justify-center col-span-3">
-          <label className="text-[12px] text-blue-300 font-medium">
-            Toilet
+    <h1>by</h1>
+
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/3 text-center"
+      type="number"
+      name="sizeb"
+      value={formData.sizeb}
+      onChange={handleChange}
+      placeholder="width in foot"
+    />
+   
+          </div>
+        </div>
+        <div className="col-span-2 flex flex-col items-start w-full">
+        <label className="text-[12px] text-blue-300 font-medium">
+            Rooms
           </label>
-    <input
+          <input
     className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
       type="number"
-      name="toilet"
-      value={formData.toilet}
+      name="room"
+      value={formData.room}
       onChange={handleChange}
-      placeholder="Toilet count"
+      placeholder="rm count"
     />
+        </div>
     </div>
-    <div className="flex flex-col gap-1 items-center justify-center col-span-3">
-          <label className="text-[12px] text-blue-300 font-medium">
-            Guest
-          </label>
-    <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
-      type="number"
-      name="guest"
-      value={formData.guest}
-      onChange={handleChange}
-      placeholder="Guest count"
-    />
-    </div>
-    <div className="flex flex-col gap-1 items-center justify-center col-span-3">
+   
+    <div className="flex flex-col gap-1 items-start justify-center col-span-3">
           <label className="text-[12px] text-blue-300 font-medium">
             Price per hour
           </label>
@@ -299,74 +315,81 @@ if (currentPage === 2) {
       placeholder="Price per hour"
     />
     </div>
-     
-        {/* Form fields for the second page */}
-        {/* Add your additional fields here */}
-        {/* Navigation buttons */}
+    <div className="flex flex-col gap-1 items-start justify-center col-span-3">
+          <label className="text-[12px] text-blue-300 font-medium">
+            Min hours
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+      type="number"
+      name="hours"
+      value={formData.hours}
+      onChange={handleChange}
+      placeholder="Min hours"
+    />
+    </div>
+      </div>
         <div className='flex flex-row items-center justify-center gap-5'>
         <button 
          className={`
-        text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
-        `} onClick={prevPage}>Previous</button>
+        text-white text-xs leading-[30px] rounded-lg px-4 py-2 bg-blue-500
+        `} onClick={prevPage}><IoArrowBackCircleOutline /></button>
         <button disabled={selectedImages.length < 1 || selectedOption.length < 1} className={`
-        text-white text-xs leading-[30px] rounded-lg px-4 py-1
+        text-white text-xs leading-[30px] rounded-lg px-4 py-2
         ${(!formData.name || selectedOption.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
-        `} onClick={nextPage}>Next</button>
+        `} onClick={lastPage}><IoArrowForwardCircleOutline /></button>
         </div>
       </div>
     );
   }
 
   if (currentPage === 3) {
-    body = (<div className='w-full items-center justify-center flex gap-5 flex-col'>
-    <h1 className="text-lg font-medium p-8 pt-6">Page 3: Numerical Data</h1>
-    <div className='flex flex-row items-center justify-center gap-5'>
-   
-    <div className="flex flex-col gap-1 items-center justify-center">
-          <label className="text-[12px] text-blue-300 font-medium">
-            Rooms
-          </label>
-    <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/2 text-center"
-      type="number"
-      name="room"
-      value={formData.room}
-      onChange={handleChange}
-      placeholder="Room count"
-    />
+    body = ( 
+   <div className="grid grid-cols-1 md:grid-cols-10 gap-3">
+    <div className="col-span-3 flex flex-col items-center justify-start gap-3">
+    <div className="mb-4 flex items-center gap-4">
+      {formData.images.map((url) => (
+        <div 
+          key={url}
+          className="
+            aspect-square 
+            w-[325px] 
+            h-[155px]
+            relative 
+            overflow-hidden 
+            rounded-xl
+          "
+        >
+        <Image
+          fill
+          className="
+            object-cover 
+            h-full 
+            w-full 
+            group-hover:scale-110 
+            transition
+          "
+          alt="Image"
+          src={url}
+        />
+        </div>
+      ))}
+    </div>
+    <div className="flex flex-row gap-3">
+      {formData.category.map((cat) => (
+        <p key={cat} className="border shadow-lg rounded-xl p-2 min-w-[64px] text-center"> {cat}</p>
+      ))}
     </div>
     </div>
-    <div className='flex flex-row items-center justify-center gap-5'>
-    
+    <div className="col-span-5 flex flex-col items-start justify-start">
+    <p className="text-3xl font-semibold">{formData.name}</p>
+    <p>{formData.sizel} x {formData.sizeb}</p>
+    <p>{formData.address}, {formData.location}.</p>
+    <p>Rooms: {formData.room}</p>
+    <p>Guest Count: {formData.hours}</p>
+    <p>Price Per Hour: {formData.price}</p>
     </div>
-    
-    <div className='flex flex-row items-center justify-center gap-5'>
-    <button 
-     className={`
-    text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
-    `} onClick={prevPage}>Previous</button>
-    <button disabled={formData.size < 100 || formData.price < 7000 || formData.room < 1 || formData.toilet < 1 || formData.guest < 1} className={`
-    text-white text-xs leading-[30px] rounded-lg px-4 py-1
-    ${(formData.size < 100 || formData.price < 7000 || formData.room < 1 || formData.toilet < 1 || formData.guest < 1) ? 'bg-gray-500' : 'bg-blue-500'}
-    `} onClick={lastPage}>Next</button>
-    </div>
-  </div>)
-  }
-
-  if (currentPage === 4) {
-    body = ( <div className='w-full items-center justify-center flex gap-5 flex-col mt-12'>
-    {/* Display the submitted form data for confirmation */}
-    <p>Space Name: {formData.name}</p>
-    <p>Space Category: {formData.category}</p>
-    <p>Space Location: {formData.location}</p>
-    <p>Space Images: {formData.images}</p>
-    <p>Space Size: {formData.size}</p>
-    <p>Space Room Count: {formData.room}</p>
-    <p>Space Toilet Count: {formData.toilet}</p>
-    <p>Space Guest Count: {formData.guest}</p>
-    <p>Space Price Per Hour: {formData.price}</p>
-    {/* Navigation buttons */}
-    <div className='flex flex-row items-center justify-center gap-5'>
+    <div className=' col-span-2 flex flex-row items-center justify-center gap-5'>
     <button 
      className={`
     text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
@@ -376,13 +399,13 @@ if (currentPage === 2) {
     ${'bg-blue-500'}
     `} type="submit">Submit</button>
     </div>
-  </div>)
+   </div>)
   }
 
   
   return (
    <>
-   <form onSubmit={handleSubmit} className="flex border rounded-md p-4">
+   <form onSubmit={handleSubmit} className="flex border rounded-md p-4 min-h-[60vh] items-center justify-center">
     {body}
    </form>
       </>

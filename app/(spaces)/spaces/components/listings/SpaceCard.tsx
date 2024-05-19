@@ -96,12 +96,6 @@ const SpaceCard: React.FC<ListingCardProps> = ({
             src={data.images[0]}
             alt="Listing"
           />
-          <div className="
-            absolute
-            top-3
-            right-3
-          ">
-          </div>
         </div>
         <div className="w-[325px] flex flex-row items-center justify-between">
           <div className="text-base">{data.title}</div>

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Range } from "react-date-range";
 import { useRouter, useSearchParams } from "next/navigation";
-import { differenceInDays, eachDayOfInterval, endOfHour, add, endOfDay, endOfToday, addMilliseconds, format } from "date-fns";
+import { isSameDay, eachDayOfInterval, endOfHour, add, endOfDay, differenceInHours, endOfToday, addMilliseconds, format, addHours, addMinutes, isWithinInterval } from "date-fns";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
@@ -16,6 +16,7 @@ import HourInfo from "../components/listings/HourInfo";
 import SpaceReservation from "../components/listings/SpaceReservation";
 import Button from "@/app/(website)/components/Button";
 import Calendar from "@/app/(website)/components/inputs/Calendar";
+import { Reservation } from "@prisma/client";
 
 const initialDateRange = {
   startDate: new Date(),
@@ -24,7 +25,7 @@ const initialDateRange = {
 };
 
 interface ListingClientProps {
-  reservations?: SafeReservation[];
+  reservations: Reservation[] | null;
   listing: SafeListing & {
     user: SafeUser;
   };
@@ -33,7 +34,7 @@ interface ListingClientProps {
 
 const ListingClient: React.FC<ListingClientProps> = ({
   listing,
-  reservations = [],
+  reservations,
   currentUser,
 }) => {
   const loginModal = useLoginModal();
@@ -41,32 +42,26 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const searchParams = useSearchParams();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(listing.price);
+  const [overDay, setOverDay] = useState(false);
+  const [hourDay, setHourDay] = useState(false);
   const [dateRange, setDateRange] = useState<Range>(initialDateRange);
   const [time, setTime] = useState<Date>(new Date());
-  
-  useEffect(() => {
-    if (searchParams?.get("success")) {
-      toast.success("Payment completed");
-    }
+  const [data, setData] = useState({
+    start: new Date(),
+    end: endOfToday(),
+    duration: listing.minHours,
+    cost: listing.minHours * listing.price
+  });
 
-    if (searchParams?.get("canceled")) {
-      toast.error("something went wrong");
-    }
-  }, [
-    searchParams,
-    totalPrice,
-    dateRange,
-    listing?.id,
-    router,
-    currentUser,
-    loginModal,
-  ]);
 
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
 
-    reservations.forEach((reservation: any) => {
+    const filteredReservations = reservations?.filter(
+      (reservation) => !isSameDay(new Date(reservation.startDate), new Date(reservation.endDate))
+    );
+
+    filteredReservations?.forEach((reservation: any) => {
       const range = eachDayOfInterval({
         start: new Date(reservation.startDate),
         end: new Date(reservation.endDate),
@@ -84,34 +79,105 @@ const ListingClient: React.FC<ListingClientProps> = ({
   // }, [listing.category]);
 
   const onCreateReservation = async () => {
-    if (!currentUser) {
+    if (!currentUser || !dateRange.startDate || !dateRange.endDate) {
       return loginModal.onOpen();
     }
-    console.log(`Start:${dateRange.startDate} End:${dateRange.endDate}`)
-    alert(`Start:${dateRange.startDate} End:${dateRange.endDate}`)
-    // setIsLoading(true);
+    setIsLoading(true);
 
-    // const response = await axios.post("/api/checkout", {
-    //   totalPrice,
-    //   startDate: dateRange.startDate,
-    //   endDate: dateRange.endDate,
-    //   listingId: listing?.id,
-    // });
-
-    // window.location = response.data.url;
+    try {
+      // Call your POST function with form data
+      await axios.post(`/api/reserve/${listing?.id}`, data);
+      toast.success("Space reserved successfully!");
+      setDateRange(initialDateRange);
+      setData({
+       start: new Date(),
+       end: endOfToday(),
+       duration: listing.minHours,
+       cost: listing.minHours * listing.price
+     });
+     router.push("/spaces");
+    
+    } catch (error: any) {
+      toast.error(`${error.response.data}`);
+  } finally {
+    setIsLoading(false);
+  }
+     // window.location = response.data.url;
   };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setData({
+        ...data,
+        [name]: value,
+    });
+};
+
+const handleSelect = (selectedTime: Date) => {
+  if (time && format(time, "kk:mm") === format(selectedTime, "kk:mm") && times) {
+    // If the selected time is already the start time, unselect it
+    setTime(addMinutes(times[0], 1));
+    setData({
+      start: times[0],
+      end: times[-1],
+      duration: times.length,
+      cost: listing.price * times.length
+    });
+  } else {
+    // Otherwise, set the selected time as the start time
+    setTime(selectedTime);
+    setData({
+      start: selectedTime,
+      end: addHours(selectedTime, listing.minHours),
+      duration: listing.minHours,
+      cost: listing.price * listing.minHours
+    });
+  }
+};
+
+
+const isSelectedTime = (selectedTime: Date) => {
+  return time && format(time, "kk:mm") === format(selectedTime, "kk:mm");
+};
 
   useEffect(() => {
-    if (dateRange.startDate && dateRange.endDate) {
-      const dayCount = differenceInDays(dateRange.endDate, dateRange.startDate);
+    
+    if (dateRange.startDate && dateRange.endDate && times) {
 
-      if (dayCount && listing.price) {
-        setTotalPrice(dayCount * listing.price);
-      } else {
-        setTotalPrice(listing.price);
+    let end = endOfDay(dateRange.endDate) 
+
+      if(dateRange.startDate === dateRange.endDate || dateRange.endDate < endOfToday()){
+        setOverDay(false)
+        setTime(addMinutes(times[0], 1));
+        setData({
+          ...data,
+          duration: listing.minHours,
+          cost: listing.price * listing.minHours
+        })
+      }else if(dateRange.startDate < new Date()){
+      
+      let duration = differenceInHours(end, new Date())
+      
+      setOverDay(true)
+      setData({
+        start: new Date(),
+        end: end,
+        duration: duration,
+        cost: listing.price * duration
+      });
+      }else{
+         
+      let duration = differenceInHours(end, dateRange.startDate)
+      
+      setOverDay(true)
+      setData({
+        start: dateRange.startDate,
+        end: end,
+        duration: duration,
+        cost: listing.price * duration
+      });
       }
-    }
-  }, [dateRange, listing.price]);
+       }
+  }, [dateRange.startDate, dateRange.endDate]);
 
   const getOpenTimes = () => {
     if (!dateRange.startDate) return
@@ -123,22 +189,38 @@ const ListingClient: React.FC<ListingClientProps> = ({
     if(startDate <= new Date()){
       const result = endOfHour(new Date())
       const start = add(result, {hours: 3})
-      const beginning = addMilliseconds(start, 1)
+      const beginning = addMilliseconds(result, 1)
 
 
-      const times = []
+      const times: Date[] = []
       for (let i = beginning; i <= endOfToday(); i = add(i, { hours: interval})){
         times.push(i)
       }
 
-      return times
+      const filteredReservations = reservations?.filter(
+        (reservation) => isSameDay(new Date(reservation.startDate), new Date(reservation.endDate))
+      );
+
+      const filteredDay = filteredReservations?.filter(
+        (reservation: { startDate: string | number | Date; endDate: string | number | Date; }) => isSameDay(new Date(reservation.startDate), new Date(beginning))
+      );
+
+      const filteredTimes = times?.filter(
+        (time) => !isWithinInterval(time, { start: result, end: endOfToday()})
+      );
+
+      return filteredTimes
     }
     const times = []
       for (let i = startDate; i <= endOfDay(startDate); i = add(i, { hours: interval})){
         times.push(i)
       }
 
-      return times
+      const filteredTimes = times?.filter(
+        (time) => !isWithinInterval(time, { start: startDate, end: endOfDay(startDate)})
+      );
+
+      return filteredTimes
 
    
   }
@@ -162,15 +244,46 @@ const ListingClient: React.FC<ListingClientProps> = ({
               id={listing.id}
               currentUser={currentUser}
             />
-            <div className="w-full flex flex-row items-center gap-3 flex-wrap justify-center">
-              {times?.map((time, i) => (
-                <div key={i} className="rounded-lg bg-gray-100 p-2">
-                  <button type="button" onClick={() => {}}>
-                    {format(time, 'kk:mm')}
-                  </button>
-                </div>
-              ))}
+            {overDay? <div className="w-full flex items-center justify-center font-semibold text-5xl text-center">{data.duration}hrs</div>:
+            <div className="grid grid-cols-3 divide-slate-600 divide-x">
+            <div className="col-span-2 flex flex-col items-start justify-start gap-2">
+             <label className="text-[12px] text-blue-300 font-medium">
+               Start time
+               </label>
+            <div className="w-full flex flex-row items-center gap-3 flex-wrap justify-center
+             text-xs">
+               {times?.map((time, i) => (
+                 <div
+                 key={i}
+                 className={`rounded-lg bg-${isSelectedTime(time) ? "blue-400" : "gray-100"} p-2`}
+               >
+                 <button type="button" onClick={() => handleSelect(time)}>
+                   {format(time, "kk:mmb")}
+                 </button>
+               </div>
+               ))}
+             </div>
             </div>
+            <div className="col-span-1 flex flex-col items-start justify-start gap-2 pl-3">
+            <label className="text-[12px] text-blue-300 font-medium">
+               Duration
+               </label>
+              <div className="flex flex-row items-center justify-start gap-2">
+              <input
+               className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+               type="number"
+               placeholder="Duration"
+               name="duration"
+               value={data.duration}
+               onChange={handleChange}
+             />
+             <h1>hrs</h1>
+              </div>
+              <h1 className="text-xs text-blue-300 font-normal"
+              >minimum of {listing.minHours} hours</h1>
+            </div>
+            </div>}
+           
           </div>
 
           <div className="col-span-4">
@@ -199,7 +312,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
               <hr />
               <div className="p-4">
                 <Button
-                  disabled={isLoading}
+                  disabled={isLoading || !overDay && data.duration > (times?.length? times.length : 24)}
                   label="Reserve"
                   onClick={onCreateReservation}
                 />
@@ -217,7 +330,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
         "
               >
                 <div>Total</div>
-                <div>$ {totalPrice}</div>
+                <div>$ {data.cost}</div>
               </div>
             </div>
           </div>

@@ -19,10 +19,11 @@ export async function POST(
       category,
       images,
       location,
-      size,
+      sizel,
+      sizeb,
       room,
-      toilet,
-      guest,
+      address,
+      hours,
       price,
    } = body;
 
@@ -30,12 +31,13 @@ export async function POST(
     data: {
       title: name,
       images: images,
-      size,
+      sizel,
+      sizeb,
       category,
       roomCount: Number(room),
-      bathroomCount: Number(toilet),
-      guestCount: Number(guest),
       location,
+      street: address,
+      minHours: hours,
       price: parseInt(price, 10),
       userId: currentUser.id
     }
