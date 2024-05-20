@@ -183,6 +183,9 @@ const isSelectedTime = (selectedTime: Date) => {
     if (!dateRange.startDate) return
 
     const {startDate} = dateRange
+    const filteredReservations = reservations?.filter(
+      (reservation) => isSameDay(new Date(reservation.startDate), new Date(reservation.endDate))
+    );
 
     const interval = 1 // in hours
 
@@ -197,17 +200,19 @@ const isSelectedTime = (selectedTime: Date) => {
         times.push(i)
       }
 
-      const filteredReservations = reservations?.filter(
-        (reservation) => isSameDay(new Date(reservation.startDate), new Date(reservation.endDate))
-      );
-
       const filteredDay = filteredReservations?.filter(
         (reservation: { startDate: string | number | Date; endDate: string | number | Date; }) => isSameDay(new Date(reservation.startDate), new Date(beginning))
       );
 
-      const filteredTimes = times?.filter(
-        (time) => !isWithinInterval(time, { start: result, end: endOfToday()})
-      );
+      const filteredTimes = times?.filter((time) => {
+        // Check if the current time falls within any of the intervals in filteredDay
+        const isWithinFilteredDay = filteredDay?.some((interval) =>
+          isWithinInterval(time, { start: new Date(interval.startDate), end: new Date(interval.endDate) })
+        );
+      
+        // Include the current time in the result if it's not within any interval in filteredDay
+        return !isWithinFilteredDay;
+      });
 
       return filteredTimes
     }
@@ -216,10 +221,19 @@ const isSelectedTime = (selectedTime: Date) => {
         times.push(i)
       }
 
-      const filteredTimes = times?.filter(
-        (time) => !isWithinInterval(time, { start: startDate, end: endOfDay(startDate)})
+      const filteredDay = filteredReservations?.filter(
+        (reservation: { startDate: string | number | Date; endDate: string | number | Date; }) => isSameDay(new Date(reservation.startDate), new Date(data.start))
       );
 
+      const filteredTimes = times?.filter((time) => {
+        // Check if the current time falls within any of the intervals in filteredDay
+        const isWithinFilteredDay = filteredDay?.some((interval) =>
+          isWithinInterval(time, { start: startDate, end: endOfDay(startDate)})
+        );
+      
+        // Include the current time in the result if it's not within any interval in filteredDay
+        return !isWithinFilteredDay;
+      });
       return filteredTimes
 
    

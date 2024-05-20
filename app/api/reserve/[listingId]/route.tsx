@@ -32,7 +32,7 @@ export async function POST(
       startDate: start,
       endDate: end,
       totalPrice: cost,
-      duration,
+      duration: Number(duration),
       userId: currentUser.id
     }
   });
