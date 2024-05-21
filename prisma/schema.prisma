@@ -39,6 +39,7 @@ model User{
   orders Order[]
   reviews Reviews[]
   feeback Feedback[]
+  rating  Ratings[]
 }
 
 model Admin{
@@ -109,6 +110,12 @@ model Listing{
   approvedBy String?
   reported Boolean @default(false)
   minHours Int
+  open Int
+  close Int
+  rating  Ratings[]
+  services Services[]
+  features Features[]
+  minibar  Minibar[]
   
   userId String @db.ObjectId
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -167,6 +174,68 @@ model Reviews{
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model Ratings{
+  id        String    @id @default(uuid()) @map("_id")
+  userId String @db.ObjectId
+  listingId  String   @db.ObjectId 
+  rating Int
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model Services{
+  id        String    @id @default(uuid()) @map("_id")
+  listingId  String   @db.ObjectId 
+  service    ServiceItem[]
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model Features{
+  id        String    @id @default(uuid()) @map("_id")
+  listingId  String   @db.ObjectId 
+  item   FeatureItem[]
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model Minibar{
+  id        String    @id @default(uuid()) @map("_id")
+  listingId  String   @db.ObjectId 
+  miniItem  MiniItem[]
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model MiniItem{
+  id        String    @id @default(uuid()) @map("_id")
+  barId  String   
+  name String
+  price Int
+
+  minibar Minibar @relation(fields: [barId], references: [id], onDelete: Cascade)
+}
+
+model FeatureItem{
+  id        String    @id @default(uuid()) @map("_id")
+  featureId  String   
+  name String
+  price Int
+
+  features Features @relation(fields: [featureId], references: [id], onDelete: Cascade)
+}
+
+model ServiceItem{
+  id        String    @id @default(uuid()) @map("_id")
+  serviceId  String   
+  name String
+  price Int
+
+  features Services @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 model Feedback{

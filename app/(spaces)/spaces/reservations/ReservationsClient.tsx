@@ -10,10 +10,11 @@ import { SafeReservation, SafeUser, SafeOrder } from "@/app/types"
 import Heading from "@/app/(website)/components/Heading";
 import Container from "@/app/(website)/components/Container";
 import ListingCard from "@/app/(website)/components/listings/ListingCard";
+import { Reservation } from "@prisma/client";
 
 interface ReservationsClientProps {
   currentUser?: SafeUser | null,
-  orders: SafeOrder[]
+  orders: Reservation[] | null
 }
 
 const ReservationsClient: React.FC<ReservationsClientProps> = ({
@@ -57,7 +58,7 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
           gap-8
         "
       >
-        {orders.map((order: any) => (
+        {orders?.map((order: any) => (
           <ListingCard
             key={order.id}
             data={order.listing}

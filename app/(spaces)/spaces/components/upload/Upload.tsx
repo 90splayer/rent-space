@@ -8,6 +8,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { statesng } from '@/public/data/nigeria-states';
+import { hours } from '@/public/data/hour';
 import { IoArrowForwardCircleOutline, IoArrowBackCircleOutline } from "react-icons/io5";
 import Image from "next/image";
 
@@ -55,6 +56,8 @@ const Upload = () => {
         address: '',
         hours: 3,
         price: 7000,
+        open: 8,
+        close: 10
       });
 
     const handleClick = (categoryLabel: any) => {
@@ -96,6 +99,8 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
       address: '',
       hours: 3,
       price: 7000,
+      open: 8,
+      close: 10,
     });
     setSelectedCategories([]);
     setSelectedImages([]);
@@ -144,21 +149,37 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
         });
     };
 
+    const handleOpen = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const { value } = e.target;
+      setFormData({
+          ...formData,
+          open: Number(value),
+      });
+  };
+
+  const handleClose = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setFormData({
+        ...formData,
+        close: Number(value),
+    });
+};
+
     let body
 
     if (currentPage === 1){
       body = (<div className="w-full flex flex-col gap-3 items-center justify-start">
          <div className='w-full grid grid-cols-10'>
      <div className=" col-span-6 w-full flex flex-col gap-3 items-start justify-start">
-     <h1 className="text-gray-500 font-light text-base">Add images of your space. Images are viewed in landscape</h1>
+     <h1 className="text-gray-500 font-light text-base">1. Add images of your space. Images are viewed in landscape</h1>
      <ImageUpload value={selectedImages} 
      disabled={loading} 
      onChange={handleImageChange}
      onRemove={handleImageRemove}
      />
      </div>
-      <div className="col-span-4 flex flex-col gap-3 w-full items-center">
-        <h1 className="text-gray-500 font-light text-base">Select up to 3 specs that match your space</h1>
+      <div className="col-span-4 flex flex-col gap-3 w-full items-start">
+        <h1 className="text-gray-500 font-light text-base">2. Select up to 3 specs that match your space</h1>
       <div
       className=" 
         pt-4
@@ -315,12 +336,53 @@ if (currentPage === 2) {
       placeholder="Price per hour"
     />
     </div>
-    <div className="flex flex-col gap-1 items-start justify-center col-span-3">
+  <div className="col-span-3 grid grid-cols-3 item-center gap-2">
+  <div className="flex flex-col col-span-1 w-full gap-1">
+              <label className="text-[12px] text-blue-300 font-medium">
+                Open hour
+              </label>
+              <select
+                required
+                value={formData.open}
+                onChange={handleOpen}
+                className="text-small border bg-gray-100 font-semibold p-2 outline-none rounded-md placeholder:text-gray-400 focus:shadow-md"
+              >
+                <option value="" disabled hidden>
+                  Open At
+                </option>
+                {hours.map((hour) => (
+                  <option key={hour.key} value={hour.key}>
+                    {hour.time} {hour.description}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col col-span-1 w-full gap-1">
+              <label className="text-[12px] text-blue-300 font-medium">
+                Close At
+              </label>
+              <select
+                required
+                value={formData.close}
+                onChange={handleClose}
+                className="text-small border bg-gray-100 font-semibold p-2 outline-none rounded-md placeholder:text-gray-400 focus:shadow-md"
+              >
+                <option value="" disabled hidden>
+                  Select hour
+                </option>
+                {hours.map((hour) => (
+                  <option key={hour.key} value={hour.key}>
+                    {hour.time} {hour.description}
+                  </option>
+                ))}
+              </select>
+            </div>
+    <div className="flex flex-col gap-1 items-start justify-center col-span-1">
           <label className="text-[12px] text-blue-300 font-medium">
             Min hours
           </label>
     <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-2 w-full text-center"
       type="number"
       name="hours"
       value={formData.hours}
@@ -328,6 +390,7 @@ if (currentPage === 2) {
       placeholder="Min hours"
     />
     </div>
+  </div>
       </div>
         <div className='flex flex-row items-center justify-center gap-5'>
         <button 
