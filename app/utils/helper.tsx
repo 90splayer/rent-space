@@ -1,7 +1,18 @@
 
-import { add, addMinutes, getHours, getMinutes, isBefore, isEqual, parse } from 'date-fns'
+import { add, addMinutes, getHours, getMinutes, isBefore, isEqual, parse, format, setHours, startOfDay } from 'date-fns'
 
 export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+export function formatHourToAM(hour: number) {
+  // Create a date object representing the start of today
+  const today = startOfDay(new Date());
+
+  // Set the hour to 9 (or any other hour you want to format)
+  const dateWithHour = setHours(today, hour);
+
+  // Format the date object to 'h a' (hour and AM/PM)
+  return format(dateWithHour, 'h a');
+}
 
 export const weekdayIndexToName = (index: number) => {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']

@@ -5,8 +5,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Range } from "react-date-range";
 import { useRouter, useSearchParams } from "next/navigation";
-import { isSameDay, eachDayOfInterval, endOfHour, add, endOfDay, differenceInHours, endOfToday, addMilliseconds, format, addHours, addMinutes, isWithinInterval } from "date-fns";
-
+import { isSameDay, eachDayOfInterval, endOfHour, add, endOfDay, differenceInHours, endOfToday, addMilliseconds, format, addHours, addMinutes, isWithinInterval, setHours, startOfDay } from "date-fns";
+import { formatHourToAM } from "@/app/utils/helper";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
 
@@ -139,15 +139,58 @@ const isSelectedTime = (selectedTime: Date) => {
   return time && format(time, "kk:mm") === format(selectedTime, "kk:mm");
 };
 
+  const getOpenTimes = () => {
+    if (!dateRange.startDate) return
+
+    const {startDate} = dateRange
+    
+    const openHour = listing.open;
+    const closeHour = listing.close;
+    const openTime = startDate <= new Date() ? addMilliseconds(endOfHour(new Date()), 1) : setHours(new Date(startDate), openHour);
+    const closeTime = setHours(new Date(startDate), closeHour);
+
+    const filteredReservations = reservations?.filter(
+      (reservation) => isSameDay(new Date(reservation.startDate), new Date(reservation.endDate))
+    );
+
+    const interval = 1 // in hours
+
+  const times = [];
+  for (let i = openTime; i <= closeTime; i = add(i, { hours: interval })) {
+    times.push(i);
+  }
+
+  const filteredDay = filteredReservations?.filter(
+    (reservation) => isSameDay(new Date(reservation.startDate), new Date(startDate))
+  );
+
+    if(startDate <= new Date()){
+      const start = endOfHour(new Date())
+      const beginning = addMilliseconds(start, 1)
+    }
+
+    const filteredTimes = times?.filter((time) => {
+      const isWithinFilteredDay = filteredDay?.some((interval) =>
+        isWithinInterval(time, { start: new Date(interval.startDate), end: new Date(interval.endDate) })
+      );
+      return !isWithinFilteredDay;
+    });
+
+    
+    return filteredTimes
+
+  }
+
+  const times = getOpenTimes()
+
   useEffect(() => {
     
-    if (dateRange.startDate && dateRange.endDate && times) {
+    if (dateRange.startDate && dateRange.endDate) {
 
     let end = endOfDay(dateRange.endDate) 
 
-      if(dateRange.startDate === dateRange.endDate || dateRange.endDate < endOfToday()){
+      if( dateRange.startDate === dateRange.endDate || dateRange.endDate < endOfToday()){
         setOverDay(false)
-        setTime(addMinutes(times[0], 1));
         setData({
           ...data,
           duration: listing.minHours,
@@ -178,68 +221,6 @@ const isSelectedTime = (selectedTime: Date) => {
       }
        }
   }, [dateRange.startDate, dateRange.endDate]);
-
-  const getOpenTimes = () => {
-    if (!dateRange.startDate) return
-
-    const {startDate} = dateRange
-    const filteredReservations = reservations?.filter(
-      (reservation) => isSameDay(new Date(reservation.startDate), new Date(reservation.endDate))
-    );
-
-    const interval = 1 // in hours
-
-    if(startDate <= new Date()){
-      const result = endOfHour(new Date())
-      const start = add(result, {hours: 3})
-      const beginning = addMilliseconds(result, 1)
-
-
-      const times: Date[] = []
-      for (let i = beginning; i <= endOfToday(); i = add(i, { hours: interval})){
-        times.push(i)
-      }
-
-      const filteredDay = filteredReservations?.filter(
-        (reservation: { startDate: string | number | Date; endDate: string | number | Date; }) => isSameDay(new Date(reservation.startDate), new Date(beginning))
-      );
-
-      const filteredTimes = times?.filter((time) => {
-        // Check if the current time falls within any of the intervals in filteredDay
-        const isWithinFilteredDay = filteredDay?.some((interval) =>
-          isWithinInterval(time, { start: new Date(interval.startDate), end: new Date(interval.endDate) })
-        );
-      
-        // Include the current time in the result if it's not within any interval in filteredDay
-        return !isWithinFilteredDay;
-      });
-
-      return filteredTimes
-    }
-    const times = []
-      for (let i = startDate; i <= endOfDay(startDate); i = add(i, { hours: interval})){
-        times.push(i)
-      }
-
-      const filteredDay = filteredReservations?.filter(
-        (reservation: { startDate: string | number | Date; endDate: string | number | Date; }) => isSameDay(new Date(reservation.startDate), new Date(data.start))
-      );
-
-      const filteredTimes = times?.filter((time) => {
-        // Check if the current time falls within any of the intervals in filteredDay
-        const isWithinFilteredDay = filteredDay?.some((interval) =>
-          isWithinInterval(time, { start: startDate, end: endOfDay(startDate)})
-        );
-      
-        // Include the current time in the result if it's not within any interval in filteredDay
-        return !isWithinFilteredDay;
-      });
-      return filteredTimes
-
-   
-  }
-
-  const times = getOpenTimes()
 
   return (
     <Container>
