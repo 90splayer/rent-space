@@ -104,6 +104,8 @@ model Listing{
   bathroomCount Int?
   guestCount Int?
   price Int
+  priceDay Int?
+  dailyBook Boolean @default(true)
   available Boolean @default(true)
   orderItems  OrderItem[]
   approved Boolean @default(false)
@@ -131,6 +133,7 @@ model Reservation {
   startDate DateTime
   endDate DateTime
   duration Int
+  day  Boolean @default(false)
   totalPrice Int
   createdAt DateTime @default(now())
 

@@ -20,22 +20,25 @@ export async function POST(
 
   const body = await request.json();
   const { 
-    start,
-      end,
-      duration,
-      cost
+    reservations
    } = body;
 
-  const reservation = await prisma.reservation.create({
-    data: {
-      listingId: params.listingId,
-      startDate: start,
-      endDate: end,
-      totalPrice: cost,
-      duration: Number(duration),
-      userId: currentUser.id
-    }
-  });
+   // Map the userData to format required by Prisma
+const data = reservations.map((reservation: any) => ({
+  startDate: reservation.start,
+  endDate: reservation.end,
+  duration: reservation.duration,
+  totalPrice: reservation.cost,
+  day: reservation.day,
+  listingId: params.listingId,
+  userId: currentUser.id
+}));
+
+// Use the mapped data in createMany
+const reservation = await prisma.reservation.createMany({
+  data,
+});
+  
 
   return NextResponse.json(reservation);
 } catch (error) {
