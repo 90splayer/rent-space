@@ -29,7 +29,6 @@ const data = reservations.map((reservation: any) => ({
   endDate: reservation.end,
   duration: reservation.duration,
   totalPrice: reservation.cost,
-  day: reservation.day,
   listingId: params.listingId,
   userId: currentUser.id
 }));

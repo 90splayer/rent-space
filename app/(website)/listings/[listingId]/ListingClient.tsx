@@ -9,13 +9,14 @@ import { differenceInDays, eachDayOfInterval } from 'date-fns';
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
-
+import { IoIosArrowForward } from "react-icons/io";
 import Container from "@/app/(website)/components/Container";
 import { categories } from "@/app/(website)/components/navbar/Categories";
 import ListingHead from "@/app/(website)/components/listings/ListingHead";
 import ListingInfo from "@/app/(website)/components/listings/ListingInfo";
 import ListingReservation from "@/app/(website)/components/listings/ListingReservation";
 import Stripe from "stripe";
+import { Reservation } from "@prisma/client";
 
 const initialDateRange = {
   startDate: new Date(),
@@ -24,7 +25,7 @@ const initialDateRange = {
 };
 
 interface ListingClientProps {
-  reservations?: SafeReservation[];
+  reservations?: Reservation[] | null;
   listing: SafeListing & {
     user: SafeUser;
   }; 
@@ -64,7 +65,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
 
-    reservations.forEach((reservation: any) => {
+    reservations?.forEach((reservation: any) => {
       const range = eachDayOfInterval({
         start: new Date(reservation.startDate),
         end: new Date(reservation.endDate)

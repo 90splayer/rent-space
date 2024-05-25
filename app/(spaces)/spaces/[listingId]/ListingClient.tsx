@@ -5,22 +5,21 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Range } from "react-date-range";
 import { useRouter, useSearchParams } from "next/navigation";
-import { isSameDay, eachDayOfInterval, endOfHour, add, endOfDay, differenceInHours, endOfToday, addMilliseconds, format, addHours, subHours, addMinutes, isWithinInterval, setHours, startOfDay, isSameHour, differenceInDays } from "date-fns";
+import { isSameDay, eachDayOfInterval, endOfHour, add, endOfDay, differenceInHours, endOfToday, addMilliseconds, format, addHours, subHours, addMinutes, isWithinInterval, setHours, startOfDay, isSameHour, differenceInDays, subMilliseconds } from "date-fns";
 import { formatHourToAM } from "@/app/utils/helper";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
-
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 import Container from "@/app/(website)/components/Container";
 import ListingHead from "@/app/(spaces)/spaces/components/listings/ListingHead";
 import HourInfo from "../components/listings/HourInfo";
 import SpaceReservation from "../components/listings/SpaceReservation";
 import Button from "@/app/(website)/components/Button";
-import Calendar from "@/app/(website)/components/inputs/Calendar";
 import { Reservation } from "@prisma/client";
 
 const initialDateRange = {
-  startDate: new Date(),
-  endDate: new Date(),
+  date: new Date(),
   key: "selection",
 };
 
@@ -37,7 +36,6 @@ interface ReservationData {
   end: Date;
   duration: number;
   cost: number;
-  day: boolean;
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({
@@ -50,17 +48,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const searchParams = useSearchParams();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
-  const [overDay, setOverDay] = useState(false)
-  const [time, setTime] = useState<Date>(new Date());
+  const [dateRange, setDateRange] = useState<Date>(new Date());
   const [selectedTimes, setSelectedTimes] = useState<Date[]>([]);
   const [data, setData] = useState<ReservationData[]>([]);
-  const [days, setDays] = useState({
-    start: initialDateRange.startDate,
-    end: initialDateRange.endDate,
-    duration: 1,
-    cost: listing.priceDay,
-  })
+  const duration = listing.minHours * selectedTimes.length;
 
 
 
@@ -90,7 +81,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   // }, [listing.category]);
 
   const onCreateReservation = async () => {
-    if (!currentUser || !dateRange.startDate || !dateRange.endDate) {
+    if (!currentUser) {
       return loginModal.onOpen();
     }
     setIsLoading(true);
@@ -99,9 +90,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
       // Call your POST function with form data
       await axios.post(`/api/reserve/${listing?.id}`,  { reservations: data });
       toast.success("Space reserved successfully!");
-      setDateRange(initialDateRange);
+      setDateRange(new Date());
       setData([]);
-     router.push("/spaces");
+     window.location.reload();
     
     } catch (error: any) {
       toast.error(`${error.response.data}`);
@@ -111,106 +102,84 @@ const ListingClient: React.FC<ListingClientProps> = ({
      // window.location = response.data.url;
   };
 
-const handleSelect = (selectedTime: Date) => {
-  setSelectedTimes((prevSelectedTimes) => {
-    if (prevSelectedTimes.some((time) => isSameHour(time, selectedTime))) {
-      return prevSelectedTimes.filter((time) => !isSameHour(time, selectedTime));
-    } else {
-      return [...prevSelectedTimes, selectedTime];
-    }
-  });
-
-  setData((prevData) => {
-    if (prevData.some((entry) => isSameHour(entry.start, selectedTime))) {
-      return prevData.filter((entry) => !isSameHour(entry.start, selectedTime));
-    } else {
-      const endTime = addHours(selectedTime, listing.minHours);
-      return [
-        ...prevData,
-        {
-          start: selectedTime,
-          end: endTime,
-          duration: listing.minHours,
-          cost: listing.price * listing.minHours,
-          day: false
-        },
-      ];
-    }
-  });
-};
+  const handleSelect = (selectedTime: Date) => {
+    setSelectedTimes((prevSelectedTimes) => {
+      if (prevSelectedTimes.some((time) => isSameHour(time, selectedTime))) {
+        return prevSelectedTimes.filter((time) => !isSameHour(time, selectedTime));
+      } else {
+        return [...prevSelectedTimes, selectedTime];
+      }
+    });
+  
+    setData((prevData) => {
+      if (prevData.some((entry) => isSameHour(entry.start, selectedTime))) {
+        return prevData.filter((entry) => !isSameHour(entry.start, selectedTime));
+      } else {
+        const endTime = subMilliseconds(addHours(selectedTime, listing.minHours), 1);
+        return [
+          ...prevData,
+          {
+            start: selectedTime,
+            end: endTime,
+            duration: listing.minHours,
+            cost: listing.price * listing.minHours,
+          },
+        ];
+      }
+    });
+  };
+  
 
 const isSelectedTime = (selectedTime: Date) => {
   return selectedTimes.some((time) => isSameHour(time, selectedTime));
 };
 
-  const getOpenTimes = () => {
-    if (!dateRange.startDate) return
+const getOpenTimes = () => {
+  if (!dateRange) return [];
 
-    const {startDate} = dateRange
-    
-    const openHour = listing.open;
-    const closeHour = listing.close;
-    const openTime = startDate <= new Date() ? addMilliseconds(endOfHour(new Date()), 1) : setHours(new Date(startDate), openHour);
-    const closeTime = subHours(setHours(new Date(startDate), closeHour), 1);
+  const openHour = listing.open;
+  const closeHour = listing.close;
+  const openTime = dateRange <= new Date() ? addMilliseconds(endOfHour(new Date()), 1) : setHours(new Date(dateRange), openHour);
+  const closeTime = setHours(new Date(dateRange), closeHour);
 
-    const filteredReservations = reservations?.filter(
-      (reservation) => isSameDay(new Date(reservation.startDate), new Date(reservation.endDate))
-    );
-
-  const interval = listing.minHours // in hours
+  const interval = listing.minHours; // in hours
 
   const times = [];
   for (let i = openTime; i <= closeTime; i = add(i, { hours: interval })) {
     times.push(i);
   }
 
-  const filteredDay = filteredReservations?.filter(
-    (reservation) => isSameDay(new Date(reservation.startDate), new Date(startDate))
-  );
-
-    if(startDate <= new Date()){
-      const start = endOfHour(new Date())
-      const beginning = addMilliseconds(start, 1)
+  // Remove the last time slot if it doesn't fit the minimum duration requirement
+  if (times.length > 0) {
+    const lastTime = times[times.length - 1];
+    const timeDifference = differenceInHours(closeTime, lastTime);
+    if (timeDifference < listing.minHours) {
+      times.pop();
     }
-
-    const filteredTimes = times?.filter((time) => {
-      const isWithinFilteredDay = filteredDay?.some((interval) =>
-        isWithinInterval(time, { start: new Date(interval.startDate), end: new Date(interval.endDate) })
-      );
-      return !isWithinFilteredDay;
-    });
-
-    
-    return filteredTimes
-
   }
 
-  const times = getOpenTimes()
+  const filteredDay = reservations?.filter(
+    (reservation) => isSameDay(new Date(reservation.startDate), new Date(dateRange))
+  );
 
-  useEffect(() => {
-    
-    if (dateRange.startDate && dateRange.endDate) {
+  const filteredTimes = times?.filter((time) => {
+    const isWithinFilteredDay = filteredDay?.some((interval) =>
+      isWithinInterval(time, { start: new Date(interval.startDate), end: new Date(interval.endDate) })
+    );
+    return !isWithinFilteredDay;
+  });
 
-    let end = setHours(new Date(dateRange.endDate), listing.close)
+  return filteredTimes;
+};
 
-    if (dateRange.startDate.getTime() === dateRange.endDate.getTime() || dateRange.endDate < endOfToday()) {
-      setOverDay(false);
-      setData([]);
-    } else if(listing.priceDay){
 
-      setOverDay(true)
-      let duration = differenceInDays(end, dateRange.startDate)
-      
-      setData([{
-        start: setHours(new Date(dateRange.startDate), listing.open),
-        end: end,
-        duration: duration,
-        cost: listing?.priceDay * duration,
-        day: false
-      }]);
-      }
-       }
-  }, [dateRange.startDate, dateRange.endDate]);
+const times = getOpenTimes();
+
+
+useEffect(() => {
+  setSelectedTimes([]);
+  setData([]);
+}, [dateRange]);
 
   return (
     <Container>
@@ -220,27 +189,26 @@ const isSelectedTime = (selectedTime: Date) => {
           mx-auto
         "
       >
-        <div className="grid grid-cols-10 gap-3">
+        <div className="grid grid-cols-10 gap-5">
           <div className="col-span-6 flex flex-col items-start justify-start w-full gap-5">
             <ListingHead
               locationValue={listing.location}
               title={listing.title}
-              imageSrc={listing.images[0]}
+              imageSrc={listing.images}
               id={listing.id}
               currentUser={currentUser}
             />
-            {overDay? <div className="w-full flex items-center justify-center font-semibold text-5xl text-center">{days.duration} days</div> :
             <div className="w-full flex flex-col items-center justify-start gap-2">
              <label className="text-md text-blue-300 font-medium">
                Select a Time
                </label>
-               {listing.minHours > 1? <h1 className="text-xs">Duration: {listing.minHours} hrs</h1>: <h1 className="text-xs">Duration: {listing.minHours} hr</h1>}
+               {duration > 1? <h1 className="text-xs">Duration: {duration} hrs</h1>: <h1 className="text-xs">Duration: {duration} hr</h1>}
             <div className="w-full flex flex-row items-center gap-3 flex-wrap justify-center
              text-xs">
                {times?.map((time, i) => (
                  <div
                  key={i}
-                 className={`rounded-lg py-2 px-5 border ${isSelectedTime(time) ? "border-2 border-blue-500" : " border-[1px] border-blue-300"}`}
+                 className={`rounded-lg py-2 px-5 border ${isSelectedTime(time) ? "inner-border-2 border-blue-500" : " border-[1px] border-blue-300"}`}
                >
                  <button type="button" onClick={() => handleSelect(time)}>
                    {format(time, "kk:mmb")}
@@ -248,37 +216,31 @@ const isSelectedTime = (selectedTime: Date) => {
                </div>
                ))}
              </div>
-            </div>}
+            </div>
            
           </div>
 
           <div className="col-span-4">
-            <div
-              className=" w-full
-      bg-white 
-        rounded-xl 
-        border-[1px]
-      border-neutral-200 
-        overflow-hidden
-      "
-            >
-              <div
-                className="
-      flex flex-row items-center gap-1 p-4"
-              >
+            <div className="bg-white w-min rounded-xl border-[1px] border-neutral-100 overflow-hidden">
+              <div className="flex flex-row items-center gap-1 p-4 justify-center">
                 <div className="text-2xl font-semibold">N {listing.price}</div>
                 <div className="font-light text-neutral-600">/hr</div>
               </div>
               <hr />
+              <div className="w-full flex items-center justify-center">
               <Calendar
                 value={dateRange}
-                disabledDates={disabledDates}
-                onChange={(value) => setDateRange(value.selection)}
+                tileDisabled={({ date }) => disabledDates.some((disabledDate) => isSameDay(disabledDate, date))}
+                onChange={(value) => setDateRange(value as Date)}
+                className="border-none"
+                minDate={new Date()}
+                tileClassName="border-none"
               />
+              </div>
               <hr />
               <div className="p-4">
                 <Button
-                  disabled={isLoading}
+                  disabled={isLoading || data.length < 1}
                   label="Reserve"
                   onClick={onCreateReservation}
                 />
@@ -296,7 +258,7 @@ const isSelectedTime = (selectedTime: Date) => {
         "
               >
                 <div>Total</div>
-                <div>$ {overDay? days.cost : selectedTimes.length * listing.price}</div>
+                <div>N {selectedTimes.length * listing.price}</div>
               </div>
             </div>
           </div>

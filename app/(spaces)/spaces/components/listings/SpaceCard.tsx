@@ -55,7 +55,7 @@ const SpaceCard: React.FC<ListingCardProps> = ({
     }
 
     return data.price;
-  }, [order, data.price, order?.totalPrice]);
+  }, [order, data.price]);
 
   const reservationDate = useMemo(() => {
     if (!order) {

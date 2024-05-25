@@ -105,7 +105,7 @@ model Listing{
   guestCount Int?
   price Int
   priceDay Int?
-  dailyBook Boolean @default(true)
+  dailyBook Boolean @default(false)
   available Boolean @default(true)
   orderItems  OrderItem[]
   approved Boolean @default(false)
