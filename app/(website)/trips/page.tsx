@@ -21,25 +21,11 @@ const TripsPage = async () => {
     );
   }
 
-  const reservations = await getReservations({ userId: currentUser.id });
-
-  if (reservations.length === 0) {
-    return (
-      <ClientOnly>
-        <EmptyState
-          title="No spaces found"
-          subtitle="Looks like you havent reserved any spaces."
-        />
-      </ClientOnly>
-    );
-  }
-
   return (
     <ClientOnly>
-      <TripsClient
-      orders={reservations}
-        currentUser={currentUser}
-      />
+      <div>
+
+      </div>
     </ClientOnly>
   );
 }
