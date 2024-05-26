@@ -35,6 +35,7 @@ export async function POST(
           startDate,
           endDate,
           totalPrice,
+          duration: 2
         }
       }
     }
