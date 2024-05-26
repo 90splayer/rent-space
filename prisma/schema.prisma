@@ -96,7 +96,7 @@ model Listing{
   sizel  Int
   sizeb  Int
   location  String
-  street String?
+  street String
   images  String[]
   createdAt DateTime @default(now())
   category String[]

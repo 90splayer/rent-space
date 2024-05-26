@@ -192,6 +192,7 @@ useEffect(() => {
         <div className="grid grid-cols-10 gap-5">
           <div className="col-span-6 flex flex-col items-start justify-start w-full gap-5">
             <ListingHead
+            listingId={listing.id}
               locationValue={listing.location}
               title={listing.title}
               imageSrc={listing.images}
@@ -208,7 +209,7 @@ useEffect(() => {
                {times?.map((time, i) => (
                  <div
                  key={i}
-                 className={`rounded-lg py-2 px-5 border ${isSelectedTime(time) ? "inner-border-2 border-blue-500" : " border-[1px] border-blue-300"}`}
+                 className={`rounded-lg py-2 px-5 border ${isSelectedTime(time) ? "inner-border-4 border-blue-500" : " border-[1px] border-blue-300"}`}
                >
                  <button type="button" onClick={() => handleSelect(time)}>
                    {format(time, "kk:mmb")}

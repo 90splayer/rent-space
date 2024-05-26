@@ -1,15 +1,17 @@
 'use client';
 
+import Link from "next/link";
 import { CiEdit } from "react-icons/ci";
 import { CiShop } from "react-icons/ci";
 
 interface HeadingProps {
     title: string;
     location: string;
+    listingId: string;
 }
 
 const Heading: React.FC<HeadingProps> = ({
-    title, location
+    title, location, listingId
 }) => {
   return (
     <div className="w-full flex flex-row items-center justify-between">
@@ -22,8 +24,8 @@ const Heading: React.FC<HeadingProps> = ({
         </h1>
         </div>
         <div className="flex flex-row items-center justify-center gap-3 text-blue-500">
-            <CiEdit size={24}/>
-            <CiShop size={24}/>
+            <Link href={`/spaces/${listingId}/edit`} ><CiEdit size={24}/></Link>
+            <Link href={`/spaces/${listingId}/market`} ><CiShop size={24}/></Link>
         </div>
 
     </div>
