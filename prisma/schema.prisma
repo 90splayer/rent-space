@@ -40,6 +40,7 @@ model User{
   reviews Reviews[]
   feeback Feedback[]
   rating  Ratings[]
+  messages Message[]
 }
 
 model Admin{
@@ -118,6 +119,7 @@ model Listing{
   services Services[]
   features Features[]
   minibar  Minibar[]
+  report Report[]
   
   userId String @db.ObjectId
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -214,6 +216,15 @@ model Minibar{
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
+model Report{
+  id        String    @id @default(uuid()) @map("_id")
+  listingId  String   @db.ObjectId 
+  userId    String
+  report    String
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
 model MiniItem{
   id        String    @id @default(uuid()) @map("_id")
   barId  String   
@@ -249,4 +260,23 @@ model Feedback{
   createdAt DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Message{
+  id        String    @id @default(uuid()) @map("_id")
+  userId    String    @db.ObjectId
+  toId      String    @db.ObjectId
+  messages  Messages[]
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Messages{
+  id         String    @id @default(uuid()) @map("_id")
+  messageId  String   
+  text       String
+  read       Boolean  @default(false)
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
 }

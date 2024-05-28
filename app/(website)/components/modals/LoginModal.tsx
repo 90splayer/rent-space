@@ -17,7 +17,7 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 
 import Modal from "./Modal";
 import Input from "../inputs/Input";
-import Heading from "../Heading";
+import Heading from "../listings/ListingHeading";
 import Button from "../Button";
 
 const LoginModal = () => {

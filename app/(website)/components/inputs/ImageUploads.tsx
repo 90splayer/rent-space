@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useCallback } from "react";
 import { TbPhotoPlus } from 'react-icons/tb'
 import { ImagePlus, Trash } from 'lucide-react';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 declare global {
   var cloudinary: any
@@ -28,6 +29,19 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 }) => {
 
   const [isMounted, setIsMounted] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const handleNextImage = () => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === value.length - 1 ? 0 : prevIndex + 1
+      );
+    };
+  
+    const handlePrevImage = () => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === 0 ? value.length - 1 : prevIndex - 1
+      );
+    };
 
   useEffect(() => {
     setIsMounted(true);
@@ -44,8 +58,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-5">
     <div className="mb-4 flex items-center gap-4">
-      {value.map((url) => (
-        <div key={url} className="
+      <IoIosArrowBack size={24} onClick={handlePrevImage} className="cursor-pointer"/>
+        <div className="
         aspect-square 
         w-[325px] 
         h-[155px]
@@ -54,7 +68,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         rounded-xl
       ">
           <div className="z-10 absolute top-2 right-2">
-            <button type="button" onClick={() => onRemove(url)}>
+            <button type="button" onClick={() => onRemove(value[currentImageIndex])}>
               <Trash className="h-4 w-4" />
             </button>
           </div>
@@ -68,10 +82,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             transition
           "
           alt="Image"
-          src={url}
+          src={value[currentImageIndex]}
         />
         </div>
-      ))}
+        <IoIosArrowForward size={24} onClick={handleNextImage} className="cursor-pointer"/>
     </div>
     <CldUploadWidget onUpload={handleUpload} uploadPreset="fp65wtfs">
       {({ open }) => {

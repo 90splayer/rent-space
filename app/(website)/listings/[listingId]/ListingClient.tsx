@@ -56,7 +56,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   }, [searchParams,
     totalPrice, 
     dateRange, 
-    listing?.id,
+    listing.id,
     router,
     currentUser,
     loginModal
@@ -95,7 +95,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
         totalPrice,
         startDate: dateRange.startDate,
         endDate: dateRange.endDate,
-        listingId: listing?.id
+        listingId: listing.id
       })
       
       // axios.post('/api/reservations', {
@@ -144,11 +144,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
       >
         <div className="flex flex-col gap-6">
           <ListingHead
-          locationValue={listing.location}
+            locationValue={listing.location}
             title={listing.title}
             imageSrc={listing.images[0]}
             id={listing.id}
             currentUser={currentUser}
+            host={listing.user.fname}
           />
           <div 
             className="

@@ -5,13 +5,14 @@ import Image from "next/image";
 import useCountries from "@/app/hooks/useCountries";
 import { SafeUser } from "@/app/types";
 
-import Heading from "../Heading";
+import Heading from "./ListingHeading";
 import HeartButton from "../HeartButton";
 
 interface ListingHeadProps {
   title: string;
   locationValue: string;
   imageSrc: string;
+  host: string;
   id: string;
   currentUser?: SafeUser | null
 }
@@ -20,6 +21,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
   title,
   locationValue,
   imageSrc,
+  host,
   id,
   currentUser
 }) => {
@@ -32,6 +34,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
       <Heading
         title={title}
         subtitle={locationValue}
+        host={host}
       />
       <div className="
           w-full

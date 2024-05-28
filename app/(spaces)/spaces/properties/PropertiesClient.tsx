@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import { SafeListing, SafeUser } from "@/app/types";
 
-import Heading from "@/app/(website)/components/Heading";
+import Heading from "@/app/(website)/components/listings/ListingHeading";
 import Container from "@/app/(website)/components/Container";
 import ListingCard from "@/app/(website)/components/listings/ListingCard";
 

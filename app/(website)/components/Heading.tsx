@@ -3,23 +3,21 @@
 interface HeadingProps {
     title: string;
     subtitle?: string;
-    center?: boolean;
 }
 
-const Heading: React.FC<HeadingProps> = ({
-    title, subtitle, center
+const ListingHeading: React.FC<HeadingProps> = ({
+    title, subtitle
 }) => {
   return (
-    <div className={center ? 'text-center' : 'text-start'}>
-        <div className="text-xl font-bold">
-            {title}
-        </div>
-        <div className="font-light text-neutral-500 mt-2">
-            {subtitle}
-        </div>
-
+    <div className='text-start flex flex-col items-start gap-1'>
+    <div className="text-xl font-bold">
+        {title}
     </div>
+    <div className="font-light text-neutral-500">
+        {subtitle}
+    </div>
+</div>
   )
 }
 
-export default Heading
+export default ListingHeading

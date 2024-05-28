@@ -3,7 +3,10 @@
 import { Range } from "react-date-range";
 
 import Button from "../Button";
-import Calendar from "../inputs/Calendar";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import { useState } from "react";
+import { isSameDay } from "date-fns";
 
 interface ListingReservationProps {
   price: number;
@@ -19,38 +22,35 @@ const ListingReservation: React.FC<
   ListingReservationProps
 > = ({
   price,
-  dateRange,
   totalPrice,
   onChangeDate,
   onSubmit,
   disabled,
   disabledDates
 }) => {
+
+  const [dateRange, setDateRange] = useState<Date>(new Date());
+
   return ( 
     <div 
       className="
-      bg-white 
-        rounded-xl 
-        border-[1px]
-      border-neutral-200 
-        overflow-hidden
-      "
-    >
-      <div className="
-      flex flex-row items-center gap-1 p-4">
+      bg-white w-min rounded-xl border-[1px] border-neutral-200 overflow-hidden items-end">
+      <div className=" flex flex-row items-center justify-center gap-1 p-4">
         <div className="text-2xl font-semibold">
-          $ {price}
+          N {price}
         </div>
         <div className="font-light text-neutral-600">
-          night
+          /hour
         </div>
       </div>
       <hr />
       <Calendar
         value={dateRange}
-        disabledDates={disabledDates}
-        onChange={(value) => 
-          onChangeDate(value.selection)}
+        tileDisabled={({ date }) => disabledDates.some((disabledDate) => isSameDay(disabledDate, date))}
+        onChange={(value) => setDateRange(value as Date)}
+        className="border-none"
+        minDate={new Date()}
+        tileClassName="border-none"
       />
       <hr />
       <div className="p-4">
@@ -76,7 +76,7 @@ const ListingReservation: React.FC<
           Total
         </div>
         <div>
-          $ {totalPrice}
+          N {totalPrice}
         </div>
       </div>
     </div>

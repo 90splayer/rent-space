@@ -14,16 +14,11 @@ const NavbarTabs = () => {
         },
         {
             id: 2,
-            name: "Messages",
-            link: "/spaces/messages"
-        },
-        {
-            id: 3,
             name: "Reservations",
             link: "/spaces/reservations"
         },
         {
-            id: 4,
+            id: 3,
             name: "Insights",
             link: "/spaces/insights"
         },

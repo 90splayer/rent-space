@@ -9,7 +9,7 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 
 import React from 'react'
 import Modal from './Modal';
-import Heading from '../Heading';
+import Heading from '../listings/ListingHeading';
 import Input from '../inputs/Input';
 import { toast } from 'react-hot-toast';
 import Button from '../Button';

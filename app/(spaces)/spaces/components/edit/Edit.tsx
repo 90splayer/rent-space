@@ -1,7 +1,7 @@
 'use client';
 
 import * as z from "zod"
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { categories } from '@/public/data/categories';
 import ImageUpload from '@/app/(website)/components/inputs/ImageUploads';
 import axios from 'axios';
@@ -9,10 +9,10 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { statesng } from '@/public/data/nigeria-states';
 import { hours } from '@/public/data/hour';
-import { IoArrowForwardCircleOutline, IoArrowBackCircleOutline } from "react-icons/io5";
 import Image from "next/image";
-import { Listing } from "@prisma/client";
 import { SafeListing } from "@/app/types";
+import { IoReturnUpBack } from "react-icons/io5";
+import Link from "next/link";
 
 
 const formSchema = z.object({
@@ -44,6 +44,7 @@ const Edit: React.FC<EditProps>  = ({listing}) => {
     const [selectedImages, setSelectedImages] = useState<any[]>(listing.images);
     const [selectedOption, setSelectedOption] = useState(listing.location);
     const [formData, setFormData] = useState<SafeListing>(listing);
+    
 
     const handleClick = (categoryLabel: any) => {
         if (selectedCategories.includes(categoryLabel)) {
@@ -84,11 +85,6 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
   setLoading(false);
 }
 };
-
-
-    const nextPage = () => {
-      setCurrentPage((prevPage) => prevPage + 1);
-    };
   
     const prevPage = () => {
       setCurrentPage((prevPage) => prevPage - 1);
@@ -142,19 +138,23 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
     if (currentPage === 1){
       body = (<div className="w-full flex flex-col gap-3 items-center justify-start">
          <div className='w-full grid grid-cols-10'>
-     <div className=" col-span-6 w-full flex flex-col gap-3 items-start justify-start">
-     <h1 className="text-gray-500 font-light text-base">1. Add images of your space. Images are viewed in landscape</h1>
+     <div className=" col-span-5 w-full flex flex-col gap-3 items-start justify-start">
+     <label className="text-[12px] text-blue-300 font-medium">
+     Add images of your space. Images are viewed in landscape
+     </label>
      <ImageUpload value={selectedImages} 
      disabled={loading} 
      onChange={handleImageChange}
      onRemove={handleImageRemove}
      />
      </div>
-      <div className="col-span-4 flex flex-col gap-3 w-full items-start">
-        <h1 className="text-gray-500 font-light text-base">2. Select up to 3 specs that match your space</h1>
+      <div className="col-span-5 flex flex-col gap-3 w-full items-start">
+      <label className="text-[12px] text-blue-300 font-medium">
+      Select up to 3 specs that match your space
+     </label>
       <div
       className=" 
-        pt-4
+        pt-2
         w-full
         flex 
         flex-row
@@ -182,8 +182,8 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
            ${selectedCategories.includes(category.label) ? 'text-blue-800' : 'text-neutral-500'}
          `}
        >
-      <category.icon size={26}/>
-         <div className="font-medium text-sm">
+      <category.icon size={16}/>
+         <div className="font-medium text-xs">
            {category.label}
          </div>
        </div>
@@ -191,21 +191,7 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
     </div>
       </div>
     </div>
-     {/* Navigation buttons */}
-     <button disabled={selectedImages.length < 1 || selectedCategories.length < 1}
-      className={`
-      text-white text-xs leading-[30px] rounded-lg px-4 py-1
-      ${(selectedCategories.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
-      `} onClick={nextPage}>
-        Next
-      </button>
-    </div>)
-    }
-
-    
-if (currentPage === 2) {
-    body = (
-      <div className="flex flex-col items-center justify-start gap-8 w-full">
+    <div className="flex flex-col items-center justify-start gap-8 w-full">
        <div className='w-full grid lg:grid-cols-9 grid-cols-1 gap-5 items-start'>
           <div className="flex flex-col col-span-3 w-full">
           <label className="text-[12px] text-blue-300 font-medium">
@@ -364,21 +350,20 @@ if (currentPage === 2) {
     </div>
   </div>
       </div>
-        <div className='flex flex-row items-center justify-center gap-5'>
-        <button 
-         className={`
-        text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
-        `} onClick={prevPage}>Prev</button>
-        <button disabled={selectedImages.length < 1 || selectedOption.length < 1} className={`
-        text-white text-xs leading-[30px] rounded-lg px-4 py-1
-        ${(!formData.title || selectedOption.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
-        `} onClick={lastPage}>Next</button>
-        </div>
       </div>
-    );
-  }
+     {/* Navigation buttons */}
+     <button disabled={selectedImages.length < 1 || selectedCategories.length < 1}
+      className={`
+      text-white text-xs leading-[30px] rounded-lg px-4 py-1
+      ${(selectedCategories.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
+      `} onClick={lastPage}>
+        Next
+      </button>
+    </div>)
+    }
 
-  if (currentPage === 3) {
+
+  if (currentPage === 2) {
     body = ( 
    <div className="grid grid-cols-1 md:grid-cols-10 gap-3">
     <div className="col-span-3 flex flex-col items-center justify-start gap-3">
@@ -437,11 +422,20 @@ if (currentPage === 2) {
 
   
   return (
-   <>
+   <div className="flex flex-col items-center justify-start gap-5">
+    <div className="flex flex-row w-full items-center justify-between">
+      <Link href={`/spaces/${listing.id}`}>
+      <IoReturnUpBack size={24}/>
+      </Link>
+   <div className="w-full flex flex-row items-center justify-end gap-4">
+     <button className="text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-400">Freeze Space</button>
+     <button className="text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-red-600">Delete Space</button>
+   </div>
+    </div>
    <form onSubmit={handleSubmit} className="flex border rounded-md p-4 min-h-[60vh] items-center justify-center">
     {body}
    </form>
-      </>
+      </div>
   )
 }
 

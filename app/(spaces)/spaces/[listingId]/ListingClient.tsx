@@ -54,22 +54,17 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const duration = listing.minHours * selectedTimes.length;
 
 
-
-
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
 
     const filteredReservations = reservations?.filter(
-      (reservation) => !isSameDay(new Date(reservation.startDate), new Date(reservation.endDate))
+      (reservation) => differenceInHours(new Date(reservation.startDate), new Date(reservation.endDate))>22
     );
 
     filteredReservations?.forEach((reservation: any) => {
-      const range = eachDayOfInterval({
-        start: new Date(reservation.startDate),
-        end: new Date(reservation.endDate),
-      });
+      const date = reservation.startDate
 
-      dates = [...dates, ...range];
+      dates = [...dates, ...date];
     });
 
     return dates;
@@ -88,7 +83,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
     try {
       // Call your POST function with form data
-      await axios.post(`/api/reserve/${listing?.id}`,  { reservations: data });
+      await axios.post(`/api/spaces/${listing?.id}/reserve`,  { reservations: data });
       toast.success("Space reserved successfully!");
       setDateRange(new Date());
       setData([]);
@@ -99,7 +94,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
   } finally {
     setIsLoading(false);
   }
-     // window.location = response.data.url;
   };
 
   const handleSelect = (selectedTime: Date) => {
@@ -172,9 +166,33 @@ const getOpenTimes = () => {
   return filteredTimes;
 };
 
-
 const times = getOpenTimes();
 
+const handleBlockDay = async (date: Date) => {
+  if (!currentUser) {
+    return loginModal.onOpen();
+  }
+  setIsLoading(true);
+
+  try {
+    // Call your POST function with form data
+    await axios.patch(`/api/spaces/${listing.id}/block-day`,  { blocked: date});
+    toast.success("date blocked");
+    setDateRange(new Date());
+    setData([]);
+    window.location.reload();
+  
+  } catch (error: any) {
+    toast.error(`${error.response.data}`);
+} finally {
+  setIsLoading(false);
+}
+};
+
+//  const isDateDisabled = (date: Date) => {
+//     const availableTimes = getOpenTimes(date);
+//     return availableTimes.length === 0;
+//   };
 
 useEffect(() => {
   setSelectedTimes([]);
@@ -189,8 +207,8 @@ useEffect(() => {
           mx-auto
         "
       >
-        <div className="grid grid-cols-10 gap-5">
-          <div className="col-span-6 flex flex-col items-start justify-start w-full gap-5">
+        <div className="lg:grid lg:grid-cols-10 flex flex-col gap-5">
+          <div className="lg:col-span-6 flex flex-col items-start justify-start w-full gap-5">
             <ListingHead
             listingId={listing.id}
               locationValue={listing.location}
@@ -199,7 +217,7 @@ useEffect(() => {
               id={listing.id}
               currentUser={currentUser}
             />
-            <div className="w-full flex flex-col items-center justify-start gap-2">
+            <div className="w-full flex flex-col items-center justify-start gap-2 rounded-xl border p-2">
              <label className="text-md text-blue-300 font-medium">
                Select a Time
                </label>
@@ -218,11 +236,13 @@ useEffect(() => {
                ))}
              </div>
             </div>
-           
+           <div className="w-full flex flex-row items-center justify-center gap-3 text-white">
+            <button onClick={() => handleBlockDay(dateRange)} className="bg-orange-400 px-4 py-1 rounded-lg">Block Day</button>
+           </div>
           </div>
 
-          <div className="col-span-4">
-            <div className="bg-white w-min rounded-xl border-[1px] border-neutral-100 overflow-hidden">
+          <div className="lg:col-span-4 w-full flex items-center justify-center">
+            <div className=" flex flex-col justify-start items-center bg-white w-min rounded-xl border-[1px] border-neutral-100 overflow-hidden">
               <div className="flex flex-row items-center gap-1 p-4 justify-center">
                 <div className="text-2xl font-semibold">N {listing.price}</div>
                 <div className="font-light text-neutral-600">/hr</div>
@@ -233,13 +253,12 @@ useEffect(() => {
                 value={dateRange}
                 tileDisabled={({ date }) => disabledDates.some((disabledDate) => isSameDay(disabledDate, date))}
                 onChange={(value) => setDateRange(value as Date)}
-                className="border-none"
+                className=""
                 minDate={new Date()}
-                tileClassName="border-none"
               />
               </div>
               <hr />
-              <div className="p-4">
+              <div className="p-4 w-full">
                 <Button
                   disabled={isLoading || data.length < 1}
                   label="Reserve"
@@ -247,17 +266,7 @@ useEffect(() => {
                 />
               </div>
               <hr />
-              <div
-                className="
-          p-4 
-          flex 
-          flex-row 
-          items-center 
-          justify-between
-          font-semibold
-          text-lg
-        "
-              >
+              <div className="w-full p-4 flex flex-row items-center justify-between font-semibold text-lg">
                 <div>Total</div>
                 <div>N {selectedTimes.length * listing.price}</div>
               </div>

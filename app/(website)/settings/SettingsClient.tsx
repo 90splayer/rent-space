@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import {  SafeUser } from "@/app/types";
 
-import Heading from "@/app/(website)/components/Heading";
+import Heading from "@/app/(website)/components/listings/ListingHeading";
 import Container from "@/app/(website)/components/Container";
 import SettingsCard from "../components/settings/SettingsCard";
 import { BsFillPersonVcardFill } from "react-icons/bs";

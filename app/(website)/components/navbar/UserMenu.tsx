@@ -11,6 +11,8 @@ import { signOut } from 'next-auth/react';
 import { SafeUser } from '@/app/types';
 import useRentModal from '@/app/hooks/useRentModal';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import image from '@/public/images/placeholder.jpg'
 
 interface UserMenuProps {
     currentUser?: SafeUser | null;
@@ -50,7 +52,13 @@ interface UserMenuProps {
             className="flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
             >
                 <div className='hidden md:block'>
-                    <Avatar src={currentUser?.image}/>
+                    {currentUser? 
+                    <Avatar src={currentUser.image} name={currentUser.fname}/> :
+                    <Image  className="rounded-full"
+                    height="30"
+                    width="30"
+                    alt="Avatar"
+                    src={image} />}
                 </div>
             </div>
         </div>

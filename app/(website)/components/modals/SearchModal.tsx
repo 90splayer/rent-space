@@ -17,7 +17,7 @@ import Counter from "../inputs/Counter";
 import CountrySelect, { 
   CountrySelectValue
 } from "../inputs/CountrySelect";
-import Heading from '../Heading';
+import Heading from '../listings/ListingHeading';
 
 enum STEPS {
   CATEGORY = 0,

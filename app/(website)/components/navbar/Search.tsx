@@ -46,14 +46,13 @@ const Search: React.FC<IParams> = ({ listings })  => {
   const renderListings = searchResults.length > 0 ? searchResults : listings;
 
   return (
-    <div className="rounded-2xl border border-gray-300 flex flex-row items-center justify-center shadow-sm hover:shadow-md transition cursor-pointer bg-white divide-solid divide-x text-sm">
+    <div className="rounded-2xl border border-gray-300 flex flex-row items-center justify-center shadow-sm hover:shadow-md cursor-pointer bg-white text-sm">
       <span
-        className="flex items-center justify-between gap-2 text-center p-2"
-        onClick={handleSearchClick}
+        className="flex items-center justify-between gap-2 text-center px-2 py-1"
+        onClick={() => setLocation(!location)}
       >
-        <BiSearch size={18} />
-        {search && (
-          <input
+        <MdLocationPin size={18} />
+        <input
             ref={inputRef}
             onChange={handleChange}
             value={input}
@@ -62,16 +61,9 @@ const Search: React.FC<IParams> = ({ listings })  => {
             required
             type="text"
             placeholder=""
-            className="appearance-none text-small bg-transparent font-semibold w-12 outline-none placeholder:text-gray-400"
+            className="appearance-none text-small bg-transparent font-semibold w-20 h-4 outline-none placeholder:text-gray-400"
             onBlur={handleBlur}
           />
-        )}
-      </span>
-      <span
-        className="flex items-center justify-between gap-2 text-center p-2"
-        onClick={() => setLocation(!location)}
-      >
-        <MdLocationPin size={18} />
       </span>
     </div>
   );
