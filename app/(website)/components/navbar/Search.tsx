@@ -60,8 +60,8 @@ const Search: React.FC<IParams> = ({ listings })  => {
             name="search"
             required
             type="text"
-            placeholder=""
-            className="appearance-none text-small bg-transparent font-semibold w-24 h-4 outline-none placeholder:text-gray-400"
+            placeholder="Search location"
+            className="appearance-none text-small bg-transparent font-semibold w-24 h-4 outline-none placeholder:text-gray-400 placeholder:text-xs"
             onBlur={handleBlur}
           />
       </span>

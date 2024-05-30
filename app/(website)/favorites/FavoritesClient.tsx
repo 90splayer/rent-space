@@ -1,6 +1,6 @@
 import { SafeListing, SafeUser } from "@/app/types";
 
-import Heading from "@/app/(website)/components/listings/ListingHeading";
+import Heading from "@/app/(website)/components/Heading";
 import Container from "@/app/(website)/components/Container";
 import ListingCard from "@/app/(website)/components/listings/ListingCard";
 
@@ -25,11 +25,9 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
           grid 
           grid-cols-1 
           sm:grid-cols-2 
-          md:grid-cols-3 
-          lg:grid-cols-4
-          xl:grid-cols-5
-          2xl:grid-cols-6
+          lg:grid-cols-3 
           gap-8
+          items-center justify-center
         "
       >
         {listings.map((listing: any) => (

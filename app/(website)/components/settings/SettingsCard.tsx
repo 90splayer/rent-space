@@ -27,7 +27,7 @@ const SettingsCard: React.FC<SettingsCardProps> = ({
   return (
     <Link href={link} 
       
-      className="col-span-4 xs:col-span-3 cursor-pointer group"
+      className="col-span-1 cursor-pointer group"
     >
         <div className="flex flex-col w-full h-40 items-center justify-center 
         text-center px-3 py-4 border-[1px] shadow-sm rounded-lg gap-2">
