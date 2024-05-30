@@ -21,7 +21,7 @@ const Map = dynamic(() => import('../Map'), {
 
 interface ListingInfoProps {
   listing: SafeListing;
-  reservations: Reservation[];
+  reservations: Reservation[] | null;
   locationValue: string;
   onSubmit: () => void;
   disabledDates: Date[];
