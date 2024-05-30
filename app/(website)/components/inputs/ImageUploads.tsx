@@ -45,7 +45,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+  }, [value]);
 
   const handleUpload = useCallback((result: any) => {
     onChange(result.info.secure_url);
@@ -57,6 +57,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-5">
+    {value.length >= 1 ? 
     <div className="mb-4 flex items-center gap-4">
       <IoIosArrowBack size={24} onClick={handlePrevImage} className="cursor-pointer"/>
         <div className="
@@ -86,7 +87,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         />
         </div>
         <IoIosArrowForward size={24} onClick={handleNextImage} className="cursor-pointer"/>
-    </div>
+    </div> : <div></div>}
     <CldUploadWidget onUpload={handleUpload} uploadPreset="fp65wtfs">
       {({ open }) => {
         const onClick = () => {

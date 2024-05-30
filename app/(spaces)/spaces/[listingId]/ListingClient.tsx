@@ -133,7 +133,7 @@ const getOpenTimes = () => {
 
   const openHour = listing.open;
   const closeHour = listing.close;
-  const openTime = dateRange <= new Date() ? addMilliseconds(endOfHour(new Date()), 1) : setHours(new Date(dateRange), openHour);
+  const openTime = dateRange <= new Date() && new Date() > setHours(new Date(dateRange), openHour)? addMilliseconds(endOfHour(new Date()), 1) : setHours(new Date(dateRange), openHour);
   const closeTime = setHours(new Date(dateRange), closeHour);
 
   const interval = listing.minHours; // in hours

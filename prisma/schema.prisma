@@ -97,6 +97,7 @@ model Listing{
   sizel  Int
   sizeb  Int
   location  String
+  city  String
   street String
   images  String[]
   createdAt DateTime @default(now())

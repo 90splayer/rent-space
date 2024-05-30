@@ -23,10 +23,8 @@ export default async function getListings(
     let query: any = {};
 
     if (category) {
-      query.category = { equals: category };
+      query.category = { has: category };
     }
-
-  
 
     const listings = await prisma.listing.findMany({
       where: query,

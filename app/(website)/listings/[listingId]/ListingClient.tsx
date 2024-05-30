@@ -25,7 +25,7 @@ const initialDateRange = {
 };
 
 interface ListingClientProps {
-  reservations?: Reservation[] | null;
+  reservations?: Reservation[];
   listing: SafeListing & {
     user: SafeUser;
   }; 
@@ -119,20 +119,20 @@ const ListingClient: React.FC<ListingClientProps> = ({
       window.location = response.data.url;
   };
 
-  useEffect(() => {
-    if (dateRange.startDate && dateRange.endDate) {
-      const dayCount = differenceInDays(
-        dateRange.endDate, 
-        dateRange.startDate
-      );
+  // useEffect(() => {
+  //   if (dateRange.startDate && dateRange.endDate) {
+  //     const dayCount = differenceInDays(
+  //       dateRange.endDate, 
+  //       dateRange.startDate
+  //     );
       
-      if (dayCount && listing.price) {
-        setTotalPrice(dayCount * listing.price);
-      } else {
-        setTotalPrice(listing.price);
-      }
-    }
-  }, [dateRange, listing.price]);
+  //     if (dayCount && listing.price) {
+  //       setTotalPrice(dayCount * listing.price);
+  //     } else {
+  //       setTotalPrice(listing.price);
+  //     }
+  //   }
+  // }, [dateRange, listing.price]);
 
   return ( 
     <Container>
@@ -153,40 +153,17 @@ const ListingClient: React.FC<ListingClientProps> = ({
           />
           <div 
             className="
-              grid 
-              grid-cols-1 
-              md:grid-cols-7 
-              md:gap-10 
+              w-full
               mt-6
             "
           >
             <ListingInfo
-              user={listing.user}
-              category={listing.category}
-              description={listing.description? listing.description : ""}
-              roomCount={listing.roomCount}
-              guestCount={listing.guestCount}
-              bathroomCount={listing.bathroomCount}
+              listing={listing}
+              reservations={reservations}
               locationValue={listing.title}
+              onSubmit={onCreateReservation}
+              disabledDates={disabledDates}
             />
-            <div 
-              className="
-                order-first 
-                mb-10 
-                md:order-last 
-                md:col-span-3
-              "
-            >
-              <ListingReservation
-                price={listing.price}
-                totalPrice={totalPrice}
-                onChangeDate={(value) => setDateRange(value)}
-                dateRange={dateRange}
-                onSubmit={onCreateReservation}
-                disabled={isLoading}
-                disabledDates={disabledDates}
-              />
-            </div>
           </div>
         </div>
       </div>

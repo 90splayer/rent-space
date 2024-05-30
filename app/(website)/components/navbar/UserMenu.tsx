@@ -1,7 +1,7 @@
 'use client';
 import { AiOutlineMenu } from 'react-icons/ai';
 import Avatar from '../Avatar';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { MdWorkspacesOutline } from "react-icons/md";
 import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
@@ -26,6 +26,7 @@ interface UserMenuProps {
     const loginModal = useLoginModal();
     const rentModal = useRentModal();
     const [isOpen, setIsOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const toggleOpen = useCallback(() => {
         setIsOpen((value) => !value);
@@ -37,6 +38,20 @@ interface UserMenuProps {
         }
         router.push('/spaces');
     }, [currentUser, loginModal]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [menuRef]);
 
   return (
     <div className='relative'>
@@ -63,7 +78,7 @@ interface UserMenuProps {
             </div>
         </div>
         {isOpen && (
-            <div className='absolute rounded-xl shadow-md w-[40vw] md:w-56 bg-white overflow-hidden right-0 top-12 text-sm'>
+            <div ref={menuRef} className='absolute rounded-xl shadow-md w-[40vw] md:w-56 bg-white overflow-hidden right-0 top-12 text-sm'>
                 <div className='flex flex-col cursor-pointer'>
                     {currentUser ? (
                         <>
@@ -74,6 +89,10 @@ interface UserMenuProps {
                         <MenuItem 
                         onClick={() => {router.push("/reservations"); toggleOpen();}}
                         label='Trips'
+                        />
+                        <MenuItem 
+                        onClick={() => {router.push("/favorites"); toggleOpen();}}
+                        label='Favorites'
                         />
                         <MenuItem 
                         onClick={() => {router.push("/settings"); toggleOpen();}}

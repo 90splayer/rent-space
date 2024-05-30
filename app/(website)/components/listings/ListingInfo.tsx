@@ -4,23 +4,27 @@ import dynamic from "next/dynamic";
 import { IconType } from "react-icons";
 
 import useCountries from "@/app/hooks/useCountries";
-import { SafeUser } from "@/app/types";
-
+import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 import Avatar from "../Avatar";
 import ListingCategory from "./ListingCategory";
 import { add, addHours, addMilliseconds, differenceInHours, endOfHour, format, isSameDay, isSameHour, isWithinInterval, setHours, subMilliseconds } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Listing, Reservation, User } from "@prisma/client";
+import ListingReservation from "./ListingReservation";
+import Button from "../Button";
 
 const Map = dynamic(() => import('../Map'), { 
   ssr: false 
 });
 
 interface ListingInfoProps {
-  listing: Listing;
+  listing: SafeListing;
   reservations: Reservation[];
-  currentUser: User;
-  locationValue: string
+  locationValue: string;
+  onSubmit: () => void;
+  disabledDates: Date[];
 }
 
 interface ReservationData {
@@ -33,8 +37,9 @@ interface ReservationData {
 const ListingInfo: React.FC<ListingInfoProps> = ({
   listing,
   reservations,
-  currentUser,
-  locationValue
+  locationValue,
+  onSubmit,
+  disabledDates
 }) => {
   const { getByValue } = useCountries();
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +47,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
   const [selectedTimes, setSelectedTimes] = useState<Date[]>([]);
   const [data, setData] = useState<ReservationData[]>([]);
   const duration = listing.minHours * selectedTimes.length;
+  const [totalPrice, setTotalPrice] = useState(listing.price);
 
   const coordinates = getByValue(locationValue)?.latlng
   const handleSelect = (selectedTime: Date) => {
@@ -114,34 +120,87 @@ const getOpenTimes = () => {
   return filteredTimes;
 };
 
-
 const times = getOpenTimes();
 
+useEffect(() => {
+  setSelectedTimes([]);
+  setData([]);
+}, [dateRange]);
+
   return ( 
-    <div className="w-full flex lg:flex-row flex-col lg:justify-between gap-5">
-      <div className="flex flex-col gap-2">
+    <div className="lg:grid flex lg:grid-cols-10 w-full gap-5">
+      <div className="col-span-6 flex flex-col items-center justify-start gap-2">
       <div className="w-full flex flex-col items-center justify-start gap-2">
-             <label className="text-md text-blue-300 font-medium">
-               Select a Time
-               </label>
-               {duration > 1? <h1 className="text-xs">Duration: {duration} hrs</h1>: <h1 className="text-xs">Duration: {duration} hr</h1>}
-            <div className="w-full flex flex-row items-center gap-3 flex-wrap justify-center
-             text-xs">
-               {times?.map((time, i) => (
-                 <div
-                 key={i}
-                 className={`rounded-lg py-2 px-5 border ${isSelectedTime(time) ? "inner-border-4 border-blue-500" : " border-[1px] border-blue-300"}`}
-               >
-                 <button type="button" onClick={() => handleSelect(time)}>
-                   {format(time, "kk:mmb")}
-                 </button>
-               </div>
-               ))}
-             </div>
-            </div>
+      <label className="text-md text-blue-300 font-medium">
+        Select a Time
+        </label>
+        {duration > 1? <h1 className="text-xs">Duration: {duration} hrs</h1>: <h1 className="text-xs">Duration: {duration} hr</h1>}
+     <div className="w-full flex flex-row items-center gap-3 flex-wrap justify-center
+      text-xs">
+        {times?.map((time, i) => (
+          <div
+          key={i}
+          className={`rounded-lg py-2 px-5 border ${isSelectedTime(time) ? "inner-border-4 border-blue-500" : " border-[1px] border-blue-300"}`}
+        >
+          <button type="button" onClick={() => handleSelect(time)}>
+            {format(time, "kk:mmb")}
+          </button>
+        </div>
+        ))}
       </div>
-    
+</div>
       <Map center={coordinates} />
+    </div>
+    <div className="col-span-4 flex justify-end">
+      <div 
+      className="
+      bg-white w-min rounded-xl border-[1px] border-neutral-200 overflow-hidden items-end">
+      <div className=" flex flex-row items-center justify-center gap-1 p-4">
+        <div className="text-2xl font-semibold">
+          N {listing.price}
+        </div>
+        <div className="font-light text-neutral-600">
+          /hour
+        </div>
+      </div>
+      <hr />
+      <Calendar
+        value={dateRange}
+        tileDisabled={({ date }) => disabledDates.some((disabledDate) => isSameDay(disabledDate, date))}
+        onChange={(value) => setDateRange(value as Date)}
+        className="border-none"
+        minDate={new Date()}
+        tileClassName="border-none"
+      />
+      <hr />
+      <div className="p-4">
+        <Button 
+          disabled={isLoading} 
+          label="Reserve" 
+          onClick={onSubmit}
+        />
+      </div>
+      <hr />
+      <div 
+        className="
+          p-4 
+          flex 
+          flex-row 
+          items-center 
+          justify-between
+          font-semibold
+          text-lg
+        "
+      >
+        <div>
+          Total
+        </div>
+        <div>
+          N {totalPrice}
+        </div>
+      </div>
+    </div>
+    </div>
     </div>
    );
 }

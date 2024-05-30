@@ -1,6 +1,5 @@
 'use client';
 
-import { Range } from "react-date-range";
 
 import Button from "../Button";
 import Calendar from 'react-calendar';
@@ -10,9 +9,9 @@ import { isSameDay } from "date-fns";
 
 interface ListingReservationProps {
   price: number;
-  dateRange: Range,
+  dateRange: Date,
   totalPrice: number;
-  onChangeDate: (value: Range) => void;
+  onChangeDate: (value: Date) => void;
   onSubmit: () => void;
   disabled?: boolean;
   disabledDates: Date[];

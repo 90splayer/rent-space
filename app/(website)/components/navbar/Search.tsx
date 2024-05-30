@@ -46,7 +46,7 @@ const Search: React.FC<IParams> = ({ listings })  => {
   const renderListings = searchResults.length > 0 ? searchResults : listings;
 
   return (
-    <div className="rounded-2xl border border-gray-300 flex flex-row items-center justify-center shadow-sm hover:shadow-md cursor-pointer bg-white text-sm">
+    <div className="rounded-lg border-b border-gray-300 flex flex-row items-center justify-center shadow-sm hover:shadow-md cursor-pointer bg-white text-sm">
       <span
         className="flex items-center justify-between gap-2 text-center px-2 py-1"
         onClick={() => setLocation(!location)}
@@ -61,7 +61,7 @@ const Search: React.FC<IParams> = ({ listings })  => {
             required
             type="text"
             placeholder=""
-            className="appearance-none text-small bg-transparent font-semibold w-20 h-4 outline-none placeholder:text-gray-400"
+            className="appearance-none text-small bg-transparent font-semibold w-24 h-4 outline-none placeholder:text-gray-400"
             onBlur={handleBlur}
           />
       </span>

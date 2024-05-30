@@ -13,6 +13,7 @@ import Image from "next/image";
 import { SafeListing } from "@/app/types";
 import { IoReturnUpBack } from "react-icons/io5";
 import Link from "next/link";
+import { statiesng } from "@/public/data/nigerian-states-and-cities";
 
 
 const formSchema = z.object({
@@ -44,6 +45,7 @@ const Edit: React.FC<EditProps>  = ({listing}) => {
     const [selectedImages, setSelectedImages] = useState<any[]>(listing.images);
     const [selectedOption, setSelectedOption] = useState(listing.location);
     const [formData, setFormData] = useState<SafeListing>(listing);
+    const [cities, setCities] = useState<string[]>(statiesng[0].cities);
     
 
     const handleClick = (categoryLabel: any) => {
@@ -72,13 +74,13 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
   try {
     // Call your POST function with form data
     await axios.patch(`/api/spaces/${listing.id}`, formData);
-    toast.success("Space uploaded successfully!");
+    toast.success("Space updated successfully!");
     setSelectedOption(listing.location);
     setFormData(listing);
     setSelectedCategories(listing.category);
     setSelectedImages(listing.images);
-   router.push(`/spaces/${listing.id}`);
-   window.location.reload()
+    router.push(`/spaces/${listing.id}`);
+    window.location.reload()
   } catch (error: any) {
     toast.error(`${error.response.data}`);
 } finally {
@@ -115,6 +117,11 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
             ...formData,
             location: value,
         });
+        
+
+        const selectedState = statiesng.find(state => state.name === value);
+        setCities(selectedState ? selectedState.cities : []);
+        setFormData({...formData, city: ""}); // Reset city selection
     };
 
     const handleOpen = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -131,6 +138,11 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
         ...formData,
         close: Number(value),
     });
+};
+
+const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const { value } = e.target;
+  setFormData({...formData, city: value});
 };
 
     let body
@@ -219,9 +231,30 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
                 <option value="" disabled hidden>
                   Select a location
                 </option>
-                {statesng.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
+                {statiesng.map((state) => (
+                  <option key={state.name} value={state.name}>
+                    {state.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col md:col-span-3 w-full gap-1">
+              <label className="text-[12px] text-blue-300 font-medium">
+                City
+              </label>
+              <select
+                required
+                value={formData.city}
+                onChange={handleCityChange}
+                className="text-small border bg-gray-100 font-semibold p-2 outline-none rounded-md placeholder:text-gray-400 focus:shadow-md"
+              >
+                <option value="" disabled hidden>
+                  Select a city in {selectedOption}
+                </option>
+                {cities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
                   </option>
                 ))}
               </select>
@@ -402,7 +435,7 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
     <div className="col-span-5 flex flex-col items-start justify-start">
     <p className="text-3xl font-semibold">{formData.title}</p>
     <p>{formData.sizel} x {formData.sizeb}</p>
-    <p>{formData.street}, {formData.location}.</p>
+    <p>{formData.street}, {formData.city} {formData.location}.</p>
     <p>Rooms: {formData.roomCount}</p>
     <p>Guest Count: {formData.minHours}</p>
     <p>Price Per Hour: {formData.price}</p>

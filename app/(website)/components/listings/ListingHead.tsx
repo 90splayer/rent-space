@@ -30,7 +30,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
   const location = getByValue(locationValue);
 
   return ( 
-    <>
+    <div className="flex flex-col w-full items-center gap-3">
       <Heading
         title={title}
         subtitle={locationValue}
@@ -63,7 +63,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
           />
         </div>
       </div>
-    </>
+    </div>
    );
 }
  

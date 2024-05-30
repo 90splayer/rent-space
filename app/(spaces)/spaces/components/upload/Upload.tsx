@@ -7,9 +7,8 @@ import ImageUpload from '@/app/(website)/components/inputs/ImageUploads';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { statesng } from '@/public/data/nigeria-states';
+import { statiesng } from "@/public/data/nigerian-states-and-cities";
 import { hours } from '@/public/data/hour';
-import { IoArrowForwardCircleOutline, IoArrowBackCircleOutline } from "react-icons/io5";
 import Image from "next/image";
 
 
@@ -45,11 +44,13 @@ const Upload = () => {
     const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
     const [selectedImages, setSelectedImages] = useState<any[]>([]);
     const [selectedOption, setSelectedOption] = useState("");
+    const [cities, setCities] = useState<string[]>([]);
     const [formData, setFormData] = useState({
         name: '',
         category: selectedCategories,
         images: selectedImages,
-        location: selectedOption,
+        state: selectedOption,
+        city: "",
         sizel: 100,
         sizeb: 100,
         room: 1,
@@ -85,14 +86,15 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
   setLoading(true);
   try {
     // Call your POST function with form data
-    await axios.post("/api/space", formData);
+    await axios.post("/api/spaces", formData);
     toast.success("Space uploaded successfully!");
     setSelectedOption("");
     setFormData({
       name: '',
       category: selectedCategories,
       images: selectedImages,
-      location: selectedOption,
+      state: selectedOption,
+      city: "",
       sizel: 100,
       sizeb: 100,
       room: 1,
@@ -105,7 +107,8 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
     setSelectedCategories([]);
     setSelectedImages([]);
     setSelectedOption("");
-   router.push("/spaces");
+    setCities([]);
+    router.push("/spaces");
   } catch (error: any) {
     toast.error(`${error.response.data}`);
 } finally {
@@ -128,7 +131,7 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
             ...formData,
             category: selectedCategories,
             images: selectedImages,
-            location: selectedOption,
+            state: selectedOption,
           });
       };
 
@@ -137,7 +140,7 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
       };
       
       const handleImageRemove = (imageUrl: string) => {
-        setSelectedImages(selectedImages.filter((url) => url !== imageUrl));
+      setSelectedImages(selectedImages.filter((url) => url !== imageUrl));
       };
       
       const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -145,9 +148,18 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
         setSelectedOption(value);
         setFormData({
             ...formData,
-            location: value,
+            state: value,
         });
+
+        const selectedState = statiesng.find(state => state.name === value);
+        setCities(selectedState ? selectedState.cities : []);
+        setFormData({...formData, city: ""}); // Reset city selection
     };
+
+    const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const { value } = e.target;
+      setFormData({...formData, city: value});
+  };
 
     const handleOpen = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const { value } = e.target;
@@ -234,8 +246,8 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
 if (currentPage === 2) {
     body = (
       <div className="flex flex-col items-center justify-start gap-8 w-full">
-       <div className='w-full grid lg:grid-cols-9 grid-cols-1 gap-5 items-start'>
-          <div className="flex flex-col col-span-3 w-full">
+       <div className='w-full md:grid lg:grid-cols-9 md:grid-cols-6 flex flex-col gap-5 items-start'>
+          <div className="flex flex-col md:col-span-3 w-full">
           <label className="text-[12px] text-blue-300 font-medium">
                 Space Name
               </label>
@@ -248,7 +260,7 @@ if (currentPage === 2) {
               onChange={handleChange}
             />
           </div>
-          <div className="flex flex-col col-span-3 w-full gap-1">
+          <div className="flex flex-col md:col-span-3 w-full gap-1">
               <label className="text-[12px] text-blue-300 font-medium">
                 State
               </label>
@@ -261,16 +273,36 @@ if (currentPage === 2) {
                 <option value="" disabled hidden>
                   Select a location
                 </option>
-                {statesng.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
+                {statiesng.map((state) => (
+                  <option key={state.name} value={state.name}>
+                    {state.name}
                   </option>
                 ))}
               </select>
             </div>
-    <div className="flex flex-col gap-1 items-start justify-center col-span-3">
+            <div className="flex flex-col md:col-span-3 w-full gap-1">
+              <label className="text-[12px] text-blue-300 font-medium">
+                City
+              </label>
+              <select
+                required
+                value={formData.city}
+                onChange={handleCityChange}
+                className="text-small border bg-gray-100 font-semibold p-2 outline-none rounded-md placeholder:text-gray-400 focus:shadow-md"
+              >
+                <option value="" disabled hidden>
+                  Select a city in {selectedOption}
+                </option>
+                {cities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
+            </div>
+    <div className="flex flex-col gap-1 items-start justify-center md:col-span-3 w-full">
           <label className="text-[12px] text-blue-300 font-medium">
-            Address
+            Street
           </label>
     <input
     className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
@@ -281,7 +313,7 @@ if (currentPage === 2) {
       placeholder="Address"
     />
     </div>
-    <div className="grid grid-cols-7 gap-2 lg:gap-0 col-span-3">
+    <div className="grid grid-cols-7 gap-2 lg:gap-0 md:col-span-3 w-full">
         <div className="col-span-5 flex flex-col items-start">
         <label className="text-[12px] text-blue-300 font-medium">
             Size
@@ -323,7 +355,7 @@ if (currentPage === 2) {
         </div>
     </div>
    
-    <div className="flex flex-col gap-1 items-start justify-center col-span-3">
+    <div className="flex flex-col gap-1 items-start justify-center md:col-span-3 w-full">
           <label className="text-[12px] text-blue-300 font-medium">
             Price per hour
           </label>
@@ -336,7 +368,7 @@ if (currentPage === 2) {
       placeholder="Price per hour"
     />
     </div>
-  <div className="col-span-3 grid grid-cols-3 item-center gap-2">
+  <div className="md:col-span-3 w-full grid grid-cols-3 item-center gap-2">
   <div className="flex flex-col col-span-1 w-full gap-1">
               <label className="text-[12px] text-blue-300 font-medium">
                 Open hour
@@ -395,12 +427,12 @@ if (currentPage === 2) {
         <div className='flex flex-row items-center justify-center gap-5'>
         <button 
          className={`
-        text-white text-xs leading-[30px] rounded-lg px-4 py-2 bg-blue-500
-        `} onClick={prevPage}><IoArrowBackCircleOutline /></button>
+        text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
+        `} onClick={prevPage}>Prev</button>
         <button disabled={selectedImages.length < 1 || selectedOption.length < 1} className={`
-        text-white text-xs leading-[30px] rounded-lg px-4 py-2
+        text-white text-xs leading-[30px] rounded-lg px-4 py-1
         ${(!formData.name || selectedOption.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
-        `} onClick={lastPage}><IoArrowForwardCircleOutline /></button>
+        `} onClick={lastPage}>Next</button>
         </div>
       </div>
     );
@@ -447,7 +479,7 @@ if (currentPage === 2) {
     <div className="col-span-5 flex flex-col items-start justify-start">
     <p className="text-3xl font-semibold">{formData.name}</p>
     <p>{formData.sizel} x {formData.sizeb}</p>
-    <p>{formData.address}, {formData.location}.</p>
+    <p>{formData.address}, {formData.city} {formData.state}.</p>
     <p>Rooms: {formData.room}</p>
     <p>Guest Count: {formData.hours}</p>
     <p>Price Per Hour: {formData.price}</p>
