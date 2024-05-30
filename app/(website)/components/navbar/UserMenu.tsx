@@ -54,7 +54,7 @@ interface UserMenuProps {
     }, [menuRef]);
 
   return (
-    <div className='relative'>
+    <div className='relative' ref={menuRef}>
         <div className='flex flex-row items-center gap-2'>
             <div 
             onClick={onRent}
@@ -78,7 +78,7 @@ interface UserMenuProps {
             </div>
         </div>
         {isOpen && (
-            <div ref={menuRef} className='absolute rounded-xl shadow-md w-[40vw] md:w-56 bg-white overflow-hidden right-0 top-12 text-sm'>
+            <div className='absolute rounded-xl shadow-md w-[40vw] md:w-56 bg-white overflow-hidden right-0 top-12 text-sm'>
                 <div className='flex flex-col cursor-pointer'>
                     {currentUser ? (
                         <>

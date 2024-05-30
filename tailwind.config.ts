@@ -17,7 +17,8 @@ const config: Config = {
     },
   },
   plugins: [
-    require("tailwindcss-inner-border")
+    require("tailwindcss-inner-border"),
+    require('tailwind-scrollbar-hide'),
   ],
 }
 export default config

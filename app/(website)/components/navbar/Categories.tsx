@@ -110,13 +110,10 @@ const Categories = () => {
 
   return (
       <div
-        className="
-          flex 
-          flex-row 
-          items-center 
-          justify-between
-          overflow-x-auto
-          w-full py-4
+        className="w-full max-w-screen
+        fixed top-20 z-20 bg-white flex
+        flex-row items-center justify-start overflow-x-scroll 
+        scrollbar-hide gap-5 py-4 lg:px-16 md:px-10 sm:px-2 px-4
         "
       >
         {categories.map((item) => (

@@ -142,7 +142,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
           mx-auto
         "
       >
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 mt-6">
           <ListingHead
             locationValue={listing.location}
             title={listing.title}
