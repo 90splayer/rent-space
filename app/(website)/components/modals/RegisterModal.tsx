@@ -61,7 +61,6 @@ const RegisterModal = () => {
             <Heading 
             title="Welcome to Rent Space"
             subtitle='Create an account!'
-            center
             />
             <Input
             id='email'
