@@ -21,6 +21,7 @@ const FavoritesClient: React.FC<FavoritesClientProps> = ({
       />
       <div 
         className="
+          pt-28
           mt-10
           grid 
           grid-cols-1 

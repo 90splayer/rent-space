@@ -5,9 +5,9 @@ import ClientOnly from "@/app/(website)/components/ClientOnly";
 import getCurrentUser from "@/actions/getCurrentUser";
 import getListings from "@/actions/getListings";
 import getReservations from "@/actions/getReservations";
-import ProfileClient from "./ProfileClient";
+import HostClient from "./HostClient";
 
-const ProfilePage = async () => {
+const HostPage = async () => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -22,7 +22,7 @@ const ProfilePage = async () => {
 
   return (
     <ClientOnly>
-      <ProfileClient
+      <HostClient
         currentUser={currentUser}
         listings={listings}
       />
@@ -30,4 +30,4 @@ const ProfilePage = async () => {
   );
 }
  
-export default ProfilePage;
+export default HostPage;

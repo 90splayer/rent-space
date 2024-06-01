@@ -26,6 +26,9 @@ model User{
   interests String[]
   about  String?
   hashedPassword String?
+  sex String?
+  badge String?
+  city String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   favoriteIds String[] @db.ObjectId
@@ -41,6 +44,10 @@ model User{
   feeback Feedback[]
   rating  Ratings[]
   messages Message[]
+}
+
+model Profile{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 }
 
 model Admin{
@@ -109,7 +116,6 @@ model Listing{
   priceDay Int?
   dailyBook Boolean @default(false)
   available Boolean @default(true)
-  orderItems  OrderItem[]
   approved Boolean @default(false)
   approvedBy String?
   reported Boolean @default(false)
@@ -148,27 +154,16 @@ model Order {
   id        String    @id @default(uuid()) @map("_id")
   userId String @db.ObjectId
   listingId  String   @db.ObjectId
-  orderItems OrderItem[] // Relation to OrderItem model
+  intervals DateTime[] 
   isPaid     Boolean   @default(false)
-  startDate  DateTime
-  endDate    DateTime 
+  duration    Int
   totalPrice  Int
   phone      String    @default("")
   address    String    @default("")
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-}
-
-model OrderItem {
-  id        String  @id @default(uuid())  @map("_id")
-  orderId   String  // Foreign Key to Order
-  order     Order   @relation(fields: [orderId], references: [id])
-  listingId String  @db.ObjectId// Foreign Key to Product
-  listing   Listing @relation(fields: [listingId], references: [id])
-
 }
 
 model Reviews{

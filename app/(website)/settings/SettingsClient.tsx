@@ -23,7 +23,7 @@ export const categories = [
     label: 'Personal Info',
     icon: BsFillPersonVcardFill,
     description: 'Provide personal detail so we can reach you easily',
-    link: '/settings/account-info'
+    link: '/profile'
   },
   {
     label: 'Login & Security',
@@ -104,7 +104,7 @@ const SettingsClient: React.FC<SettingsClientProps> = ({
   }, [currentUser])
 
   return ( 
-    <Container>
+    <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 pt-28">
       <Heading
         title={`Hello ${fname}`}
         subtitle='update space settings'
@@ -131,7 +131,7 @@ const SettingsClient: React.FC<SettingsClientProps> = ({
         ))}
         
       </div>
-    </Container>
+    </div>
    );
 }
  
