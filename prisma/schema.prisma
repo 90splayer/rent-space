@@ -181,7 +181,12 @@ model Ratings{
   id        String    @id @default(uuid()) @map("_id")
   userId String @db.ObjectId
   listingId  String   @db.ObjectId 
-  rating Int
+  location Int
+  communication Int
+  checkin Int
+  clean Int
+  privacy Int
+  host Int
   createdAt DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

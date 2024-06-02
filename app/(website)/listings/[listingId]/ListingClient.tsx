@@ -135,14 +135,14 @@ const ListingClient: React.FC<ListingClientProps> = ({
   // }, [dateRange, listing.price]);
 
   return ( 
-    <Container>
+    <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 py-24">
       <div 
         className="
           max-w-screen-lg 
           mx-auto
         "
       >
-        <div className="flex flex-col gap-6 mt-6">
+        <div className="flex flex-col gap-6">
           <ListingHead
             locationValue={listing.location}
             title={listing.title}
@@ -167,7 +167,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
           </div>
         </div>
       </div>
-    </Container>
+    </div>
    );
 }
  

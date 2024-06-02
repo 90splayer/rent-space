@@ -128,42 +128,12 @@ useEffect(() => {
 }, [dateRange]);
 
   return ( 
-    <div className="lg:grid flex lg:grid-cols-10 w-full gap-5">
+    <div className="flex w-full flex-col items-center justify-start gap-3">
+      <div className="flex w-full items-center justify-start font-bold text-lg">Pick Date</div>
+      <div className="lg:grid flex lg:grid-cols-10 w-full gap-7">
+      <div className="col-span-6 flex flex-col items-center justify-start gap-2 border rounded-lg p-5">
+      <div className="lg:grid flex lg:grid-cols-10 w-full gap-5">
       <div className="col-span-6 flex flex-col items-center justify-start gap-2">
-      <div className="w-full flex flex-col items-center justify-start gap-2">
-      <label className="text-md text-blue-300 font-medium">
-        Select a Time
-        </label>
-        {duration > 1? <h1 className="text-xs">Duration: {duration} hrs</h1>: <h1 className="text-xs">Duration: {duration} hr</h1>}
-     <div className="w-full flex flex-row items-center gap-3 flex-wrap justify-center
-      text-xs">
-        {times?.map((time, i) => (
-          <div
-          key={i}
-          className={`rounded-lg py-2 px-5 border ${isSelectedTime(time) ? "inner-border-4 border-blue-500" : " border-[1px] border-blue-300"}`}
-        >
-          <button type="button" onClick={() => handleSelect(time)}>
-            {format(time, "kk:mmb")}
-          </button>
-        </div>
-        ))}
-      </div>
-</div>
-      <Map center={coordinates} />
-    </div>
-    <div className="col-span-4 flex justify-end">
-      <div 
-      className="
-      bg-white w-min rounded-xl border-[1px] border-neutral-200 overflow-hidden items-end">
-      <div className=" flex flex-row items-center justify-center gap-1 p-4">
-        <div className="text-2xl font-semibold">
-          N {listing.price}
-        </div>
-        <div className="font-light text-neutral-600">
-          /hour
-        </div>
-      </div>
-      <hr />
       <Calendar
         value={dateRange}
         tileDisabled={({ date }) => disabledDates.some((disabledDate) => isSameDay(disabledDate, date))}
@@ -172,32 +142,58 @@ useEffect(() => {
         minDate={new Date()}
         tileClassName="border-none"
       />
-      <hr />
-      <div className="p-4">
+      </div>
+      <div className="col-span-4 flex flex-col justify-start items-center gap-3">
+      <label className="text-md text-blue-300 font-medium">
+        Available Times
+        </label>
+      <div className="w-full flex flex-col items-center gap-2 justify-center">
+        {times?.map((time, i) => (
+          <div
+          key={i}
+          className={`w-full rounded-lg py-1 px-3 border text-xs text-gray-400 ${isSelectedTime(time) ? "inner-border-4 border-blue-500" : " border-[1px] border-gray-400"}`}
+        >
+          <button type="button" className="flex flex-row items-center justify-center w-full" onClick={() => handleSelect(time)}>
+            {format(time, "kk:mmb")} - {format(addHours(time, listing.minHours), "kk:mmb")}
+          </button>
+        </div>
+        ))}
+      </div>
+      </div>
+      </div>
+      <div className="w-full text-gray-600 bg-gray-300 rounded-lg p-3 text-xs text-center">Be sure to arrive before agreed time</div> 
+    </div>
+    <div className="col-span-4 flex flex-col gap-4 justify-start items-center border rounded-lg p-5">
+      <div className="flex flex-row items-center justify-between w-full">
+      <div className="text-2xl font-semibold">
+          N{listing.price}
+        </div>
+        <div className="font-light text-neutral-600">
+          Hourly rate
+        </div>
+      </div>
+      <div className="rounded-lg border w-full p-2 flex flex-row items-center justify-between">
+        <h1 className=" text-gray-500">{listing.minHours}hrs</h1>
+        <h1 className="text-xs text-gray-500">min hours</h1>
+      </div>
+      <div className="flex flex-row w-full items-center justify-between">
+         {duration > 1? <h1 className="font-semibold flex flex-row items-center justify-start">N{listing.price} x {duration} hours</h1>: <h1 className="font-semibold flex flex-row items-center justify-start">N{listing.price} x {duration} hour</h1>}
+        <div>
+          N{listing.price * duration}
+        </div>
+      </div>
+      <div className="flex flex-row w-full items-center justify-between">
+        <h1 className="font-semibold">Discount code</h1>
+        <div>
+          <input type="checkbox"/>
+        </div>
+      </div>
+      <div className="p-4 w-full">
         <Button 
           disabled={isLoading} 
-          label="Reserve" 
+          label="Pay" 
           onClick={onSubmit}
         />
-      </div>
-      <hr />
-      <div 
-        className="
-          p-4 
-          flex 
-          flex-row 
-          items-center 
-          justify-between
-          font-semibold
-          text-lg
-        "
-      >
-        <div>
-          Total
-        </div>
-        <div>
-          N {totalPrice}
-        </div>
       </div>
     </div>
     </div>
