@@ -120,6 +120,7 @@ model Listing{
   approvedBy String?
   reported Boolean @default(false)
   minHours Int
+  slots Int @default(1)
   open Int
   close Int
   rating  Ratings[]
