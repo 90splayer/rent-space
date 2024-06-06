@@ -17,7 +17,7 @@ import getCurrentUser from "@/actions/getCurrentUser";
 
   
   export async function POST(req: Request) {
-    const { totalPrice, listingId, startDate, endDate } = await req.json();
+    const { totalPrice, listingId, intervals, duration } = await req.json();
 
     if (!totalPrice || !listingId){
         return new NextResponse("listing is required", { status: 400})
@@ -43,8 +43,8 @@ import getCurrentUser from "@/actions/getCurrentUser";
       userId: currentUser?.id,
       isPaid: false,
       listingId: listingId, 
-      startDate: startDate,
-      endDate: endDate,
+      intervals: intervals,
+      duration: duration,
       totalPrice: totalPrice
     }
   });

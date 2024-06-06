@@ -58,7 +58,8 @@ const Upload = () => {
         hours: 3,
         price: 7000,
         open: 8,
-        close: 10
+        close: 10,
+        slots: 1,
       });
 
     const handleClick = (categoryLabel: any) => {
@@ -103,6 +104,7 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
       price: 7000,
       open: 8,
       close: 10,
+      slots: 1
     });
     setSelectedCategories([]);
     setSelectedImages([]);
@@ -420,6 +422,61 @@ if (currentPage === 2) {
       value={formData.hours}
       onChange={handleChange}
       placeholder="Min hours"
+    />
+    </div>
+  </div>
+  <div className="md:col-span-3 w-full grid grid-cols-3 item-center gap-2">
+  <div className="flex flex-col col-span-1 w-full gap-1">
+              <label className="text-[12px] text-blue-300 font-medium">
+                Open hour
+              </label>
+              <select
+                required
+                value={formData.open}
+                onChange={handleOpen}
+                className="text-small border bg-gray-100 font-semibold p-2 outline-none rounded-md placeholder:text-gray-400 focus:shadow-md"
+              >
+                <option value="" disabled hidden>
+                  Open At
+                </option>
+                {hours.map((hour) => (
+                  <option key={hour.key} value={hour.key}>
+                    {hour.time} {hour.description}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col col-span-1 w-full gap-1">
+              <label className="text-[12px] text-blue-300 font-medium">
+                Close At
+              </label>
+              <select
+                required
+                value={formData.close}
+                onChange={handleClose}
+                className="text-small border bg-gray-100 font-semibold p-2 outline-none rounded-md placeholder:text-gray-400 focus:shadow-md"
+              >
+                <option value="" disabled hidden>
+                  Select hour
+                </option>
+                {hours.map((hour) => (
+                  <option key={hour.key} value={hour.key}>
+                    {hour.time} {hour.description}
+                  </option>
+                ))}
+              </select>
+            </div>
+    <div className="flex flex-col gap-1 items-start justify-center col-span-1">
+          <label className="text-[12px] text-blue-300 font-medium">
+           Slots <h1 className="text-[7px]">(if you have similar spaces input the amount of similar spaces or leave as 1)</h1> 
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-2 w-full text-center"
+      type="number"
+      name="slots"
+      value={formData.slots}
+      onChange={handleChange}
+      placeholder="How many slots are available"
     />
     </div>
   </div>

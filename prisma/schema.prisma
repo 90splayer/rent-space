@@ -123,10 +123,8 @@ model Listing{
   slots Int @default(1)
   open Int
   close Int
+  features String[]
   rating  Ratings[]
-  services Services[]
-  features Features[]
-  minibar  Minibar[]
   report Report[]
   
   userId String @db.ObjectId
@@ -194,30 +192,6 @@ model Ratings{
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
-model Services{
-  id        String    @id @default(uuid()) @map("_id")
-  listingId  String   @db.ObjectId 
-  service    ServiceItem[]
-
-  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-}
-
-model Features{
-  id        String    @id @default(uuid()) @map("_id")
-  listingId  String   @db.ObjectId 
-  item   FeatureItem[]
-
-  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-}
-
-model Minibar{
-  id        String    @id @default(uuid()) @map("_id")
-  listingId  String   @db.ObjectId 
-  miniItem  MiniItem[]
-
-  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-}
-
 model Report{
   id        String    @id @default(uuid()) @map("_id")
   listingId  String   @db.ObjectId 
@@ -225,33 +199,6 @@ model Report{
   report    String
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-}
-
-model MiniItem{
-  id        String    @id @default(uuid()) @map("_id")
-  barId  String   
-  name String
-  price Int
-
-  minibar Minibar @relation(fields: [barId], references: [id], onDelete: Cascade)
-}
-
-model FeatureItem{
-  id        String    @id @default(uuid()) @map("_id")
-  featureId  String   
-  name String
-  price Int
-
-  features Features @relation(fields: [featureId], references: [id], onDelete: Cascade)
-}
-
-model ServiceItem{
-  id        String    @id @default(uuid()) @map("_id")
-  serviceId  String   
-  name String
-  price Int
-
-  features Services @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 model Feedback{
