@@ -14,6 +14,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/utils/AuthOptions'
 import getListings from '@/actions/getListings'
 import prisma from "@/lib/prismadb";
+import Footer from './components/footers/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -52,6 +53,7 @@ export default async function RootLayout({
         <div className=''>
         {children}
         </div>
+        <Footer/>
         </Provider>
         </body>
     </html>

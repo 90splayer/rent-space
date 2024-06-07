@@ -2,18 +2,17 @@
 
 import dynamic from "next/dynamic";
 import { IconType } from "react-icons";
-
+import { features } from "@/public/data/features";
 import useCountries from "@/app/hooks/useCountries";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import Avatar from "../Avatar";
-import ListingCategory from "./ListingCategory";
 import { add, addHours, addMilliseconds, differenceInHours, endOfHour, format, isSameDay, isSameHour, isWithinInterval, setHours, subMilliseconds } from "date-fns";
 import { useEffect, useState } from "react";
 import { Listing, Reservation, User } from "@prisma/client";
 import ListingReservation from "./ListingReservation";
 import Button from "../Button";
+import Image from "next/image";
 
 const Map = dynamic(() => import('../Map'), { 
   ssr: false 
@@ -47,8 +46,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
   const [selectedTimes, setSelectedTimes] = useState<Date[]>([]);
   const [data, setData] = useState<ReservationData[]>([]);
   const duration = listing.minHours * selectedTimes.length;
-  const [totalPrice, setTotalPrice] = useState(listing.price);
-
+  const filteredFeatures = features.filter(feature => listing.features.includes(feature.feature));
   const coordinates = getByValue(locationValue)?.latlng
   const handleSelect = (selectedTime: Date) => {
     setSelectedTimes((prevSelectedTimes) => {
@@ -130,10 +128,10 @@ useEffect(() => {
   return ( 
     <div className="flex w-full flex-col items-center justify-start gap-3">
       <div className="flex w-full items-center justify-start font-bold text-lg">Pick Date</div>
-      <div className="lg:grid flex lg:grid-cols-10 w-full gap-7">
+      <div className="lg:grid flex flex-col items-center justify-start lg:grid-cols-10 w-full gap-7">
       <div className="col-span-6 flex flex-col items-center justify-start gap-2 border rounded-lg p-5">
-      <div className="lg:grid flex lg:grid-cols-10 w-full gap-5">
-      <div className="col-span-6 flex flex-col items-center justify-start gap-2">
+      <div className="lg:grid flex flex-col items-center justify-start lg:grid-cols-10 w-full gap-5">
+      <div className="lg:col-span-6 w-full flex flex-col items-center justify-start gap-2">
       <Calendar
         value={dateRange}
         tileDisabled={({ date }) => disabledDates.some((disabledDate) => isSameDay(disabledDate, date))}
@@ -143,7 +141,7 @@ useEffect(() => {
         tileClassName="border-none"
       />
       </div>
-      <div className="col-span-4 flex flex-col justify-start items-center gap-3">
+      <div className="lg:col-span-4 w-full flex flex-col justify-start items-center gap-3">
       <label className="text-md text-blue-300 font-medium">
         Available Times
         </label>
@@ -163,7 +161,7 @@ useEffect(() => {
       </div>
       <div className="w-full text-gray-600 bg-gray-300 rounded-lg p-3 text-xs text-center">Be sure to arrive before agreed time</div> 
     </div>
-    <div className="col-span-4 flex flex-col gap-4 justify-start items-center border rounded-lg p-5">
+    <div className="lg:col-span-4 w-full flex flex-col gap-4 justify-start items-center border rounded-lg p-5">
       <div className="flex flex-row items-center justify-between w-full">
       <div className="text-2xl font-semibold">
           N{listing.price}
@@ -197,6 +195,15 @@ useEffect(() => {
       </div>
     </div>
     </div>
+      <div className="flex w-full items-center justify-start font-bold text-lg">Features</div>
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 w-full items-center justify-start text-sm gap-3">
+        {filteredFeatures.map((feature, i) => (
+          <div key={i} className="col-span-1 flex flex-row items-center justify-center rounded-lg p-2 gap-2 border">
+          <feature.icon size={18} />
+          <p className="text-xs text-gray-500">{feature.feature}</p>
+        </div>
+        ))}
+      </div>
     </div>
    );
 }

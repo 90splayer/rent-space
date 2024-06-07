@@ -26,10 +26,16 @@ interface UserMenuProps {
     const loginModal = useLoginModal();
     const rentModal = useRentModal();
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpenSm, setIsOpenSm] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const menuRefSm = useRef<HTMLDivElement>(null);
 
     const toggleOpen = useCallback(() => {
         setIsOpen((value) => !value);
+    }, [])
+
+    const toggleOpenSm = useCallback(() => {
+        setIsOpenSm((value) => !value);
     }, [])
 
     const onRent = useCallback(() => {
@@ -39,10 +45,22 @@ interface UserMenuProps {
         router.push('/spaces');
     }, [currentUser, loginModal]);
 
+  const handleSignOut = async () => {
+    // Call the signOut function from NextAuth.js
+    await signOut({ redirect: false, callbackUrl: '/' });
+
+    // Clear any client-side storage where session data might be stored
+    localStorage.removeItem('next-auth.session-token'); // Example: using localStorage
+    router.push('/');
+  };
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
+            }
+            if (menuRefSm.current && !menuRefSm.current.contains(event.target as Node)) {
+                setIsOpenSm(false);
             }
         };
 
@@ -51,10 +69,11 @@ interface UserMenuProps {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [menuRef]);
+    }, [menuRef, menuRefSm]);
 
   return (
-    <div className='relative' ref={menuRef}>
+    <>
+    <div className='relative hidden md:block' ref={menuRef}>
         <div className='flex flex-row items-center gap-2'>
             <div 
             onClick={onRent}
@@ -63,7 +82,7 @@ interface UserMenuProps {
             <MdWorkspacesOutline size={24}/>
             </div>
             <div
-            onClick={toggleOpen}
+            onClick={toggleOpen} 
             className="flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
             >
                 <div className='hidden md:block'>
@@ -100,7 +119,7 @@ interface UserMenuProps {
                         />
                         <hr/>
                         <MenuItem 
-                        onClick={() => {signOut(); toggleOpen();}}
+                        onClick={handleSignOut}
                         label='Logout'
                         />
                         </>
@@ -121,6 +140,58 @@ interface UserMenuProps {
             </div>
         )}
     </div>
+    <div className='md:hidden block relative' ref={menuRefSm}>
+        <AiOutlineMenu size={24} 
+            onClick={toggleOpenSm} className='cursor-pointer'/>
+             {isOpenSm && (
+            <div className='absolute rounded-xl shadow-md w-[40vw] md:w-56 bg-white overflow-hidden right-0 top-12 text-sm'>
+                <div className='flex flex-col cursor-pointer'>
+                    {currentUser ? (
+                        <>
+                        <MenuItem 
+                        onClick={() => {router.push("/spaces"); toggleOpenSm();}}
+                        label='Search'
+                        />
+                        <MenuItem 
+                        onClick={() => {router.push("/spaces"); toggleOpenSm();}}
+                        label='My Spaces'
+                        />
+                        <MenuItem 
+                        onClick={() => {router.push("/reservations"); toggleOpenSm();}}
+                        label='Trips'
+                        />
+                        <MenuItem 
+                        onClick={() => {router.push("/favorites"); toggleOpenSm();}}
+                        label='Favorites'
+                        />
+                        <MenuItem 
+                        onClick={() => {router.push("/settings"); toggleOpenSm();}}
+                        label='Account'
+                        />
+                        <hr/>
+                        <MenuItem 
+                        onClick={handleSignOut}
+                        label='Logout'
+                        />
+                        </>
+                    ) : (
+                        <>
+                    <MenuItem 
+                    onClick={() => {loginModal.onOpen(); toggleOpenSm();}}
+                    label='Login'
+                    />
+                    <MenuItem 
+                    onClick={() => {registerModal.onOpen(); toggleOpenSm();}}
+                    label='Sign up'
+                    />
+                    </>
+                    )}
+                    
+                </div>
+            </div>
+        )}
+    </div>
+    </>
   )
 }
 

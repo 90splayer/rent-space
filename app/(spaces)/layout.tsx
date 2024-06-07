@@ -7,6 +7,7 @@ import { authOptions } from "@/utils/AuthOptions";
 import Provider from "../providers/AuthProvider";
 import Navbar from "./spaces/components/navbar/Navbar";
 import getCurrentUser from "@/actions/getCurrentUser";
+import Footer from "../(website)/components/footers/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,6 +50,7 @@ export default async function RootLayout({
             <div className="min-h-screen p-4 md:p-6 2xl:p-10 mt-20">
               {children}
             </div>
+            <Footer/>
         </Provider>
       </body>
     </html>
