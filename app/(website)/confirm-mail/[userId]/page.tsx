@@ -10,7 +10,7 @@ interface IParams {
   userId: string;
 }
 
-const page = ({ params }: { params: IParams }) => {
+const Page = ({ params }: { params: IParams }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -49,4 +49,4 @@ const page = ({ params }: { params: IParams }) => {
   );
 };
 
-export default page;
+export default Page;
