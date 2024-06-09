@@ -17,9 +17,9 @@ const Footer= () => {
                 <div className='flex flex-row items-center justify-between'>
                     <div>&copy; {new Date().getFullYear()} Rent Spaces, Inc</div>
                     <div className='flex flex-row items-center justify-end gap-3 text-blue-900'>
-                        <Link href="https://www.facebook.com/profile.php?id=61560575015381"><FaFacebook size={24}/></Link>
-                        <Link href="https://www.instagram.com/rent_spaces/"><FaInstagram size={24}/></Link>
-                        <Link href="https://x.com/rentspaceshq"><BsTwitter size={24}/></Link>
+                        <Link target="_blank" href="https://www.facebook.com/profile.php?id=61560575015381"><FaFacebook size={24}/></Link>
+                        <Link target="_blank" href="https://www.instagram.com/rent_spaces/"><FaInstagram size={24}/></Link>
+                        <Link target="_blank" href="https://x.com/rentspaceshq"><BsTwitter size={24}/></Link>
                         
                         
                         

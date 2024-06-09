@@ -7,7 +7,7 @@ import { authOptions } from "@/utils/AuthOptions";
 import Provider from "../providers/AuthProvider";
 import Navbar from "./spaces/components/navbar/Navbar";
 import getCurrentUser from "@/actions/getCurrentUser";
-import Footer from "../(website)/components/footers/Footer";
+import Footer from "../(website)/components/footer/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 

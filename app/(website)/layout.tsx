@@ -14,7 +14,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/utils/AuthOptions'
 import getListings from '@/actions/getListings'
 import prisma from "@/lib/prismadb";
-import Footer from './components/footers/Footer'
+import Footer from './components/footer/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
