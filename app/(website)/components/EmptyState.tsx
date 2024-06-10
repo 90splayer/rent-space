@@ -20,7 +20,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({
 
   return ( 
     <div 
-      className=" h-full
+      className=" h-screen
         flex 
         flex-col 
         gap-2 

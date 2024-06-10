@@ -1,14 +1,12 @@
 'use client';
 import { AiOutlineMenu } from 'react-icons/ai';
 import Avatar from './Avatar';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import UserMenuDropdown from './UserMenuDropdown';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
-import { User } from '.prisma/client';
 import { signOut } from 'next-auth/react';
 import { SafeUser } from '@/app/types';
-import useRentModal from '@/app/hooks/useRentModal';
 import { useRouter } from 'next/navigation';
 import { CiCirclePlus } from 'react-icons/ci';
 
@@ -22,8 +20,8 @@ interface UserMenuProps {
     const router = useRouter();
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
-    const rentModal = useRentModal();
     const [isOpen, setIsOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const toggleOpen = useCallback(() => {
         setIsOpen((value) => !value);
@@ -36,6 +34,20 @@ interface UserMenuProps {
         router.push('/spaces/upload');
     }, [currentUser, loginModal]);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [menuRef]);
+
   return (
     <div className='relative'>
         <div className='flex flex-row items-center gap-3'>
@@ -46,7 +58,7 @@ interface UserMenuProps {
             <CiCirclePlus size={24}/>
             </div>
             <div
-            onClick={toggleOpen}
+            onClick={toggleOpen} ref={menuRef}
             className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
             >
                 <AiOutlineMenu/>
