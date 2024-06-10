@@ -60,12 +60,12 @@ const ProfileClient: React.FC<ProfileClientProps> = ({
         <div className="text-xs">{currentUser?.badge? "Verified" : <button className="border border-gray-400 rounded-lg px-3 py-1">Get a badge</button>}</div>
         </div>
         <div className="w-full flex flex-col gap-4 py-6 items-start justify-start text-xs">
-          {currentUser?.emailVerified? <div className="flex flex-row items-center justify-start gap-1 text-gray-600"><VscVerified/> {currentUser?.email} </div> : <div className="flex flex-row items-center justify-start gap-1 text-purple-600"><AiOutlineExclamationCircle/>Verify mail</div>}
-          {currentUser?.number? <div className="flex flex-row items-center justify-start gap-1">
-            {currentUser?.numberVerified? <div className="flex flex-row items-center justify-start gap-1 text-gray-600">{currentUser.number}</div> : <div className="flex flex-row items-center justify-start gap-1 text-purple-600"><AiOutlineExclamationCircle/>Verify number</div>}
-          </div> :<div className="flex flex-row items-center justify-start gap-1 text-purple-600"><IoIosAddCircleOutline/>Add number</div>}
-          {currentUser?.idVerified? <div className="flex flex-row items-center justify-start gap-1 text-gray-600">ID Verified</div>: <div className="flex flex-row items-center justify-start gap-1 text-purple-600"><AiOutlineExclamationCircle/>Verify Identity</div>}
-          <div className="flex flex-row items-center justify-start gap-1 text-red-600"><IoTrashOutline className=""/> Deactivate account</div>
+          {currentUser?.emailVerified? <div className="flex flex-row items-center justify-start gap-1 text-gray-600 cursor-pointer"><VscVerified/> {currentUser?.email} </div> : <div className="flex flex-row items-center justify-start gap-1 text-purple-600"><AiOutlineExclamationCircle/>Verify mail</div>}
+          {currentUser?.number? <div className="flex flex-row items-center justify-start gap-1 cursor-pointer">
+            {currentUser?.numberVerified? <div className="flex flex-row items-center justify-start gap-1 text-gray-600 cursor-pointer">{currentUser.number}</div> : <div className="flex flex-row items-center justify-start gap-1 text-purple-600"><AiOutlineExclamationCircle/>Verify number</div>}
+          </div> :<Link href={"/settings/account-info"}className="flex flex-row items-center justify-start gap-1 text-purple-600 cursor-pointer"><IoIosAddCircleOutline/>Add number</Link>}
+          {currentUser?.idVerified? <div className="cursor-pointer flex flex-row items-center justify-start gap-1 text-gray-600">ID Verified</div>: <div className="flex flex-row items-center justify-start gap-1 text-purple-600"><AiOutlineExclamationCircle/>Verify Identity</div>}
+          <div className="flex flex-row items-center justify-start gap-1 text-red-600 cursor-pointer"><IoTrashOutline className=""/> Deactivate account</div>
         </div>
       </div>
 
@@ -75,7 +75,7 @@ const ProfileClient: React.FC<ProfileClientProps> = ({
           <h1 className="text-sm font-semibold">Hi {fname}</h1>
           {currentUser?.city? <p className="text-sm text-gray-400">{currentUser?.city}, {currentUser?.location}</p> : <p className="text-sm text-gray-400">{currentUser?.location}</p>}
         </div>
-        <Link href={"/settings/account-info"} className="border border-green-500 text-green-500 text-xs bg-green-200 bg-opacity-50 rounded-lg px-3 py-1 cursor-pointer">Edit Details</Link>
+        <Link href={"/settings/account-info"} className="border border-blue-500 text-blue-500 text-xs bg-blue-200 bg-opacity-50 rounded-lg px-3 py-1 cursor-pointer">Edit Details</Link>
         </div>
 
         <div className="flex flex-col items-start justify-start gap-3">

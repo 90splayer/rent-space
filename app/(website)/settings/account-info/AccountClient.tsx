@@ -55,9 +55,9 @@ const saveChanges = async (e: { preventDefault: () => void }) => {
 
   return ( 
     <div className="relative max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 py-28 flex flex-col items-center justify-start gap-3">
-        <div className="fixed top-[70px] p-3 bg-white flex flex-row items-center justify-between w-full lg:w-1/2">
+        <div className="fixed top-[70px] p-4 bg-white flex flex-row items-center justify-between w-full lg:w-1/2">
         <CiCircleRemove size={32} onClick={() => router.push('/profile')} className="text-red-600 cursor-pointer" />
-        <CiCircleCheck size={32} onClick={saveChanges} className="text-green-600 cursor-pointer"/>
+        <CiCircleCheck size={32} onClick={saveChanges} className="text-blue-600 cursor-pointer"/>
         </div>
       <div 
         className="mt-7 p-5 grid grid-cols-1 
