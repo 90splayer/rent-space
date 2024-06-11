@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/AuthOptions";
 import Provider from "../providers/AuthProvider";
 import getCurrentUser from "@/actions/getCurrentUser";
+import DashboardLayout from "./admin/components/DashboardLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,9 +45,11 @@ export default async function RootLayout({
       <body className={bai.className}>
         <Provider session={session}>
           <ToasterProvider />
-            <div className="min-h-screen p-4 md:p-6 2xl:p-10 bg-dashboard">
-              {children}
-            </div>
+                    <DashboardLayout>
+                        <div className='min-h-screen p-4 md:p-6 2xl:p-10 bg-dashboard'>
+                            {children}
+                        </div>
+                    </DashboardLayout>
         </Provider>
       </body>
     </html>

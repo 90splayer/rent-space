@@ -54,7 +54,7 @@ const LoginPage = () => {
           password: "",
           userType: "advertiser",
         });
-        router.push(`/admins`);
+        router.push(`/admin`);
       }
     });
     setIsLoading(false);
@@ -70,9 +70,9 @@ const LoginPage = () => {
       <div className="col-span-2 lg:col-span-1 overflow-y-scroll">
         <div className="p-6 md:p-16 h-full flex flex-col justify-center">
           <Image
-            src={"/assets/logo-icon.png"}
-            height={50}
-            width={50}
+            src={"/images/logo.png"}
+            height={100}
+            width={120}
             alt="logo"
           />
           <h1 className="font-bold text-[35px] mt-6">Admin Login</h1>
@@ -90,7 +90,7 @@ const LoginPage = () => {
               </div>
             )}
             <div className="flex flex-col gap-1">
-              <label className="text-[12px] text-primary-blue font-medium">
+              <label className="text-[12px] text-blue-600 font-medium">
                 Email Address
               </label>
               <input
@@ -106,7 +106,7 @@ const LoginPage = () => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-[12px] text-primary-blue font-medium">
+              <label className="text-[12px] text-blue-600 font-medium">
                 Password
               </label>
               <input
@@ -124,7 +124,7 @@ const LoginPage = () => {
             <div className="flex justify-end">
               <Link
                 href={"/auth/admin/forgot-password"}
-                className="text-[13px] text-primary-blue font-medium hover:underline"
+                className="text-[13px] text-blue-600 font-medium hover:underline"
               >
                 Forgot Password?
               </Link>
@@ -135,7 +135,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-primary-blue text-[13px] text-white font-medium border-4 border-white border-double rounded-lg hover:bg-primary-blue/80 disabled:bg-primary-blue/80 disabled:cursor-not-allowed py-3"
+              className="bg-blue-600 text-[13px] text-white font-medium border-4 border-white border-double rounded-lg hover:bg-blue-600 disabled:bg-blue-600 disabled:cursor-not-allowed py-3"
             >
               {isLoading ? "Please wait..." : "Login"}
             </button>
@@ -143,7 +143,7 @@ const LoginPage = () => {
 
           <p className="text-[13px] text-gray-500 mt-1">
             Don&apos;t have an account yet?
-            <span className="text-primary-blue font-semibold hover:underline">
+            <span className="text-blue-600 font-semibold hover:underline">
               {" "}
               <Link href={"/auth/admin/register"}>Register</Link>
             </span>
@@ -151,25 +151,25 @@ const LoginPage = () => {
         </div>
       </div>
 
-      <div className="col-span-1 hidden lg:block bg-primary-blue">
+      <div className="col-span-1 hidden lg:block bg-blue-700">
         <div className="h-full flex flex-col gap-14 px-10 py-14">
           <div className="relative h-full w-full overflow-hidden">
             <Image
-              src={"/assets/blue-logo-phone-mockup.png"}
+              src={"/images/blue-logo-phone-mockup.png"}
               className="z-30 scale-150"
               layout={"fill"}
               objectFit={"contain"}
               alt="phone-mockup"
             />
             <Image
-              src={"/assets/big-triangle-element.png"}
+              src={"/images/big-triangle-element.png"}
               className="absolute right-20 -bottom-20"
               height={200}
               width={200}
               alt="element"
             />
             <Image
-              src={"/assets/white-geometry-element.png"}
+              src={"/images/white-geometry-element.png"}
               className="absolute left-24 -top-4 opacity-30"
               height={140}
               width={140}

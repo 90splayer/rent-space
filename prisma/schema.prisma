@@ -29,6 +29,7 @@ model User{
   sex String?
   badge String?
   city String?
+  bank Bank?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   favoriteIds String[] @db.ObjectId
@@ -228,4 +229,22 @@ model Messages{
   read       Boolean  @default(false)
 
   message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+model Bank{
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  nairabalance   Int @default(0)
+  dollarbalance  Int @default(0)
+  userId         String @db.ObjectId  @unique
+  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions   Transactions[]
+}
+
+model Transactions{
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  amount         Int
+  bankId         String  @db.ObjectId
+  bank           Bank @relation(fields: [bankId], references: [id], onDelete: Cascade)
+  type           String
+  createdAt      DateTime   @default(now())
 }

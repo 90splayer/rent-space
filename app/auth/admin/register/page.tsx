@@ -48,9 +48,8 @@ const RegisterPage = () => {
       <div className="col-span-2 lg:col-span-1 overflow-y-scroll">
         <div className="px-6 py-20 md:px-16 md:py-24">
           <Image
-            src={"/assets/logo-icon.png"}
-            height={50}
-            width={50}
+            src={"/images/logo.png"}
+            height={100} width={120}
             alt="logo"
           />
           <h1 className="font-bold text-[35px] mt-6">Admin Sign up</h1>
@@ -125,7 +124,7 @@ const RegisterPage = () => {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-[12px] text-primary-blue font-medium">
+              <label className="text-[12px] text-blue-600 font-medium">
                 Confirm Password
               </label>
               <input
@@ -150,7 +149,7 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={!passwordMatch || isLoading}
-              className="bg-primary-blue text-[13px] text-white font-medium border-4 border-white border-double rounded-lg hover:bg-primary-blue/80 disabled:bg-primary-blue/80 py-3"
+              className="bg-blue-700 text-[13px] text-white font-medium border-4 border-white border-double rounded-lg hover:bg-gray-300 disabled:bg-gray-300 py-3"
             >
               {isLoading ? "Creating Account..." : "Create Account"}
             </button>
@@ -179,25 +178,25 @@ const RegisterPage = () => {
         </div>
       </div>
 
-      <div className="col-span-1 hidden lg:block bg-primary-blue">
+      <div className="col-span-1 hidden lg:block bg-blue-700">
         <div className="h-full flex flex-col gap-14 px-10 py-14">
           <div className="relative h-full w-full overflow-hidden">
             <Image
-              src={"/assets/blue-logo-phone-mockup.png"}
+              src={"/images/blue-logo-phone-mockup.png"}
               className="z-30 scale-150"
               layout={"fill"}
               objectFit={"contain"}
               alt="phone-mockup"
             />
             <Image
-              src={"/assets/big-triangle-element.png"}
+              src={"/images/big-triangle-element.png"}
               className="absolute right-20 -bottom-20"
               height={200}
               width={200}
               alt="element"
             />
             <Image
-              src={"/assets/white-geometry-element.png"}
+              src={"/images/white-geometry-element.png"}
               className="absolute left-24 -top-4 opacity-30"
               height={140}
               width={140}
