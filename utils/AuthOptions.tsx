@@ -30,12 +30,12 @@ export const authOptions: AuthOptions = {
             credentials: {
                 email: { label: "Email", type: "text", placeholder: "jsmith" },
                 password: { label: "Password", type: "password" },
-                userType: { label: "Username", type: "text", placeholder: "advertiser or influencer" },
+                userType: { label: "Usertype", type: "text", placeholder: "user or admin" },
             },
             async authorize(credentials, req) {
                 // Check if email, password, and userType are provided
                 if (!credentials?.email || !credentials.password || !credentials.userType) {
-                    throw new Error("Please provide an email & password");
+                    throw new Error("Please provide an email, password, and user type");
                 }
             
                 let user = null;
@@ -46,7 +46,7 @@ export const authOptions: AuthOptions = {
                             email: credentials.email,
                         },
                     });
-               } else if (credentials.userType === "admin") {
+                } else if (credentials.userType === "admin") {
                     user = await prisma.admin.findUnique({
                         where: {
                             email: credentials.email,
@@ -69,9 +69,45 @@ export const authOptions: AuthOptions = {
             },            
         }),  
     ],
+    callbacks: {
+        async jwt({ token, user, session}){
+            // console.log("jwt callback", {token, user, session});
+            // pass in user id and user type to token
+            if (user && 'userType' in user){
+                return {
+                    ...token,
+                    id: user.id,
+                    usertype: user.userType
+                }
+            }
+            return token
+        },
+        async session({ session, token, user }) {
+            // console.log("session callback", { session, token, user });
+        
+            // Check if session exists
+            if (token && 'usertype' in token) {
+                // Update session user with id and usertype from token
+                // session.user.usertype = token.usertype;
+        
+                return {
+                    ...session,
+                    user: {
+                        ...session.user,
+                        usertype: token.usertype
+                    }
+                };
+            }
+        
+            // If session doesn't exist, return unchanged session
+            return session;
+        },
+    },
+      
     secret: process.env.SECRET,
     session: {
         strategy: "jwt",
     },
     debug: process.env.NODE_ENV === "development",
 }
+

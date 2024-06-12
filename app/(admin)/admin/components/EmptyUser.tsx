@@ -5,7 +5,7 @@ const EmptyUser = () => {
     return (
         <div className="h-screen w-screen flex items-center justify-center bg-primary-gray">
             <div className="max-w-6xl mx-auto flex flex-col items-center justify-center px-6 text-center">
-                <Image src={'/assets/error-badge.png'} alt="unauthorized" width={200} height={200} className="animate__animated animate__bounceIn" />
+                <Image src={'/images/error-badge.png'} alt="unauthorized" width={200} height={200} className="animate__animated animate__bounceIn" />
                 <h1 className="text-[35px] font-bold">Ooops!</h1>
                 <p className="text-[16px] text-gray-500 mt-2 leading-[22px]">
                     You are not authorized to access the Admin dashboard. <br /> 

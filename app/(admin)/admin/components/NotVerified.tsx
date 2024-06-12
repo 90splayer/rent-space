@@ -35,7 +35,7 @@ const NotVerified: React.FC<IParams> = ({ user }) => {
     return (
         <div className="h-screen w-screen flex items-center justify-center bg-primary-gray">
             <div className="max-w-6xl mx-auto flex flex-col items-center justify-center px-6 text-center">
-                <Image src={'/assets/unverified-image.png'} alt="unauthorized" width={200} height={200} />
+                <Image src={'/images/unverified-image.png'} alt="unauthorized" width={200} height={200} />
                 <h1 className="text-[35px] font-bold">Email sent!</h1>
                 <p className="text-[16px] text-gray-500 mt-2 leadin-[22px]">
                     Please check your inbox and follow the instructions to verify  your account. <br />

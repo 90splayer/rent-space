@@ -29,7 +29,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (usertype === "admin") {
-      router.push(`/admins`);
+      router.push(`/admin`);
     }
 
     console.log(usertype);
@@ -52,7 +52,7 @@ const LoginPage = () => {
         setData({
           email: "",
           password: "",
-          userType: "advertiser",
+          userType: "admin",
         });
         router.push(`/admin`);
       }
@@ -157,7 +157,7 @@ const LoginPage = () => {
             <Image
               src={"/images/blue-logo-phone-mockup.png"}
               className="z-30 scale-150"
-              layout={"fill"}
+              fill
               objectFit={"contain"}
               alt="phone-mockup"
             />

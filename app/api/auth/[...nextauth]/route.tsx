@@ -32,7 +32,7 @@ const authOptions: AuthOptions = {
             credentials: {
                 email: { label: "Email", type: "text", placeholder: "jsmith" },
                 password: { label: "Password", type: "password" },
-                userType: { label: "Username", type: "text", placeholder: "advertiser or influencer" },
+                userType: { label: "Usertype", type: "text", placeholder: "user or admin" },
             },
             async authorize(credentials, req) {
                 // Check if email, password, and userType are provided

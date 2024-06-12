@@ -9,6 +9,7 @@ import {
   MdSpaceDashboard,
   MdOutlineFileUpload,
   MdOutlineClose,
+  MdWorkspacesOutline,
 } from "react-icons/md";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import { IoLogOut } from "react-icons/io5";
@@ -28,6 +29,9 @@ const Sidebar = () => {
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
+
+  // const storedSidebarExpanded = typeof localStorage !== 'undefined' ? localStorage.getItem("sidebar-expanded") : null;
+
 
   const storedSidebarExpanded = localStorage.getItem("sidebar-expanded");
   const [sidebarExpanded, setSidebarExpanded] = useState(
@@ -77,10 +81,10 @@ const Sidebar = () => {
       }`}
     >
       {/* <!-- SIDEBAR HEADER START --> */}
-      <div className="overflow-x-hidden relative flex items-center justify-between lg:justify-start gap-2 px-14 py-7 lg:py-8">
+      <div className="overflow-y-hidden relative flex items-center justify-between lg:justify-start gap-2 px-14 py-7 lg:py-8">
           <Link href={"/admins"}>
             <Image
-              src={"/assets/white-logo-version-1.png"}
+              src={"/images/logo.png"}
               alt="logo"
               width={110}
               height={110}
@@ -125,46 +129,46 @@ const Sidebar = () => {
                   )}
                 </li>
 
-                {/* Menu Item Pins */}
+                {/* Menu Item Spaces */}
                 <li className="relative">
                   <Link
-                    href={"/admins/pins/active-pins"}
+                    href={"/admins/spaces"}
                     className={`${
-                      pathname.includes("/admins/pins") ? "bg-white/10" : ""
+                      pathname.includes("/admins/spaces") ? "bg-white/10" : ""
                     } group relative flex items-center gap-2 rounded-sm py-3 px-14 text-[13px] font-medium duration-300 ease-in-out hover:bg-white/10`}
                   >
                     <span className="text-[17px]">
-                      <BiSolidCommentDetail />
+                    <MdWorkspacesOutline />
                     </span>
-                    Pins
+                    Spaces
                   </Link>
-                  {pathname.includes("/admins/pins") && (
+                  {pathname.includes("/admins/spaces") && (
                     <div className="absolute h-full w-[6px] bg-dashboard left-0 top-0"></div>
                   )}
                 </li>
 
-                {/* Menu Item Influencers */}
+                {/* Menu Item Users */}
                 <li className="relative">
                   <Link
-                    href={"/admins/influencers"}
+                    href={"/admins/users"}
                     className={`${
-                      pathname.includes("/admins/influencers") ? "bg-white/10" : ""
+                      pathname.includes("/admins/users") ? "bg-white/10" : ""
                     } group relative flex items-center gap-2 rounded-sm py-3 px-14 text-[13px] font-medium duration-300 ease-in-out hover:bg-white/10`}
                   >
                     <span className="text-[17px]">
                       <BsPersonBadgeFill />
                     </span>
-                    Influencers
+                    Users
                   </Link>
-                  {pathname.includes("/admins/influencers") && (
+                  {pathname.includes("/admins/users") && (
                     <div className="absolute h-full w-[6px] bg-dashboard left-0 top-0"></div>
                   )}
                 </li>
 
-                {/* Menu Item Advertisers */}
+                {/* Menu Item Admins */}
                 <li className="relative">
                   <Link
-                    href={"/admins/advertisers"}
+                    href={"/admins/admins"}
                     className={`${
                       pathname.includes("/admins/advertisers") ? "bg-white/10" : ""
                     } group relative flex items-center gap-2 rounded-sm py-3 px-14 text-[13px] font-medium duration-300 ease-in-out hover:bg-white/10`}
@@ -172,9 +176,9 @@ const Sidebar = () => {
                     <span className="text-[17px]">
                       <BsPersonBadgeFill />
                     </span>
-                    Advertisers
+                    Admins
                   </Link>
-                  {pathname.includes("/admins/advertisers") && (
+                  {pathname.includes("/admins/admins") && (
                     <div className="absolute h-full w-[6px] bg-dashboard left-0 top-0"></div>
                   )}
                 </li>

@@ -15,8 +15,6 @@ const DateComponent = () => {
     // Construct the formatted date string
     const formattedDate = `${dayOfWeek}, ${month} ${dayOfMonth}`;
 
-    console.log(formattedDate); // Output example: "Sunday, January 28"
-
     return (
         <p className="hidden lg:block" >{formattedDate}</p>
     )
