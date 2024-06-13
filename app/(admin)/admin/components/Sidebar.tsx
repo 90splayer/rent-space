@@ -147,6 +147,27 @@ const Sidebar = () => {
                   )}
                 </li>
 
+
+                {/* Menu Item Withdrawals */}
+                <li className="relative">
+                  <Link
+                    href={`/admins/withdrawals/approved-withdrawals`}
+                    className={`${
+                      pathname.includes("/admins/withdrawals/")
+                        ? "bg-white/10"
+                        : ""
+                    } group relative flex items-center gap-2 rounded-sm py-3 px-14 text-[13px] font-medium duration-300 ease-in-out hover:bg-white/10`}
+                  >
+                    <span className="text-[17px]">
+                      <MdOutlineFileUpload />
+                    </span>
+                    Withdrawals
+                  </Link>
+                  {pathname.includes("/admins/withdrawals/") && (
+                    <div className="absolute h-full w-[6px] bg-dashboard left-0 top-0"></div>
+                  )}
+                </li>
+
                 {/* Menu Item Users */}
                 <li className="relative">
                   <Link
@@ -207,26 +228,6 @@ const Sidebar = () => {
                   )}
                 </li>
 
-                {/* Menu Item Withdrawals */}
-                <li className="relative">
-                  <Link
-                    href={`/admins/withdrawals/approved-withdrawals`}
-                    className={`${
-                      pathname.includes("/admins/withdrawals/")
-                        ? "bg-white/10"
-                        : ""
-                    } group relative flex items-center gap-2 rounded-sm py-3 px-14 text-[13px] font-medium duration-300 ease-in-out hover:bg-white/10`}
-                  >
-                    <span className="text-[17px]">
-                      <MdOutlineFileUpload />
-                    </span>
-                    Withdrawals
-                  </Link>
-                  {pathname.includes("/admins/withdrawals/") && (
-                    <div className="absolute h-full w-[6px] bg-dashboard left-0 top-0"></div>
-                  )}
-                </li>
-
                 {/* Menu Item Account Settings */}
                 <li className="relative">
                   <Link
@@ -260,7 +261,7 @@ const Sidebar = () => {
                         Advertiser Account
                     </div> */}
           <div className="flex flex-col gap-1">
-            <p>&#169; PinnedAds {new Date().getFullYear()}</p>
+            <p>&#169; Rent Spaces {new Date().getFullYear()}</p>
             <p>All Rights Reserved.</p>
           </div>
         </div>
