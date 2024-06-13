@@ -46,34 +46,33 @@ const SpaceCard: React.FC<IParams> = ({space}) => {
         setLoading(true);
         setRejected(false);
         try {
-          // Call your POST function with form data
-          await axios.patch(`/api/admin/space/${space.id}/approve`, {status: "approved"});
-          toast.success("Space approved successfully!");
+            // Call your PATCH function with form data
+            await axios.patch(`/api/admin/space/${space.id}/approve`, {status: "approved"});
+            toast.success("Space approved successfully!");
+            router.push('/admin/spaces'); // Redirect to admin spaces page
         } catch (error: any) {
-          toast.error(`${error.response.data}`);
-      } finally {
-        setLoading(false);
-        router.push(`admin/spaces`);
-        window.location.reload();
-      }
-      };
-
-      const reject = async (e: { preventDefault: () => void }) => {
+            toast.error(`${error.response.data}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    const reject = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
         setLoading(true);
         setRejected(false);
         try {
-          // Call your POST function with form data
-          await axios.patch(`/api/admin/space/${space.id}/reject`, data);
-          toast.success("Space approved successfully!");
-          window.location.reload();
-          router.push(`admin/spaces`);
+            // Call your PATCH function with form data
+            await axios.patch(`/api/admin/space/${space.id}/reject`, data);
+            toast.success("Space rejected successfully!");
+            router.push('/admin/spaces'); // Redirect to admin spaces page
         } catch (error: any) {
-          toast.error(`${error.response.data}`);
-      } finally {
-        setLoading(false);
-      }
-      };
+            toast.error(`${error.response.data}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
 
   return (
     <div className="w-full flex flex-col items-center justify-start gap-5">
