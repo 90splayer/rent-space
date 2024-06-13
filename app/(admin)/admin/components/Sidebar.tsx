@@ -132,7 +132,7 @@ const Sidebar = () => {
                 {/* Menu Item Spaces */}
                 <li className="relative">
                   <Link
-                    href={"/admins/spaces"}
+                    href={"/admin/spaces"}
                     className={`${
                       pathname.includes("/admins/spaces") ? "bg-white/10" : ""
                     } group relative flex items-center gap-2 rounded-sm py-3 px-14 text-[13px] font-medium duration-300 ease-in-out hover:bg-white/10`}

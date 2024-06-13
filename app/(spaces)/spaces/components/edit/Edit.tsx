@@ -16,19 +16,6 @@ import Link from "next/link";
 import { statiesng } from "@/public/data/nigerian-states-and-cities";
 
 
-const formSchema = z.object({
-    name: z.string().min(1),
-    images: z.object({ url: z.string() }).array(),
-    price: z.coerce.number().min(1),
-    categories: z.string().array(),
-    room: z.number().min(1),
-    size: z.number().min(1),
-    toilet: z.number().min(1),
-    guest: z.number().min(1),
-    description: z.string().min(1),
-    location: z.string().min(1)
-  });
-
   interface EditProps {
     listing: SafeListing
   }

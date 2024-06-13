@@ -46,7 +46,7 @@ export default async function RootLayout({
         <Provider session={session}>
           <ToasterProvider />
                     <DashboardLayout>
-                        <div className='min-h-screen p-4 md:p-6 2xl:p-10 bg-dashboard'>
+                        <div className='p-4 md:p-6 2xl:p-10'>
                             {children}
                         </div>
                     </DashboardLayout>
