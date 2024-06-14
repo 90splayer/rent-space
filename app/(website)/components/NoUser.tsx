@@ -38,7 +38,6 @@ const NoUser: React.FC<NoUserProps> = ({
       />
       <div className="w-48 mt-4">
           <Button
-            outline
             label="Login"
             onClick={() => router.push('/')}
           />
