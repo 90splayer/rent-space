@@ -7,17 +7,18 @@ import { useRouter } from "next/navigation";
 
 import {  SafeUser, SafeOrder } from "@/app/types";
 
-import Heading from "@/app/(website)/components/listings/ListingHeading";
+import Heading from "@/app/(website)/components/Heading";
 import Container from "@/app/(website)/components/Container";
 import ListingCard from "@/app/(website)/components/listings/ListingCard";
+import { Reservation } from "@prisma/client";
 
 interface TripsClientProps {
-  orders: SafeOrder[],
+  trips: Reservation[],
   currentUser?: SafeUser | null,
 }
 
 const TripsClient: React.FC<TripsClientProps> = ({
-  orders,
+  trips,
   currentUser
 }) => {
   const router = useRouter();
@@ -40,12 +41,12 @@ const TripsClient: React.FC<TripsClientProps> = ({
   }, [router]);
 
   return (
-    <Container>
+    <div className="max-w-[2520px] min-h-[90vh] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 py-24">
       <Heading
         title="Trips"
         subtitle="Where you've been and where you're going"
       />
-      <div 
+      {/* <div 
         className="
           mt-10
           grid 
@@ -58,7 +59,7 @@ const TripsClient: React.FC<TripsClientProps> = ({
           gap-8
         "
       >
-        {orders.map((reservation: any) => (
+        {trips.map((reservation: any) => (
           <ListingCard
             key={reservation.id}
             data={reservation.listing}
@@ -70,8 +71,28 @@ const TripsClient: React.FC<TripsClientProps> = ({
             currentUser={currentUser}
           />
         ))}
-      </div>
-    </Container>
+      </div> */}
+       <div 
+          className="
+            pt-10
+            py-28
+            grid 
+            grid-cols-1 
+            sm:grid-cols-2 
+            lg:grid-cols-3 
+            gap-8
+            items-center justify-center
+          "
+        >
+          {trips?.map((listing: any) => (
+            <ListingCard
+              currentUser={currentUser}
+              key={listing.id}
+              data={listing}
+            />
+          ))}
+        </div>
+    </div>
    );
 }
  

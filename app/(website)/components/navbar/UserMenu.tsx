@@ -106,7 +106,7 @@ interface UserMenuProps {
                         label='My Spaces'
                         />
                         <MenuItem 
-                        onClick={() => {router.push("/reservations"); toggleOpen();}}
+                        onClick={() => {router.push("/trips"); toggleOpen();}}
                         label='Trips'
                         />
                         <MenuItem 
@@ -157,7 +157,7 @@ interface UserMenuProps {
                         label='My Spaces'
                         />
                         <MenuItem 
-                        onClick={() => {router.push("/reservations"); toggleOpenSm();}}
+                        onClick={() => {router.push("/trips"); toggleOpenSm();}}
                         label='Trips'
                         />
                         <MenuItem 

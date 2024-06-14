@@ -23,6 +23,9 @@ const Map = dynamic(() => import('../Map'), {
   ssr: false 
 });
 
+
+const publicKey = "pk_test_b96250f93cd16b6252fcde41d61498e1f930f5e7"
+
 interface ListingInfoProps {
   listing: SafeListing;
   reservations: Reservation[] | null;
@@ -141,7 +144,6 @@ useEffect(() => {
   setData([]);
 }, [date]);
 
-const publicKey = "pk_test_b96250f93cd16b6252fcde41d61498e1f930f5e7"
 
     const componentProps = {
         email: user?.email || '', // Ensure email is defined or provide a default value
@@ -162,7 +164,7 @@ const publicKey = "pk_test_b96250f93cd16b6252fcde41d61498e1f930f5e7"
         toast.success("Space reserved successfully!");
         setDate(new Date());
         setData([]);
-        router.push('/trips')
+        router.refresh()
       } catch (error: any) {
         toast.error(`${error.response.data}`);
     } finally {
@@ -180,13 +182,19 @@ const publicKey = "pk_test_b96250f93cd16b6252fcde41d61498e1f930f5e7"
       <div className="lg:col-span-6 w-full flex flex-col items-center justify-start gap-2">
       <Calendar
         value={date}
-        tileDisabled={({ date }) => disabledDates.some((disabledDate) => isSameDay(disabledDate, date))}
         onChange={(value) => setDate(value as Date)}
         className="border-none"
         minDate={new Date()}
         tileClassName="border-none"
       />
       </div>
+
+      {times.length < 1? 
+      <div className="lg:col-span-4 w-full flex flex-col justify-start items-center gap-3">
+        <label className="text-md text-blue-300 font-medium">
+        No open times today 
+        </label>
+      </div> :
       <div className="lg:col-span-4 w-full flex flex-col justify-start items-center gap-3">
       <label className="text-md text-blue-300 font-medium">
         Available Times
@@ -203,7 +211,9 @@ const publicKey = "pk_test_b96250f93cd16b6252fcde41d61498e1f930f5e7"
         </div>
         ))}
       </div>
-      </div>
+      </div> 
+    }
+      
       </div>
       <div className="w-full text-gray-600 bg-gray-300 rounded-lg p-3 text-xs text-center">Be sure to arrive before agreed time</div> 
     </div>

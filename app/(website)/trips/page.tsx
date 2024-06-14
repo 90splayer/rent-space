@@ -6,9 +6,11 @@ import getCurrentUser from "@/actions/getCurrentUser";
 import getReservations from "@/actions/getReservations";
 
 import TripsClient from "./TripsClient";
+import getTrips from "@/actions/getTrips";
 
 const TripsPage = async () => {
   const currentUser = await getCurrentUser();
+  const trips = await getTrips();
 
   if (!currentUser) {
     return (
@@ -21,11 +23,20 @@ const TripsPage = async () => {
     );
   }
 
+  if (!trips) {
+    return (
+      <ClientOnly>
+        <EmptyState
+          title="No Trips made"
+          subtitle="Rent a space"
+        />
+      </ClientOnly>
+    );
+  }
+
   return (
     <ClientOnly>
-      <div>
-
-      </div>
+      <TripsClient trips={trips} currentUser={currentUser}/>
     </ClientOnly>
   );
 }
