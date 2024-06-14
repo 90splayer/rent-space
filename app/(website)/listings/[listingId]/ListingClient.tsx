@@ -29,7 +29,7 @@ interface ListingClientProps {
   listing: SafeListing & {
     user: SafeUser;
   }; 
-  currentUser?: SafeUser | null;
+  currentUser: SafeUser | null;
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({
@@ -77,62 +77,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
     return dates;
   }, [reservations]);
 
-  // const category = useMemo(() => {
-  //    return categories.find((items) => 
-  //     items.label === listing.category);
-  // }, [listing.category]);
 
-  
-
-  const onCreateReservation = async () => {
-    if (!currentUser) {
-      return loginModal.onOpen();
-    }
-    setIsLoading(true);
-
-    
-    const response = await axios.post('/api/checkout', {
-        totalPrice,
-        startDate: dateRange.startDate,
-        endDate: dateRange.endDate,
-        listingId: listing.id
-      })
-      
-      // axios.post('/api/reservations', {
-      //   totalPrice,
-      //   startDate: dateRange.startDate,
-      //   endDate: dateRange.endDate,
-      //   listingId: listing?.id
-      // })
-      // .then(() => {
-      //   toast.success('Listing reserved!');
-      //   setDateRange(initialDateRange);
-      // })
-      // .catch(() => {
-      //   toast.error('Something went wrong.');
-      // })
-      // .finally(() => {
-      //   setIsLoading(false);
-      // })
-      
-
-      window.location = response.data.url;
-  };
-
-  // useEffect(() => {
-  //   if (dateRange.startDate && dateRange.endDate) {
-  //     const dayCount = differenceInDays(
-  //       dateRange.endDate, 
-  //       dateRange.startDate
-  //     );
-      
-  //     if (dayCount && listing.price) {
-  //       setTotalPrice(dayCount * listing.price);
-  //     } else {
-  //       setTotalPrice(listing.price);
-  //     }
-  //   }
-  // }, [dateRange, listing.price]);
 
   return ( 
     <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 py-24">
@@ -161,8 +106,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
               listing={listing}
               reservations={reservations}
               locationValue={listing.title}
-              onSubmit={onCreateReservation}
               disabledDates={disabledDates}
+              user={currentUser}
             />
           </div>
         </div>

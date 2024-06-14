@@ -13,6 +13,11 @@ import { Listing, Reservation, User } from "@prisma/client";
 import ListingReservation from "./ListingReservation";
 import Button from "../Button";
 import Image from "next/image";
+import { PaystackButton } from 'react-paystack'
+import useLoginModal from "@/app/hooks/useLoginModal";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Map = dynamic(() => import('../Map'), { 
   ssr: false 
@@ -22,8 +27,8 @@ interface ListingInfoProps {
   listing: SafeListing;
   reservations: Reservation[] | null;
   locationValue: string;
-  onSubmit: () => void;
   disabledDates: Date[];
+  user: SafeUser | null;
 }
 
 interface ReservationData {
@@ -37,17 +42,21 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
   listing,
   reservations,
   locationValue,
-  onSubmit,
-  disabledDates
+  disabledDates,
+  user
 }) => {
+
+  const router = useRouter();
   const { getByValue } = useCountries();
   const [isLoading, setIsLoading] = useState(false);
-  const [dateRange, setDateRange] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(new Date());
   const [selectedTimes, setSelectedTimes] = useState<Date[]>([]);
   const [data, setData] = useState<ReservationData[]>([]);
   const duration = listing.minHours * selectedTimes.length;
   const filteredFeatures = features.filter(feature => listing.features.includes(feature.feature));
   const coordinates = getByValue(locationValue)?.latlng
+  const price = listing.price * duration;
+
   const handleSelect = (selectedTime: Date) => {
     setSelectedTimes((prevSelectedTimes) => {
       if (prevSelectedTimes.some((time) => isSameHour(time, selectedTime))) {
@@ -74,19 +83,19 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
       }
     });
   };
-  
+  const loginModal = useLoginModal();
 
 const isSelectedTime = (selectedTime: Date) => {
   return selectedTimes.some((time) => isSameHour(time, selectedTime));
 };
 
 const getOpenTimes = () => {
-  if (!dateRange) return [];
+  if (!date) return [];
 
   const openHour = listing.open;
   const closeHour = listing.close;
-  const openTime = dateRange <= new Date() ? addMilliseconds(endOfHour(new Date()), 1) : setHours(new Date(dateRange), openHour);
-  const closeTime = setHours(new Date(dateRange), closeHour);
+  const openTime = date <= new Date() ? addMilliseconds(endOfHour(new Date()), 1) : setHours(new Date(date), openHour);
+  const closeTime = setHours(new Date(date), closeHour);
 
   const interval = listing.minHours; // in hours
 
@@ -105,7 +114,7 @@ const getOpenTimes = () => {
   }
 
   const filteredDay = reservations?.filter(
-    (reservation) => isSameDay(new Date(reservation.startDate), new Date(dateRange))
+    (reservation) => isSameDay(new Date(reservation.startDate), new Date(date))
   );
 
   const filteredTimes = times?.filter((time) => {
@@ -118,12 +127,49 @@ const getOpenTimes = () => {
   return filteredTimes;
 };
 
+const onLogin = () => {
+  if (!user) {
+    return loginModal.onOpen();
+  }
+  setIsLoading(true);
+}
+
 const times = getOpenTimes();
 
 useEffect(() => {
   setSelectedTimes([]);
   setData([]);
-}, [dateRange]);
+}, [date]);
+
+const publicKey = "pk_test_b96250f93cd16b6252fcde41d61498e1f930f5e7"
+
+    const componentProps = {
+        email: user?.email || '', // Ensure email is defined or provide a default value
+        amount: price * 100, // Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+        publicKey, // Ensure publicKey is defined or provide a default value
+        text: "Pay Now",
+        onSuccess: () =>
+          onCreateReservation(),
+        onClose: () => alert("Wait! You need this oil, don't go!!!!"),
+    }
+
+    const onCreateReservation = async () => {
+      setIsLoading(true);
+    
+      try {
+        // Call your POST function with form data
+        await axios.post(`/api/checkout/${listing.id}`,  { reservations: data, price: price })
+        toast.success("Space reserved successfully!");
+        setDate(new Date());
+        setData([]);
+        router.push('/trips')
+      } catch (error: any) {
+        toast.error(`${error.response.data}`);
+    } finally {
+      setIsLoading(false);
+    }
+        
+    };
 
   return ( 
     <div className="flex w-full flex-col items-center justify-start gap-3">
@@ -133,9 +179,9 @@ useEffect(() => {
       <div className="lg:grid flex flex-col items-center justify-start lg:grid-cols-10 w-full gap-5">
       <div className="lg:col-span-6 w-full flex flex-col items-center justify-start gap-2">
       <Calendar
-        value={dateRange}
+        value={date}
         tileDisabled={({ date }) => disabledDates.some((disabledDate) => isSameDay(disabledDate, date))}
-        onChange={(value) => setDateRange(value as Date)}
+        onChange={(value) => setDate(value as Date)}
         className="border-none"
         minDate={new Date()}
         tileClassName="border-none"
@@ -187,12 +233,16 @@ useEffect(() => {
         </div>
       </div>
       <div className="p-4 w-full">
+        {!user || selectedTimes.length < 1? 
         <Button 
-          disabled={isLoading} 
-          label="Pay" 
-          onClick={onSubmit}
-        />
-      </div>
+          disabled={isLoading || selectedTimes.length < 1} 
+          label="Pay Now" 
+          onClick={onLogin}
+        /> :
+
+<PaystackButton className='w-full bg-primary-blue text-white text-small my-2 font-medium whitespace-nowrap rounded-lg px-4 py-3 hover:bg-primary-blue/80 disabled:bg-primary-blue/80' {...componentProps} />
+ }
+  </div>
     </div>
     </div>
       <div className="flex w-full items-center justify-start font-bold text-lg">Features</div>

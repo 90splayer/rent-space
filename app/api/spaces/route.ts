@@ -28,7 +28,8 @@ export async function POST(
       price,
       open,
       close,
-      slots
+      slots,
+      phone
    } = body;
 
   const listing = await prisma.listing.create({
@@ -47,7 +48,8 @@ export async function POST(
       userId: currentUser.id,
       open,
       close,
-      slots
+      slots,
+      phone
     }
   });
 

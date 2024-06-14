@@ -106,6 +106,7 @@ model Listing{
   description String?
   sizel  Int
   sizeb  Int
+  phone  Int
   location  String
   city  String
   street String
@@ -159,11 +160,10 @@ model Order {
   userId String @db.ObjectId
   listingId  String   @db.ObjectId
   intervals DateTime[] 
-  isPaid     Boolean   @default(false)
   duration    Int
   totalPrice  Int
-  phone      String    @default("")
-  address    String    @default("")
+  phone      Int  
+  address    String   
   createdAt DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
