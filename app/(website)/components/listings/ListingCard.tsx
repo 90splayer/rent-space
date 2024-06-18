@@ -115,7 +115,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           </div>
         </div>
         <div className="w-[325px] flex flex-row items-center justify-between">
-          <div className="text-base">{data.location}</div>
+          <div className="text-base">{data.title}</div>
           <div className="text-sm flex text-right">N{price}/hr</div>
         </div>
         <div className="flex flex-row justify-between">
