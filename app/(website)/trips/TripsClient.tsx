@@ -84,6 +84,7 @@ const TripsClient: React.FC<TripsClientProps> = ({
         >
           {trips?.map((trip: any) => (
             <TripsCard
+            key={trip.id}
               order={trip}
             />
           ))}
