@@ -159,6 +159,8 @@ model Order {
   id        String    @id @default(uuid()) @map("_id")
   userId String @db.ObjectId
   listingId  String   @db.ObjectId
+  listingName String
+  listingImage String[]
   intervals DateTime[] 
   duration    Int
   totalPrice  Int

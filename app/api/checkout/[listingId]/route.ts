@@ -68,6 +68,8 @@ const order = await prisma.order.create({
   data: {
     userId: currentUser.id,
     listingId: params.listingId,
+    listingName: listing.title,
+    listingImage: listing.images,
     intervals: intervals,
     duration: listing.minHours * reservations.length,
     totalPrice: price,

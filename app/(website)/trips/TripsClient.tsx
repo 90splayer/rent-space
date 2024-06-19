@@ -10,10 +10,11 @@ import {  SafeUser, SafeOrder } from "@/app/types";
 import Heading from "@/app/(website)/components/Heading";
 import Container from "@/app/(website)/components/Container";
 import ListingCard from "@/app/(website)/components/listings/ListingCard";
-import { Reservation } from "@prisma/client";
+import { Order, Reservation } from "@prisma/client";
+import TripsCard from "../components/trips/TripsCard";
 
 interface TripsClientProps {
-  trips: Reservation[],
+  trips: Order[],
   currentUser?: SafeUser | null,
 }
 
@@ -76,19 +77,14 @@ const TripsClient: React.FC<TripsClientProps> = ({
           className="
             pt-10
             py-28
-            grid 
-            grid-cols-1 
-            sm:grid-cols-2 
-            lg:grid-cols-3 
+            flex flex-col
             gap-8
             items-center justify-center
           "
         >
-          {trips?.map((listing: any) => (
-            <ListingCard
-              currentUser={currentUser}
-              key={listing.id}
-              data={listing}
+          {trips?.map((trip: any) => (
+            <TripsCard
+              order={trip}
             />
           ))}
         </div>

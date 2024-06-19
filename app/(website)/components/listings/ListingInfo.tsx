@@ -165,6 +165,7 @@ useEffect(() => {
         setDate(new Date());
         setData([]);
         router.refresh()
+        router.push('/trips')
       } catch (error: any) {
         toast.error(`${error.response.data}`);
     } finally {
@@ -227,7 +228,9 @@ useEffect(() => {
         </div>
       </div>
       <div className="rounded-lg border w-full p-2 flex flex-row items-center justify-between">
-        <h1 className=" text-gray-500">{listing.minHours}hrs</h1>
+        {listing.minHours>1 ? 
+        <h1 className=" text-gray-500">{listing.minHours}hrs</h1>:
+        <h1 className=" text-gray-500">{listing.minHours}hr</h1>}
         <h1 className="text-xs text-gray-500">min hours</h1>
       </div>
       <div className="flex flex-row w-full items-center justify-between">

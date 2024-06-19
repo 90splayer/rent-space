@@ -9,7 +9,7 @@ export default async function getTrips() {
       return null;
     }
 
-    const trips = await prisma.reservation.findMany({
+    const trips = await prisma.order.findMany({
       where: {
         userId: currentUser.id
       }
