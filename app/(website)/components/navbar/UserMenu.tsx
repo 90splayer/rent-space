@@ -6,13 +6,13 @@ import { MdWorkspacesOutline } from "react-icons/md";
 import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
-import { User } from '.prisma/client';
 import { signOut } from 'next-auth/react';
 import { SafeUser } from '@/app/types';
 import useRentModal from '@/app/hooks/useRentModal';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import image from '@/public/images/placeholder.jpg'
+import { CiLogin } from "react-icons/ci";
 
 interface UserMenuProps {
     currentUser?: SafeUser | null;
@@ -43,6 +43,13 @@ interface UserMenuProps {
         return loginModal.onOpen();
         }
         router.push('/spaces');
+    }, [currentUser, loginModal]);
+
+    const onUpload = useCallback(() => {
+        if(!currentUser){
+        return loginModal.onOpen();
+        }
+        router.push('/spaces/upload');
     }, [currentUser, loginModal]);
 
   const handleSignOut = async () => {
@@ -76,6 +83,12 @@ interface UserMenuProps {
     <div className='relative hidden md:block' ref={menuRef}>
         <div className='flex flex-row items-center gap-2'>
             <div 
+            onClick={onUpload}
+            className='hidden md:block text-sm font-semibold p-2 rounded-full hover:bg-blue-100 transition cursor-pointer'
+            >
+            Upload Space
+            </div>
+            <div 
             onClick={onRent}
             className='hidden md:block text-sm font-semibold p-2 rounded-full hover:bg-blue-100 transition cursor-pointer'
             >
@@ -88,11 +101,9 @@ interface UserMenuProps {
                 <div className='hidden md:block'>
                     {currentUser? 
                     <Avatar src={currentUser.image} name={currentUser.fname}/> :
-                    <Image  className="rounded-full"
+                    <CiLogin  className=""
                     height="30"
-                    width="30"
-                    alt="Avatar"
-                    src={image} />}
+                    width="30" />}
                 </div>
             </div>
         </div>

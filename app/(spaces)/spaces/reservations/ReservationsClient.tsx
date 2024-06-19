@@ -10,11 +10,12 @@ import { SafeReservation, SafeUser, SafeOrder } from "@/app/types"
 import Heading from "@/app/(website)/components/Heading";
 import Container from "@/app/(website)/components/Container";
 import ListingCard from "@/app/(website)/components/listings/ListingCard";
-import { Reservation } from "@prisma/client";
+import { Order, Reservation } from "@prisma/client";
+import TripsCard from "@/app/(website)/components/trips/TripsCard";
 
 interface ReservationsClientProps {
   currentUser?: SafeUser | null,
-  orders: Reservation[] | null
+  orders: Order[]
 }
 
 const ReservationsClient: React.FC<ReservationsClientProps> = ({
@@ -45,29 +46,19 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
         title="Reservations"
         subtitle="Bookings on your properties"
       />
-      <div 
-        className="
-          mt-10
-          grid 
-          grid-cols-1 
-          sm:grid-cols-2 
-          md:grid-cols-3 
-          lg:grid-cols-4
-          xl:grid-cols-5
-          2xl:grid-cols-6
-          gap-8
-        "
-      >
+       <div 
+          className="
+            pt-10
+            py-28
+            flex flex-col
+            gap-8
+            items-center justify-center
+          "
+        >
         {orders?.map((order: any) => (
-          <ListingCard
+          <TripsCard
             key={order.id}
-            data={order.listing}
             order={order}
-            actionId={order.id}
-            onAction={onCancel}
-            disabled={deletingId === order.id}
-            actionLabel="Cancel guest reservation"
-            currentUser={currentUser}
           />
         ))}
       </div>

@@ -161,6 +161,7 @@ model Order {
   listingId  String   @db.ObjectId
   listingName String
   listingImage String[]
+  listingOwner String
   intervals DateTime[] 
   duration    Int
   totalPrice  Int

@@ -7,6 +7,7 @@ import getReservations from "@/actions/getReservations";
 
 import TripsClient from "./ReservationsClient";
 import ReservationsClient from "./ReservationsClient";
+import getBookings from "@/actions/getBookings";
 
 const ReservationsPage = async () => {
   const currentUser = await getCurrentUser();
@@ -22,9 +23,9 @@ const ReservationsPage = async () => {
     )
   }
 
-  const reservations = await getReservations({});
+  const trips = await getBookings();
 
-  if (reservations?.length === 0) {
+  if (!trips || trips?.length === 0) {
     return (
       <ClientOnly>
         <EmptyState
@@ -38,7 +39,7 @@ const ReservationsPage = async () => {
   return (
     <ClientOnly>
       <ReservationsClient
-        orders={reservations}
+        orders={trips}
         currentUser={currentUser}
       />
     </ClientOnly>

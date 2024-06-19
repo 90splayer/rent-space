@@ -25,7 +25,7 @@ export async function POST(
     }
   })
 
-  const space = await prisma.user.findUnique({
+  const lister = await prisma.user.findUnique({
     where:{
       id: listing?.userId
     }
@@ -35,7 +35,7 @@ export async function POST(
     return NextResponse.error();
   }
 
-  if (!listing || !space) {
+  if (!listing || !lister) {
     return NextResponse.error();
   }
 
@@ -70,6 +70,7 @@ const order = await prisma.order.create({
     listingId: params.listingId,
     listingName: listing.title,
     listingImage: listing.images,
+    listingOwner: lister.id,
     intervals: intervals,
     duration: listing.minHours * reservations.length,
     totalPrice: price,
@@ -117,7 +118,7 @@ const mailClient = client.sendEmail({
 
 const mailSpace = client.sendEmail({
   "From": "register@pinnedads.com",
-  "To": space.email,
+  "To": lister.email,
   "Subject": "Space Order",
     "HtmlBody": `
     <div style="background-color: #EDECEB; padding: 35px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">
@@ -125,7 +126,7 @@ const mailSpace = client.sendEmail({
         
         <h1 style="color: #000000; text-align: left; font-size: 28px">Space Order</h1>
         
-        <p style="color: #000000; font-size: 14px; margin-top: 40px">Hello, ${space.fname}!</p>
+        <p style="color: #000000; font-size: 14px; margin-top: 40px">Hello, ${lister.fname}!</p>
         
         <p style="color: #000000; font-size: 14px; line-height: 22px"><strong>You have a new order. Thank you for hosting with Rent Spaces.</strong></p>
 
