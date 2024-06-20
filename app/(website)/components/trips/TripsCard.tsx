@@ -21,8 +21,9 @@ const TripsCard: React.FC<TripsCardProps> = ({
       onClick={() => router.push(`/trips/${order.id}`)} 
       className={`w-full flex flex-col rounded-lg p-4 border items-center justify-start md:grid md:grid-cols-3 cursor-pointer gap-3`}
     >
-         <div 
-          className=" col-span-1
+        <div className="col-span-1 flex flex-col items-center justify-start">
+        <div 
+          className="
             aspect-square 
             w-[325px] 
             h-[155px]
@@ -44,7 +45,11 @@ const TripsCard: React.FC<TripsCardProps> = ({
             alt="Listing"
           />
         </div>
+        <h1>{order.listingName}</h1>
+        </div>
+        
         <div className="col-span-1 flex flex-col items-center justify-center gap-3">
+            <h1>{format(order.intervals[0], "dd MMM yyyy")}</h1>
              {order.intervals.map((interval, i) => (
           <div
           key={i}
@@ -56,7 +61,6 @@ const TripsCard: React.FC<TripsCardProps> = ({
         </div>
         ))}</div>
         <div className="col-span-1 flex flex-col items-center justify-center">
-        {format(order.intervals[0], "dd MMM yyyy")}
         <h1>N{order.totalPrice}</h1>
         </div>
     </div>

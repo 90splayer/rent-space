@@ -1,200 +1,84 @@
 'use client';
 
-import qs from 'query-string';
-import dynamic from 'next/dynamic'
-import { useCallback, useMemo, useState } from "react";
-import { Range } from 'react-date-range';
-import { formatISO } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { MdLocationPin } from 'react-icons/md';
+import { GoArrowRight } from "react-icons/go";
+import { useCallback, useEffect, useState } from 'react';
+import useSearchModal from '@/app/hooks/useSearchModal';
 
-import useSearchModal from "@/app/hooks/useSearchModal";
-
-import Modal from "./Modal";
-import { categories } from "../navbar/Categories";
-import Calendar from "../inputs/Calendar";
-import CategoryInput from '../inputs/CategoryInput';
-import Counter from "../inputs/Counter";
-import CountrySelect, { 
-  CountrySelectValue
-} from "../inputs/CountrySelect";
-import Heading from '../listings/ListingHeading';
-
-enum STEPS {
-  CATEGORY = 0,
-  LOCATION = 1,
-  DATE = 2,
+interface SearchModalProps {
+  isOpen?: boolean;
+  onClose: () => void;
+  disabled?: boolean;
+  onSubmit: () => void;
 }
 
 const SearchModal = () => {
   const router = useRouter();
   const searchModal = useSearchModal();
-  const params = useSearchParams();
-
-  const [step, setStep] = useState(STEPS.CATEGORY);
-
-  const [location, setLocation] = useState<CountrySelectValue>();
-  const [category, setCategory] = useState('');
-//   const [roomCount, setRoomCount] = useState(1);
-//   const [bathroomCount, setBathroomCount] = useState(1);
-  const [dateRange, setDateRange] = useState<Range>({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: 'selection'
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState({
+    activity: '',
+    location: ''
   });
 
-  const Map = useMemo(() => dynamic(() => import('../Map'), { 
-    ssr: false 
-  }), [location]);
 
-  const onBack = useCallback(() => {
-    setStep((value) => value - 1);
-  }, []);
-
-  const onNext = useCallback(() => {
-    setStep((value) => value + 1);
-  }, []);
-
-  const onSubmit = useCallback(async () => {
-    if (step !== STEPS.DATE) {
-      return onNext();
+  const handleSubmit = useCallback(() => {
+    if (isLoading) {
+      return;
     }
-
-    let currentQuery = {};
-
-    if (params) {
-      currentQuery = qs.parse(params.toString())
-    }
-
-    const updatedQuery: any = {
-      ...currentQuery,
-      locationValue: location?.value,
-      category,
-    //   guestCount,
-    //   roomCount,
-    //   bathroomCount
-    };
-
-    if (dateRange.startDate) {
-      updatedQuery.startDate = formatISO(dateRange.startDate);
-    }
-
-    if (dateRange.endDate) {
-      updatedQuery.endDate = formatISO(dateRange.endDate);
-    }
-
-    const url = qs.stringifyUrl({
-      url: '/',
-      query: updatedQuery,
-    }, { skipNull: true });
-
-    setStep(STEPS.CATEGORY);
-    searchModal.onClose();
-    router.push(url);
-  }, 
-  [
-    step, 
-    searchModal, 
-    location, 
-    router, 
-    // guestCount, 
-    // roomCount,
-    // bathroomCount,
-    dateRange,
-    onNext,
-    params
-  ]);
-
-  const actionLabel = useMemo(() => {
-    if (step === STEPS.DATE) {
-      return 'Search'
-    }
-
-    return 'Next'
-  }, [step]);
-
-  const secondaryActionLabel = useMemo(() => {
-    if (step === STEPS.CATEGORY) {
-      return undefined
-    }
-
-    return 'Back'
-  }, [step]);
-
-  let bodyContent =  (
-    <div className="flex flex-col gap-8">
-      <Heading
-        title="Which of these best describes your space?"
-        subtitle="Pick a category"
-      />
-      <div 
-        className="
-          grid 
-          grid-cols-1 
-          md:grid-cols-2 
-          gap-3
-          max-h-[50vh]
-          overflow-y-auto
-        "
-      >
-        {categories.map((item) => (
-            <div key={item.label} className="col-span-1">
-               <CategoryInput
-               onClick={(value) => setCategory(value)}
-               selected={category == item.label}
-               label={item.label}
-               icon={item.icon}
-               />
-            </div>
-        ))}
-      </div>
-    </div>
-  )
-
-  if (step === STEPS.DATE) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="When do you plan to go?"
-          subtitle="Make sure everyone is free!"
-        />
-        <Calendar
-          onChange={(value) => setDateRange(value.selection)}
-          value={dateRange}
-        />
-      </div>
-    )
-  }
-
-  if (step === STEPS.LOCATION){
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="Where do you wanna go?"
-          subtitle="Find the perfect location!"
-        />
-        <CountrySelect 
-          value={location} 
-          onChange={(value) => 
-            setLocation(value as CountrySelectValue)} 
-        />
-        <hr />
-        <Map center={location?.latlng} />
-      </div>
-    )
-  }
-
+    // Handle submit logic here
+  }, [isLoading]);
 
   return (
-    <Modal
-      isOpen={searchModal.isOpen}
-      title="Filters"
-      actionLabel={actionLabel}
-      onSubmit={onSubmit}
-      secondaryActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-      onClose={searchModal.onClose}
-      body={bodyContent}
-    />
+    <>
+      <div
+          className={`
+            justify-center 
+            items-center md:flex
+            hidden
+            overflow-x-hidden 
+            overflow-y-auto 
+            fixed 
+            inset-0 
+            z-40 
+            outline-none 
+            focus:outline-none 
+            pt-[74px] 
+            ${searchModal.isOpen ? ' translate-y-0' : 'duration-700 -translate-y-full '}
+          `}
+        >
+          <div className={`
+            relative 
+            w-full
+            h-full 
+          `}
+          > 
+          <div onClick={searchModal.onClose} className={`absolute w-full h-full bg-neutral-800/70 
+            ${searchModal.isOpen ? 'opacity-100 duration-700' : 'opacity-0 duration-500'}`}></div>
+            <div className={`w-full h-auto bg-blue-500 flex flex-row items-center justify-between px-16 py-3 duration-700
+               ${searchModal.isOpen? 'translate-y-0' : '-translate-y-16 '}
+            `}>
+              <div className=' flex flex-row items-center justify-start gap-2 text-white'>
+                <input  type='text'
+              placeholder='Enter your activity'
+              value={data.activity}
+              onChange={(e) => setData({...data, activity:e.target.value})} className='appearance-none bg-blue-500 focus:border-rose-500 placeholder:text-white focus:outline-none' />
+              </div>
+              <div className='flex flex-row items-center justify-end gap-2 text-white'>
+                <MdLocationPin size={18}/>
+                <input type='text'
+              placeholder='Where?'
+              value={data.location}
+              onChange={(e) => setData({...data, location:e.target.value})} className='appearance-none bg-blue-500 focus:border-rose-500 placeholder:text-white focus:outline-none' />
+              </div>
+              <div className='flex flex-row items-center justify-end gap-2 text-white'>
+                <button onClick={handleSubmit} className='bg-white rounded-md px-4 py-1 text-blue-500 flex flex-row items-center justify-center gap-2 text-sm'>Find Space <GoArrowRight size={18}/></button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </>
   );
 }
 
