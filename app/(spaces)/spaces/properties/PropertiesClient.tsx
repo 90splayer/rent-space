@@ -13,7 +13,7 @@ import ListingCard from "@/app/(website)/components/listings/ListingCard";
 
 interface PropertiesClientProps {
   listings: SafeListing[],
-  currentUser?: SafeUser | null,
+  currentUser: SafeUser,
 }
 
 const PropertiesClient: React.FC<PropertiesClientProps> = ({
@@ -45,6 +45,7 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
       <Heading
         title="Spaces"
         subtitle="List of your spaces"
+        user={currentUser}
       />
       <div 
         className="

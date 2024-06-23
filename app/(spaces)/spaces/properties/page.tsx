@@ -6,6 +6,8 @@ import getCurrentUser from "@/actions/getCurrentUser";
 import getListings from "@/actions/getListings";
 
 import PropertiesClient from "./PropertiesClient";
+import getListingsbyId from "@/actions/getListingsbyId";
+import getHostListings from "@/actions/getHostListings";
 
 const PropertiesPage = async () => {
   const currentUser = await getCurrentUser();
@@ -17,7 +19,7 @@ const PropertiesPage = async () => {
     />
   }
 
-  const listings = await getListings({ userId: currentUser.id });
+  const listings = await getHostListings();
 
   if (!listings || listings.length === 0) {
     return (
