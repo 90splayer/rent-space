@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import { SafeListing, SafeUser } from "@/app/types";
 
-import Heading from "@/app/(website)/components/listings/ListingHeading";
+import Heading from "@/app/(website)/components/Heading";
 import Container from "@/app/(website)/components/Container";
 import ListingCard from "@/app/(website)/components/listings/ListingCard";
 
@@ -45,7 +45,6 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
       <Heading
         title="Spaces"
         subtitle="List of your spaces"
-        user={currentUser}
       />
       <div 
         className="
