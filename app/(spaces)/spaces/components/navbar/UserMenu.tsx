@@ -48,6 +48,10 @@ interface UserMenuProps {
         };
     }, [menuRef]);
 
+    if(!currentUser){
+        return null
+    }
+
   return (
     <div className='relative'>
         <div className='flex flex-row items-center gap-3'>
@@ -63,7 +67,7 @@ interface UserMenuProps {
             >
                 <AiOutlineMenu/>
                 <div className='hidden md:block'>
-                    <Avatar src={currentUser?.image}/>
+                    <Avatar src={currentUser?.image} name={currentUser.fname}/>
                 </div>
             </div>
         </div>

@@ -69,13 +69,12 @@ const ProfileClient: React.FC<ProfileClientProps> = ({
         </div>
       </div>
 
-      <div className="md:col-span-5 w-full flex flex-col gap-5 h-full pt-8 px-8 overflow-y-scroll scrollbar-hide">
+      <div className="md:col-span-5 w-full flex flex-col gap-5 md:h-full pt-8 px-8 overflow-y-scroll scrollbar-hide">
         <div className="flex flex-row items-start justify-between">
         <div className="flex flex-col items-start justify-start gap-3">
           <h1 className="text-sm font-semibold">Hi {fname}</h1>
           {currentUser?.city? <p className="text-sm text-gray-400">{currentUser?.city}, {currentUser?.location}</p> : <p className="text-sm text-gray-400">{currentUser?.location}</p>}
         </div>
-        <Link href={"/settings/account-info"} className="border border-blue-500 text-blue-500 text-xs bg-blue-200 bg-opacity-50 rounded-lg px-3 py-1 cursor-pointer">Edit Details</Link>
         </div>
 
         <div className="flex flex-col items-start justify-start gap-3">

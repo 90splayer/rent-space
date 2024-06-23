@@ -2,10 +2,6 @@
 const nextConfig = {
     experimental: {},
     images: {
-      domains: [
-        'avatars.githubusercontent.com',
-        'lh3.googleusercontent.com'
-      ],
       remotePatterns: [
       {
         protocol: 'https',

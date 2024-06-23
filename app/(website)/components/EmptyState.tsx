@@ -20,7 +20,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({
 
   return ( 
     <div 
-      className=" h-screen
+      className=" p-7
         flex 
         flex-col 
         gap-2 
@@ -28,10 +28,14 @@ const EmptyState: React.FC<EmptyStateProps> = ({
         items-center 
       "
     >
-      <Heading
-        title={title}
-        subtitle={subtitle}
-      />
+    <div className='text-start flex flex-col items-center gap-1 px-5'>
+    <div className="text-xl font-bold">
+       No exact matches
+    </div>
+    <div className="font-light text-neutral-500">
+       Try changing or removing some of your filters.
+    </div>
+    </div>
       <div className="w-48 mt-4">
         {showReset && (
           <Button

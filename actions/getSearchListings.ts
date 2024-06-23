@@ -1,21 +1,30 @@
 import prisma from "@/lib/prismadb";
 
-export interface IListingsParams {
+export interface SearchListingsParams {
+  location?: string;
   category?: string;
 }
 
-export default async function getListings(
-  params: IListingsParams
+export default async function getSearchListings(
+  params: SearchListingsParams
 ) {
   try {
     const {
-      category
+      category, location
     } = params;
 
     let query: any = {};
 
     if (category) {
-      query.category = { has: category };
+      query.category = { has: category.toLowerCase() };
+    }
+
+    if (location) {
+      query.OR = [
+        { location: { contains: location, mode: "insensitive" } },
+        { city: { contains: location, mode: "insensitive" } },
+        { street: { contains: location, mode: "insensitive" } },
+      ];
     }
 
     const listings = await prisma.listing.findMany({

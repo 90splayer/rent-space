@@ -183,7 +183,7 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
 
     if (currentPage === 1){
       body = (<div className="w-full flex flex-col gap-3 items-center justify-start">
-         <div className='w-full grid grid-cols-10'>
+         <div className='w-full lg:grid lg:grid-cols-10 lg:items-start flex flex-col items-center justify-start'>
      <div className=" col-span-6 w-full flex flex-col gap-3 items-start justify-start">
      <h1 className="text-gray-500 font-light text-base">1. Add images of your space. Images are viewed in landscape</h1>
      <ImageUpload value={selectedImages} 
@@ -209,7 +209,7 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
       {categories.map((category) => (
          <div
          key={category.label}
-         onClick={() => handleClick(category.label)}
+         onClick={() => handleClick(category.label.toLowerCase())}
          className={`
            flex 
            flex-col 
@@ -220,8 +220,8 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
            hover:text-blue-800
            transition
            cursor-pointer
-           ${selectedCategories.includes(category.label) ? 'border rounded-lg border-b-blue-800' : 'border-transparent'}
-           ${selectedCategories.includes(category.label) ? 'text-blue-800' : 'text-neutral-500'}
+           ${selectedCategories.includes(category.label.toLowerCase()) ? 'border rounded-lg border-b-blue-800' : 'border-transparent'}
+           ${selectedCategories.includes(category.label.toLowerCase()) ? 'text-blue-800' : 'text-neutral-500'}
          `}
        >
       <category.icon size={26}/>
@@ -315,24 +315,23 @@ if (currentPage === 2) {
       placeholder="Address"
     />
     </div>
-    <div className="grid grid-cols-7 gap-2 lg:gap-0 md:col-span-3 w-full">
-        <div className="col-span-5 flex flex-col items-start">
+    <div className="flex flex-col items-start justify-center gap-1 md:col-span-3 w-full">
         <label className="text-[12px] text-blue-300 font-medium">
             Size
           </label>
-          <div className="flex flex-row items-center justify-start w-full gap-3">
+          <div className=" grid grid-cols-7 items-center justify-start w-full">
     <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/3 text-center"
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 col-span-3 text-center"
       type="number"
       name="sizel"
       value={formData.sizel}
       onChange={handleChange}
       placeholder="lenght in foot"
     />
-    <h1>by</h1>
+    <h1 className=" text-center col-span-1">by</h1>
 
     <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-1/3 text-center"
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 col-span-3 text-center"
       type="number"
       name="sizeb"
       value={formData.sizeb}
@@ -341,20 +340,6 @@ if (currentPage === 2) {
     />
    
           </div>
-        </div>
-        <div className="col-span-2 flex flex-col items-start w-full">
-        <label className="text-[12px] text-blue-300 font-medium">
-            Rooms
-          </label>
-          <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-3 w-full text-center"
-      type="number"
-      name="room"
-      value={formData.room}
-      onChange={handleChange}
-      placeholder="rm count"
-    />
-        </div>
     </div>
    
     <div className="flex flex-col gap-1 items-start justify-center md:col-span-3 w-full">
@@ -370,48 +355,7 @@ if (currentPage === 2) {
       placeholder="Price per hour"
     />
     </div>
-  <div className="md:col-span-3 w-full grid grid-cols-3 item-center gap-2">
-  <div className="flex flex-col col-span-1 w-full gap-1">
-              <label className="text-[12px] text-blue-300 font-medium">
-                Open hour
-              </label>
-              <select
-                required
-                value={formData.open}
-                onChange={handleOpen}
-                className="text-small border bg-gray-100 font-semibold p-2 outline-none rounded-md placeholder:text-gray-400 focus:shadow-md"
-              >
-                <option value="" disabled hidden>
-                  Open At
-                </option>
-                {hours.map((hour) => (
-                  <option key={hour.key} value={hour.key}>
-                    {hour.time} {hour.description}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-col col-span-1 w-full gap-1">
-              <label className="text-[12px] text-blue-300 font-medium">
-                Close At
-              </label>
-              <select
-                required
-                value={formData.close}
-                onChange={handleClose}
-                className="text-small border bg-gray-100 font-semibold p-2 outline-none rounded-md placeholder:text-gray-400 focus:shadow-md"
-              >
-                <option value="" disabled hidden>
-                  Select hour
-                </option>
-                {hours.map((hour) => (
-                  <option key={hour.key} value={hour.key}>
-                    {hour.time} {hour.description}
-                  </option>
-                ))}
-              </select>
-            </div>
-    <div className="flex flex-col gap-1 items-start justify-center col-span-1">
+  <div className="flex flex-col gap-1 items-start justify-center md:col-span-3 w-full">
           <label className="text-[12px] text-blue-300 font-medium">
             Min hours
           </label>
@@ -423,9 +367,8 @@ if (currentPage === 2) {
       onChange={handleChange}
       placeholder="Min hours"
     />
-    </div>
   </div>
-  <div className="md:col-span-3 w-full grid grid-cols-3 item-center gap-2">
+  <div className="md:col-span-3 w-full grid grid-cols-2 item-center gap-2">
   <div className="flex flex-col col-span-1 w-full gap-1">
               <label className="text-[12px] text-blue-300 font-medium">
                 Open hour
@@ -466,9 +409,12 @@ if (currentPage === 2) {
                 ))}
               </select>
             </div>
-    <div className="flex flex-col gap-1 items-start justify-center col-span-1">
-          <label className="text-[12px] text-blue-300 font-medium">
-           Slots <h1 className="text-[7px]">(if you have similar spaces input the amount of similar spaces or leave as 1)</h1> 
+   
+  </div>
+  <div className="md:col-span-3 w-full">
+  <div className="flex flex-col gap-1 items-start justify-center col-span-1">
+          <label className="text-[12px] text-blue-300 font-medium flex flex-row items-end gap-1">
+           Slots <h1 className="text-[10px]">(similar spaces)</h1> 
           </label>
     <input
     className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-2 w-full text-center"

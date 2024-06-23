@@ -21,19 +21,19 @@ const Navbar: React.FC<NavbarProps> = ({
   const searchModal = useSearchModal();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-          searchModal.onClose();
-        }
-    };
+//   useEffect(() => {
+//     const handleClickOutside = (event: MouseEvent) => {
+//         if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+//           searchModal.onClose();
+//         }
+//     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+//     document.addEventListener('mousedown', handleClickOutside);
 
-    return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-    };
-}, [menuRef]);
+//     return () => {
+//         document.removeEventListener('mousedown', handleClickOutside);
+//     };
+// }, [menuRef]);
 
   return (
     <div className='fixed w-full bg-white z-50 shadow-sm'>
@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 <div 
                 className='flex flex-row items-center justify-between gap-3 md:gap-0'
                 >
-                  <div ref={menuRef} className='flex flex-row items-center justify-start gap-3'>
+                  <div ref={menuRef} className='flex flex-row items-end justify-start gap-3'>
                     <Logo/>
                     <Search listings={listings}/>
                     </div>

@@ -22,9 +22,9 @@ const Search: React.FC<IParams> = ({ listings }) => {
   };
 
   return (
-    <div onClick={onSearch} className="md:flex hidden flex-row items-center justify-center cursor-pointer">
-      <div className="flex items-center justify-between gap-2 text-center px-2 py-1">
-        <BiSearch size={18} />
+    <div onClick={onSearch} className="md:flex hidden flex-row items-end justify-center cursor-pointer">
+      <div className="flex items-center justify-center gap-1 text-center px-2 py-1 text-sm">
+        <BiSearch size={14} />
         <p>Search</p>
       </div>
     </div>

@@ -139,6 +139,11 @@ const onLogin = () => {
 
 const times = getOpenTimes();
 
+function capitalizeFirstLetter(word: string | null | undefined): string | null | undefined {
+  if (!word) return word; // Return null or undefined if word is falsy
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
 useEffect(() => {
   setSelectedTimes([]);
   setData([]);
@@ -264,6 +269,15 @@ useEffect(() => {
           <div key={i} className="col-span-1 flex flex-row items-center justify-center rounded-lg p-2 gap-2 border">
           <feature.icon size={18} />
           <p className="text-xs text-gray-500">{feature.feature}</p>
+        </div>
+        ))}
+      </div>
+      <div className="flex w-full items-center justify-start font-bold text-lg">Category</div>
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 w-full items-center justify-start text-sm gap-3">
+        {listing.category.map((feature, i) => (
+          <div key={i} className="col-span-1 flex flex-row items-center justify-center rounded-lg p-2 gap-2 border">
+          {/* <feature.icon size={18} /> */}
+          <p className="text-xs text-gray-500">{capitalizeFirstLetter(feature)}</p>
         </div>
         ))}
       </div>

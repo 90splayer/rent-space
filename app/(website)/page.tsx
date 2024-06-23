@@ -46,7 +46,7 @@ const Home = async ({ searchParams }: HomeProps) => {
             sm:grid-cols-2 
             lg:grid-cols-3 
             gap-8
-            items-center justify-center
+            items-center justify-center min-h-[90vh]
           "
         >
           {listings?.map((listing: any) => (

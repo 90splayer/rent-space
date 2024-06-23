@@ -1,25 +1,26 @@
 
 import EmptyState from "@/app/(website)/components/EmptyState";
 import ClientOnly from "@/app/(website)/components/ClientOnly";
-
-import getCurrentUser from "@/actions/getCurrentUser";
-import getListings from "@/actions/getListings";
-import getReservations from "@/actions/getReservations";
 import ProfileClient from "./ProfileClient";
-import getHostListings from "@/actions/getHostListings";
+import getUserById from "@/actions/getUserById";
+import getListingsbyId from "@/actions/getListingsbyId";
 
-const ProfilePage = async () => {
-  const currentUser = await getCurrentUser();
+interface IParams {
+  userId?: string;
+}
+
+const ProfilePage = async ({ params }: { params: IParams })  => {
+  const currentUser = await getUserById(params);
 
   if (!currentUser) {
     return <EmptyState
-      title="Unauthorized"
-      subtitle="Please login"
+      title="No User"
+      subtitle="No User found"
     />
   }
   
 
-  const listings = await getHostListings();
+  const listings = await getListingsbyId(params);
 
   return (
     <ClientOnly>

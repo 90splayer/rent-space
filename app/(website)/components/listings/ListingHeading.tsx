@@ -1,16 +1,19 @@
 'use client';
 
+import { SafeUser } from "@/app/types";
+import Link from "next/link";
+
 interface HeadingProps {
     title: string;
     subtitle?: string;
-    host?: string;
+    user: SafeUser;
 }
 
 const Heading: React.FC<HeadingProps> = ({
-    title, subtitle, host
+    title, subtitle, user
 }) => {
   // Get the first letter of the host's name and convert it to uppercase
-  const hostInitial = host?.charAt(0).toUpperCase();
+  const hostInitial = user.fname.charAt(0).toUpperCase();
 
   return (
     <div className="w-full flex flex-row justify-between items-center">
@@ -22,9 +25,9 @@ const Heading: React.FC<HeadingProps> = ({
             
         </div>
       </div>
-      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white text-lg font-bold">
+      <Link href={`/profile/${user.id}`} className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white text-lg font-bold">
         {hostInitial}
-      </div>
+      </Link>
     </div>
   )
 }

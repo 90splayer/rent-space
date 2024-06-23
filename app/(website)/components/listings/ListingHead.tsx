@@ -12,7 +12,7 @@ interface ListingHeadProps {
   title: string;
   locationValue: string;
   imageSrc: string;
-  host: string;
+  user: SafeUser;
   id: string;
   currentUser?: SafeUser | null
 }
@@ -21,7 +21,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
   title,
   locationValue,
   imageSrc,
-  host,
+  user,
   id,
   currentUser
 }) => {
@@ -34,7 +34,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
       <Heading
         title={title}
         subtitle={locationValue}
-        host={host}
+        user={user}
       />
       <div className="
           w-full

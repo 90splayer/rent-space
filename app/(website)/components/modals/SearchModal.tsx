@@ -5,6 +5,7 @@ import { MdLocationPin } from 'react-icons/md';
 import { GoArrowRight } from "react-icons/go";
 import { useCallback, useEffect, useState } from 'react';
 import useSearchModal from '@/app/hooks/useSearchModal';
+import qs from 'query-string';
 
 interface SearchModalProps {
   isOpen?: boolean;
@@ -21,14 +22,26 @@ const SearchModal = () => {
     activity: '',
     location: ''
   });
+  const squery: any = {
+    category: data.activity,
+    location: data.location
+  }
 
 
   const handleSubmit = useCallback(() => {
+
     if (isLoading) {
       return;
     }
-    // Handle submit logic here
-  }, [isLoading]);
+
+    const url = qs.stringifyUrl({
+      url: '/s/',
+      query: squery
+    }, { skipNull: true });
+
+    router.push(url);
+    searchModal.onClose()
+  }, [isLoading, router, squery]);
 
   return (
     <>
@@ -45,7 +58,7 @@ const SearchModal = () => {
             outline-none 
             focus:outline-none 
             pt-[74px] 
-            ${searchModal.isOpen ? ' translate-y-0' : 'duration-700 -translate-y-full '}
+            ${searchModal.isOpen ? ' translate-y-0' : 'duration-500 -translate-y-full '}
           `}
         >
           <div className={`
@@ -55,8 +68,8 @@ const SearchModal = () => {
           `}
           > 
           <div onClick={searchModal.onClose} className={`absolute w-full h-full bg-neutral-800/70 
-            ${searchModal.isOpen ? 'opacity-100 duration-700' : 'opacity-0 duration-500'}`}></div>
-            <div className={`w-full h-auto bg-blue-500 flex flex-row items-center justify-between px-16 py-3 duration-700
+            ${searchModal.isOpen ? 'opacity-100 duration-500' : 'opacity-0 duration-500'}`}></div>
+            <div className={`w-full h-auto bg-blue-500 flex flex-row items-center justify-between px-16 py-3 duration-500
                ${searchModal.isOpen? 'translate-y-0' : '-translate-y-16 '}
             `}>
               <div className=' flex flex-row items-center justify-start gap-2 text-white'>

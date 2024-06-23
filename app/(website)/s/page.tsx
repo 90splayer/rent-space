@@ -1,24 +1,42 @@
-import React from 'react'
+export const dynamic = 'force-dynamic'
 
 import Container from "@/app/(website)/components/Container";
 import ListingCard from "@/app/(website)/components/listings/ListingCard";
 import EmptyState from "@/app/(website)/components/EmptyState";
-
-import getListings, { 
-  IListingsParams
-} from "@/actions/getListings";
 import getCurrentUser from "@/actions/getCurrentUser";
 import ClientOnly from "../components/ClientOnly";
 import Categories from "../components/navbar/Categories";
+import { useDebounce } from 'use-debounce';
+import getSearchListings, { SearchListingsParams } from '@/actions/getSearchListings';
+import { useEffect } from "react";
+import SearchBar from "../components/SearchBar";
 
-interface HomeProps {
-  searchParams: IListingsParams
+interface SearchProps {
+  searchParams: SearchListingsParams
 };
 
 
-const Search = async ({ searchParams }: HomeProps) => {
-  const listings = await getListings(searchParams);
+const Search = async ({ searchParams }: SearchProps) => {
+  const listings = await getSearchListings(searchParams);
   const currentUser = await getCurrentUser();
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const fetchedListings = await getSearchListings(searchParams);
+  //       const fetchedCurrentUser = await getCurrentUser();
+
+  //       setListings(fetchedListings);
+  //       setCurrentUser(fetchedCurrentUser);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [searchParams]);
 
   if(!listings){
     return (
@@ -29,19 +47,20 @@ const Search = async ({ searchParams }: HomeProps) => {
   if (listings?.length === 0) {
     return (
       <ClientOnly>
+        <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 py-[74px] flex flex-col items-center justify-start gap-7 min-h-[90vh]">
+        <SearchBar/>
         <EmptyState showReset />
+        </div>
       </ClientOnly>
     );
   }
 
   return (
     <ClientOnly>
-    <Categories/>
-      <Container>
+    <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 py-[74px] flex flex-col items-center justify-start gap-7 min-h-[90vh]">
+    <SearchBar/>
         <div 
           className="
-            pt-52
-            py-28
             grid 
             grid-cols-1 
             sm:grid-cols-2 
@@ -58,7 +77,7 @@ const Search = async ({ searchParams }: HomeProps) => {
             />
           ))}
         </div>
-      </Container>
+      </div>
     </ClientOnly>
   )
 }
