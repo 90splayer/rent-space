@@ -6,6 +6,7 @@ import getCurrentUser from "@/actions/getCurrentUser";
 import getListings from "@/actions/getListings";
 import getReservations from "@/actions/getReservations";
 import HostClient from "./HostClient";
+import getHostListings from "@/actions/getHostListings";
 
 const HostPage = async () => {
   const currentUser = await getCurrentUser();
@@ -18,7 +19,7 @@ const HostPage = async () => {
   }
   
 
-  const listings = await getListings({ userId: currentUser.id });
+  const listings = await getHostListings();
 
   return (
     <ClientOnly>
