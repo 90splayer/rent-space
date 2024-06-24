@@ -1,23 +1,31 @@
 import { AiFillHome } from 'react-icons/ai'
-import { TbBeach, TbPool } from 'react-icons/tb';
+import { FaCloudSun, FaSwimmer, FaPodcast } from "react-icons/fa";
+import { CgGym } from "react-icons/cg";
+import { GrWorkshop } from "react-icons/gr";
 import {  
   GiGamepad, 
-  GiOfficeChair, 
-  GiSydneyOperaHouse, 
-  GiBlockHouse, 
-  GiForestCamp
+  GiOfficeChair,  
+  GiBlockHouse, GiLovers
 } from 'react-icons/gi';
+import { CgStudio } from "react-icons/cg";
+import { SiPolywork } from "react-icons/si";
+import { LuPartyPopper } from "react-icons/lu";
 import { FaHotel } from 'react-icons/fa';
 import { BsMusicNoteBeamed } from 'react-icons/bs';
 import { IoDiamond } from 'react-icons/io5';
 import { IoIosSchool } from 'react-icons/io';
-import { MdOutlineVilla, MdSportsSoccer, MdOutlineFoodBank } from 'react-icons/md';
+import { MdOutlineVilla, MdSportsSoccer, MdOutlineFoodBank, MdMeetingRoom, MdWarehouse } from 'react-icons/md';
 
 export const categories = [
     {
-      label: 'Beach',
-      icon: TbBeach,
-      description: 'This space is close to the beach!',
+      label: 'Warehouse',
+      icon: MdWarehouse,
+      description: 'This space is an open space for storage',
+    },
+    {
+      label: 'Studio',
+      icon: CgStudio,
+      description: 'This space is a studio!'
     },
     {
       label: 'Sports',
@@ -30,14 +38,24 @@ export const categories = [
       description: 'This space is modern!'
     },
     {
-      label: 'Music',
+      label: 'Music Studio',
       icon: BsMusicNoteBeamed,
       description: 'This space is a music studio!'
     },
     {
-      label: 'Pools',
-      icon: TbPool,
-      description: 'This space has a beautiful pool!'
+      label: 'Party',
+      icon: LuPartyPopper,
+      description: 'This space is for a party!'
+    },
+    {
+      label: 'Workspace',
+      icon: SiPolywork,
+      description: 'This space is for work!'
+    },
+    {
+      label: 'Wedding',
+      icon: GiLovers,
+      description: 'This space is for a wedding!'
     },
     {
       label: 'House',
@@ -50,14 +68,29 @@ export const categories = [
       description: 'This space is a hotel!'
     },
     {
+      label: 'Outdoor',
+      icon: FaCloudSun,
+      description: 'This space is a hotel!'
+    },
+    {
+      label: 'Apartment',
+      icon: FaSwimmer,
+      description: 'This space offers an apartment!'
+    },
+    {
+      label: 'Swimming',
+      icon: FaSwimmer,
+      description: 'This space offers water activities!'
+    },
+    {
       label: 'Eatery',
       icon: MdOutlineFoodBank,
       description: 'This space has a restuarant!'
     },
     {
-      label: 'Park',
-      icon: GiSydneyOperaHouse,
-      description: 'This space is a park!'
+      label: 'Meeting',
+      icon: MdMeetingRoom,
+      description: 'This space is a meeting room!'
     },
     {
       label: 'School',
@@ -65,9 +98,14 @@ export const categories = [
       description: 'This space is a school!'
     },
     {
-      label: 'Camping',
-      icon: GiForestCamp,
-      description: 'This space offers camping activities!'
+      label: 'Gym',
+      icon: CgGym,
+      description: 'This space offers a gym!'
+    },
+    {
+      label: 'Podcast',
+      icon: FaPodcast,
+      description: 'This space offers a podcast!'
     },
     {
       label: 'Art',
@@ -75,9 +113,14 @@ export const categories = [
       description: 'This space is in art environment!'
     },
     {
-      label: 'Office',
-      icon: GiOfficeChair,
-      description: 'This space is in an office!'
+      label: 'Workshop',
+      icon: GrWorkshop,
+      description: 'This space is in a workshop!'
+    },
+    {
+      label: 'Retail',
+      icon: GrWorkshop,
+      description: 'This space is in a workshop!'
     },
     {
       label: 'Game',

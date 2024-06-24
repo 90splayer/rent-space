@@ -47,7 +47,7 @@ const Search = async ({ searchParams }: SearchProps) => {
   if (listings?.length === 0) {
     return (
       <ClientOnly>
-        <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 py-[74px] flex flex-col items-center justify-start gap-7 min-h-[90vh]">
+        <div className="max-w-[2520px] mx-auto py-[74px] flex flex-col items-center justify-start gap-7 min-h-[90vh]">
         <SearchBar/>
         <EmptyState showReset />
         </div>

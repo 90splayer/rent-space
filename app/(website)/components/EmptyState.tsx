@@ -25,7 +25,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({
         flex-col 
         gap-2 
         justify-center 
-        items-center min-h-[60vh]
+        items-center min-h-[90vh]
       "
     >
     <div className='text-start flex flex-col items-center gap-1 px-5'>

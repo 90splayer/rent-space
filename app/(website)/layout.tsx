@@ -15,6 +15,7 @@ import { authOptions } from '@/utils/AuthOptions'
 import getListings from '@/actions/getListings'
 import prisma from "@/lib/prismadb";
 import Footer from './components/footer/Footer'
+import ClientOnly from './components/ClientOnly'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -49,11 +50,13 @@ export default async function RootLayout({
         <RentModal/>
         <LoginModal/>
         <RegisterModal/>
+        <ClientOnly>
         <Navbar currentUser={currentUser} listings={listings}/>
-        <div className=''>
+        <div className='min-h-[90vh]'>
         {children}
         </div>
         <Footer/>
+        </ClientOnly>
         </Provider>
         </body>
     </html>

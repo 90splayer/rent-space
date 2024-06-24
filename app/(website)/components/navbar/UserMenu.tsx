@@ -66,9 +66,6 @@ interface UserMenuProps {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
             }
-            if (menuRefSm.current && !menuRefSm.current.contains(event.target as Node)) {
-                setIsOpenSm(false);
-            }
         };
 
         document.addEventListener('mousedown', handleClickOutside);
@@ -80,7 +77,7 @@ interface UserMenuProps {
 
   return (
     <>
-    <div className='relative hidden md:block' ref={menuRef}>
+    <div className='relative block z-50' ref={menuRef}>
         <div className='flex flex-row items-center gap-2'>
             <div 
             onClick={onUpload}
@@ -90,7 +87,7 @@ interface UserMenuProps {
             </div>
             <div 
             onClick={onRent}
-            className='hidden md:block text-sm font-semibold p-2 rounded-full hover:bg-blue-100 transition cursor-pointer'
+            className='block text-sm font-semibold p-2 rounded-full hover:bg-blue-100 transition cursor-pointer'
             >
             <MdWorkspacesOutline size={24}/>
             </div>
@@ -98,7 +95,7 @@ interface UserMenuProps {
             onClick={toggleOpen} 
             className="flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
             >
-                <div className='hidden md:block'>
+                <div className='block'>
                     {currentUser? 
                     <Avatar src={currentUser.image} name={currentUser.fname}/> :
                     <CiLogin  className=""
@@ -107,14 +104,19 @@ interface UserMenuProps {
                 </div>
             </div>
         </div>
-        {isOpen && (
-            <div className='absolute rounded-xl shadow-md w-[40vw] md:w-56 bg-white overflow-hidden right-0 top-12 text-sm'>
+        <div className={`absolute rounded-xl shadow-md w-[40vw] md:w-56 bg-white overflow-hidden right-0 top-12 text-sm duration-500 z-40
+                ${isOpen ? ' translate-x-0' : 'translate-x-96'}
+              `}>
                 <div className='flex flex-col cursor-pointer'>
                     {currentUser ? (
                         <>
                         <MenuItem 
                         onClick={() => {router.push("/spaces"); toggleOpen();}}
                         label='My Spaces'
+                        />
+                        <MenuItem 
+                        onClick={() => {router.push("/spaces/upload"); toggleOpen();}}
+                        label='Upload Space'
                         />
                         <MenuItem 
                         onClick={() => {router.push("/trips"); toggleOpen();}}
@@ -149,9 +151,8 @@ interface UserMenuProps {
                     
                 </div>
             </div>
-        )}
     </div>
-    <div className='md:hidden block relative' ref={menuRefSm}>
+    {/* <div className='md:hidden block relative' ref={menuRefSm}>
         <AiOutlineMenu size={24} 
             onClick={toggleOpenSm} className='cursor-pointer'/>
              {isOpenSm && (
@@ -159,10 +160,6 @@ interface UserMenuProps {
                 <div className='flex flex-col cursor-pointer'>
                     {currentUser ? (
                         <>
-                        <MenuItem 
-                        onClick={() => {router.push("/spaces"); toggleOpenSm();}}
-                        label='Search'
-                        />
                         <MenuItem 
                         onClick={() => {router.push("/spaces"); toggleOpenSm();}}
                         label='My Spaces'
@@ -201,7 +198,7 @@ interface UserMenuProps {
                 </div>
             </div>
         )}
-    </div>
+    </div> */}
     </>
   )
 }
