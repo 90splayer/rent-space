@@ -5,7 +5,7 @@ import React, { useCallback, useState } from 'react'
 import qs from 'query-string';
 import { MdLocationPin } from 'react-icons/md';
 import { GoArrowRight } from 'react-icons/go';
-import { categories } from './navbar/Categories';
+import { categories } from '@/public/data/categories';
 import CategorySearchBox from './CategorySearchBox';
 
 const SearchBar = () => {
