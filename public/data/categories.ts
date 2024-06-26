@@ -2,19 +2,18 @@ import { AiFillHome } from 'react-icons/ai'
 import { FaCloudSun, FaSwimmer, FaPodcast } from "react-icons/fa";
 import { CgGym } from "react-icons/cg";
 import { GrWorkshop } from "react-icons/gr";
-import {  
-  GiGamepad, 
-  GiOfficeChair,  
-  GiBlockHouse, GiLovers
+import {  GiChurch,  
+  GiBlockHouse, GiLovers, GiFarmer
 } from 'react-icons/gi';
+import { ImOffice } from "react-icons/im";
 import { CgStudio } from "react-icons/cg";
 import { SiPolywork } from "react-icons/si";
 import { LuPartyPopper } from "react-icons/lu";
 import { FaHotel } from 'react-icons/fa';
 import { BsMusicNoteBeamed } from 'react-icons/bs';
-import { IoDiamond } from 'react-icons/io5';
+import { CiShop } from 'react-icons/ci';
 import { IoIosSchool } from 'react-icons/io';
-import { MdOutlineVilla, MdSportsSoccer, MdOutlineFoodBank, MdMeetingRoom, MdWarehouse } from 'react-icons/md';
+import { MdOutlineVilla, MdSportsSoccer, MdOutlineFoodBank, MdMeetingRoom, MdWarehouse, MdCorporateFare, MdApartment } from 'react-icons/md';
 
 export const categories = [
     {
@@ -33,12 +32,7 @@ export const categories = [
       description: 'This space is a sports space!',
     },
     {
-      label: 'Modern',
-      icon: MdOutlineVilla,
-      description: 'This space is modern!'
-    },
-    {
-      label: 'Music Studio',
+      label: 'Music',
       icon: BsMusicNoteBeamed,
       description: 'This space is a music studio!'
     },
@@ -74,7 +68,7 @@ export const categories = [
     },
     {
       label: 'Apartment',
-      icon: FaSwimmer,
+      icon: MdApartment,
       description: 'This space offers an apartment!'
     },
     {
@@ -113,23 +107,23 @@ export const categories = [
       description: 'This space is in art environment!'
     },
     {
-      label: 'Workshop',
-      icon: GrWorkshop,
-      description: 'This space is in a workshop!'
-    },
-    {
       label: 'Retail',
-      icon: GrWorkshop,
+      icon: CiShop,
       description: 'This space is in a workshop!'
     },
     {
-      label: 'Game',
-      icon: GiGamepad,
-      description: 'This space is a game house!'
+      label: 'Professional',
+      icon: MdCorporateFare,
+      description: 'This space is a proffesional space!'
     },
     {
-      label: 'Lux',
-      icon: IoDiamond,
-      description: 'This space is brand new and luxurious!'
+      label: 'Farm',
+      icon: GiFarmer,
+      description: 'This space is a farm space!'
+    },
+    {
+      label: 'Religious',
+      icon: GiChurch,
+      description: 'This space is a religious space!'
     }
   ]

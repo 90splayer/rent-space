@@ -32,6 +32,8 @@ export async function POST(
       phone
    } = body;
 
+   const setPhone = phone===0? currentUser.number : phone
+
   const listing = await prisma.listing.create({
     data: {
       title: name,
@@ -49,7 +51,7 @@ export async function POST(
       open,
       close,
       slots,
-      phone
+      phone: Number(setPhone)
     }
   });
 

@@ -12,28 +12,7 @@ import { hours } from '@/public/data/hour';
 import Image from "next/image";
 
 
-const formSchema = z.object({
-    name: z.string().min(1),
-    images: z.object({ url: z.string() }).array(),
-    price: z.coerce.number().min(1),
-    categories: z.string().array(),
-    room: z.number().min(1),
-    size: z.number().min(1),
-    toilet: z.number().min(1),
-    guest: z.number().min(1),
-    description: z.string().min(1),
-    location: z.string().min(1)
-  });
   
-type UploadFormValues = z.infer<typeof formSchema>
-
-enum STEPS {
-    NAMING = 0,
-    VISUAL = 1,
-    NUMBERS = 2,
-    SUMMARY = 3,
-}
-
 const uploadPreset = "d9m4ivxo";
 
 const Upload = () => {
@@ -45,6 +24,7 @@ const Upload = () => {
     const [selectedImages, setSelectedImages] = useState<any[]>([]);
     const [selectedOption, setSelectedOption] = useState("");
     const [cities, setCities] = useState<string[]>([]);
+    const [phone, setPhone] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         category: selectedCategories,
@@ -58,8 +38,9 @@ const Upload = () => {
         hours: 3,
         price: 7000,
         open: 8,
-        close: 10,
+        close: 20,
         slots: 1,
+        phone: 0
       });
 
     const handleClick = (categoryLabel: any) => {
@@ -104,7 +85,8 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
       price: 7000,
       open: 8,
       close: 10,
-      slots: 1
+      slots: 1,
+      phone: 0,
     });
     setSelectedCategories([]);
     setSelectedImages([]);
@@ -239,7 +221,7 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
       text-white text-xs leading-[30px] rounded-lg px-4 py-1
       ${(selectedCategories.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
       `} onClick={nextPage}>
-        Next
+        Foward
       </button>
     </div>)
     }
@@ -426,16 +408,41 @@ if (currentPage === 2) {
     />
     </div>
   </div>
+  <div className="md:col-span-3 w-full">
+  <div className="flex flex-row items-center justify-start gap-3 col-span-1">
+    <input
+    className="bg-inherit"
+      type="checkbox"
+      name="slots"
+      onChange={() => setPhone(!phone)}
+    />
+    <h1 className="text-xs">Is Space phone number different from personal number?</h1> 
+    </div> </div>
+    <div className="md:col-span-3 w-full">
+    {phone && <div className="flex flex-col gap-1 items-start justify-center col-span-1">
+          <label className="text-[12px] text-blue-300 font-medium flex flex-row items-end gap-1">
+           Phone 
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-2 w-full text-center"
+      type="number"
+      name="phone"
+      value={formData.phone}
+      onChange={handleChange}
+      placeholder="Space Phone Number"
+    />
+    </div>}
+  </div>
       </div>
         <div className='flex flex-row items-center justify-center gap-5'>
         <button 
          className={`
         text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
-        `} onClick={prevPage}>Prev</button>
+        `} onClick={prevPage}>Previous</button>
         <button disabled={selectedImages.length < 1 || selectedOption.length < 1} className={`
         text-white text-xs leading-[30px] rounded-lg px-4 py-1
         ${(!formData.name || selectedOption.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
-        `} onClick={lastPage}>Next</button>
+        `} onClick={lastPage}>Foward</button>
         </div>
       </div>
     );
@@ -481,11 +488,12 @@ if (currentPage === 2) {
     </div>
     <div className="col-span-5 flex flex-col items-start justify-start">
     <p className="text-3xl font-semibold">{formData.name}</p>
-    <p>{formData.sizel} x {formData.sizeb}</p>
-    <p>{formData.address}, {formData.city} {formData.state}.</p>
-    <p>Rooms: {formData.room}</p>
-    <p>Guest Count: {formData.hours}</p>
-    <p>Price Per Hour: {formData.price}</p>
+    <p className="text-sm">{formData.sizel} x {formData.sizeb}</p>
+    <p className="text-sm">{formData.address}, {formData.city} {formData.state}.</p>
+    <p className="text-sm">Slots: {formData.slots}</p>
+    <p className="text-sm">Guest Count: {formData.hours}</p>
+    <p className="text-sm">Price Per Hour: {formData.price}</p>
+    <p className="text-sm">Space Number: {formData.price}</p>
     </div>
     <div className=' col-span-2 flex flex-row items-center justify-center gap-5'>
     <button 
