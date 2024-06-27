@@ -27,14 +27,19 @@ const SettingsCard: React.FC<SettingsCardProps> = ({
   return (
     <Link href={link} 
       
-      className="col-span-1 cursor-pointer group"
+      className="col-span-1 cursor-pointer group w-full"
     >
-        <div className="flex flex-col w-full h-40 items-center justify-center 
-        text-center px-3 py-4 border-[1px] shadow-sm rounded-lg gap-2">
+        <div className="grid grid-rows-3 w-full h-40
+        border-[1px] shadow-sm rounded-lg">
+       
+        <div className="w-full text-gray-700  row-span-2 flex flex-col items-center justify-center gap-2">
         <Icon size={26} />
         <h2 className="font-semibold text-lg">{label}</h2>
-        <p className="font-light">{description}</p>
-       </div>
+        </div>
+        <div className="row-span-1 rounded-b-lg flex items-center justify-center bg-gray-500 w-full h-full">
+        <p className="font-light text-xs text-center text-white w-full">{description}</p>
+        </div>
+         </div>
   
     </Link>
    );

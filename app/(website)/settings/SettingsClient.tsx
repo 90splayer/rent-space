@@ -6,11 +6,9 @@ import { useRouter } from "next/navigation";
 import {  SafeUser } from "@/app/types";
 
 import Heading from "@/app/(website)/components/Heading";
-import Container from "@/app/(website)/components/Container";
 import SettingsCard from "../components/settings/SettingsCard";
 import { BsFillPersonVcardFill } from "react-icons/bs";
-import { GrSecure } from "react-icons/gr"
-import { MdOutlinePrivacyTip, MdPayment } from "react-icons/md";
+import { MdOutlinePrivacyTip, MdPayment, MdOutlineSecurity } from "react-icons/md";
 import { TbReceiptTax } from "react-icons/tb";
 import { AiOutlineGlobal, AiOutlineNotification } from "react-icons/ai";
 import { GoCrossReference } from "react-icons/go";
@@ -27,7 +25,7 @@ export const categories = [
   },
   {
     label: 'Login & Security',
-    icon: GrSecure,
+    icon: MdOutlineSecurity,
     description: 'Secure your account',
     link: '/settings/security'
   },
@@ -107,7 +105,7 @@ const SettingsClient: React.FC<SettingsClientProps> = ({
     <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 pt-28">
       <Heading
         title={`Hello ${fname}`}
-        subtitle='update space settings'
+        subtitle='Update space settings'
       />
       <div 
         className="

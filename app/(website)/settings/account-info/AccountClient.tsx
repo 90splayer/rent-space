@@ -35,11 +35,11 @@ const saveChanges = async (e: { preventDefault: () => void }) => {
     setLoading(true);
     try {
       // Call your POST function with form data
-      await axios.post("/api/profile", data);
-      toast.success("Space uploaded successfully!");
+      await axios.patch("/api/profile", data);
+      toast.success("User updated successfully!");
       setData(currentUser);
       router.push("/profile");
-      window.location.reload();
+      router.refresh()
     } catch (error: any) {
       toast.error(`${error.response.data}`);
   } finally {
@@ -66,7 +66,7 @@ const saveChanges = async (e: { preventDefault: () => void }) => {
         "
       >
          <div className="flex flex-col col-span-1">
-          <label className="text-[12px] text-blue-300 font-medium">
+          <label className="text-[12px] text-gray-600 font-medium">
                 First Name
               </label>
           <input
@@ -79,7 +79,7 @@ const saveChanges = async (e: { preventDefault: () => void }) => {
             />
           </div>
           <div className="flex flex-col col-span-1">
-          <label className="text-[12px] text-blue-300 font-medium">
+          <label className="text-[12px] text-gray-600 font-medium">
                 Last Name
               </label>
           <input
@@ -91,8 +91,8 @@ const saveChanges = async (e: { preventDefault: () => void }) => {
               onChange={handleChange}
             />
           </div>
-          <div className="flex flex-col col-span-2">
-          <label className="text-[12px] text-blue-300 font-medium">
+          <div className="flex flex-col col-span-1">
+          <label className="text-[12px] text-gray-600 font-medium">
                 Email Address
               </label>
           <input
@@ -104,8 +104,8 @@ const saveChanges = async (e: { preventDefault: () => void }) => {
               onChange={handleChange}
             />
           </div>
-          <div className="flex flex-col col-span-2">
-          <label className="text-[12px] text-blue-300 font-medium">
+          <div className="flex flex-col col-span-1">
+          <label className="text-[12px] text-gray-600 font-medium">
                 Number
               </label>
           <input
@@ -117,8 +117,8 @@ const saveChanges = async (e: { preventDefault: () => void }) => {
               onChange={handleChange}
             />
           </div>
-          <div className="flex flex-col col-span-2 w-full gap-1">
-              <label className="text-[12px] text-blue-300 font-medium">
+          <div className="flex flex-col col-span-1 w-full gap-1">
+              <label className="text-[12px] text-gray-600 font-medium">
                 Gender
               </label>
               <select
@@ -142,8 +142,8 @@ const saveChanges = async (e: { preventDefault: () => void }) => {
                   </option>
               </select>
             </div>
-            <div className="flex flex-col col-span-2 w-full gap-1">
-              <label className="text-[12px] text-blue-300 font-medium">
+            <div className="flex flex-col col-span-1 w-full gap-1">
+              <label className="text-[12px] text-gray-600 font-medium">
                 Country
               </label>
               <select
@@ -163,8 +163,8 @@ const saveChanges = async (e: { preventDefault: () => void }) => {
                 ))}
               </select>
             </div>
-            <div className="flex flex-col col-span-2 w-full gap-1">
-              <label className="text-[12px] text-blue-300 font-medium">
+            <div className="flex flex-col col-span-1 w-full gap-1">
+              <label className="text-[12px] text-gray-600 font-medium">
                 City
               </label>
               <select
