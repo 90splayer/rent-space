@@ -36,12 +36,6 @@ export const categories = [
     link: '/settings/payments'
   },
   {
-    label: 'Taxes',
-    icon: TbReceiptTax,
-    description: 'Manage taxpayer information and tax documents',
-    link: '/settings/taxes'
-  },
-  {
     label: 'Notifications',
     icon: AiOutlineNotification,
     description: 'Choose notification preferences and how you want to be contacted',
@@ -54,21 +48,9 @@ export const categories = [
     link: '/settings/privacy'
   },
   {
-    label: 'Global preferences',
-    icon: AiOutlineGlobal,
-    description: 'Set your default language, currency, and timezone',
-    link: '/settings/profile'
-  },
-  {
     label: 'Referral credit & coupon',
     icon: GoCrossReference,
     description: 'You have $0 referral credits and coupon. Learn more.',
-    link: '/settings/profile'
-  },
-  {
-    label: 'Proffesional hosting tools',
-    icon: IoStatsChartOutline,
-    description: 'Get proffesional tools if you manage several spaces',
     link: '/settings/profile'
   }
  

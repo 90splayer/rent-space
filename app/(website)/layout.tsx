@@ -20,8 +20,8 @@ import ClientOnly from './components/ClientOnly'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Rent Space',
-  description: 'Rent Space',
+  title: 'Spaces By The Hour',
+  description: 'Rent Spaces By The Hour',
 }
 
 const font = Nunito({

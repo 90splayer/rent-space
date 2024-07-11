@@ -100,14 +100,13 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
 }
 };
 
-
-    const nextPage = () => {
+    const nextPage = useCallback(() => {
       setCurrentPage((prevPage) => prevPage + 1);
-    };
-  
-    const prevPage = () => {
+    }, []);
+
+    const prevPage = useCallback(() => {
       setCurrentPage((prevPage) => prevPage - 1);
-    };
+    }, []);
 
     const lastPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);
@@ -164,18 +163,34 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
     let body
 
     if (currentPage === 1){
-      body = (<div className="w-full flex flex-col gap-3 items-center justify-start">
-         <div className='w-full lg:grid lg:grid-cols-10 lg:items-start flex flex-col items-center justify-start'>
-     <div className=" col-span-6 w-full flex flex-col gap-3 items-start justify-start">
-     <h1 className="text-gray-500 font-light text-base">1. Add images of your space. Images are viewed in landscape</h1>
+      body = (<div className="w-full flex flex-col items-center justify-start gap-7">
+         <div className="w-full flex flex-col h-[90%] border rounded-md p-4 items-center justify-center">
+     <h1 className="text-gray-500 font-light text-base">Add images of your space. Images are viewed in landscape</h1>
      <ImageUpload value={selectedImages} 
      disabled={loading} 
      onChange={handleImageChange}
      onRemove={handleImageRemove}
      />
-     </div>
-      <div className="col-span-4 flex flex-col gap-3 w-full items-start">
-        <h1 className="text-gray-500 font-light text-base">2. Select up to 3 specs that match your space</h1>
+    
+    </div>
+
+     {/* Navigation buttons */}
+     <button disabled={selectedImages.length < 1 }
+      className={`
+      text-white text-xs leading-[25px] rounded-lg px-4 py-1
+      ${(selectedImages.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
+      `} type="button" onClick={nextPage}>
+        Foward
+      </button>
+      </div>
+     )
+    }
+
+    if (currentPage === 2){
+      body =(
+      <div className="w-full flex flex-col items-center justify-start gap-7">
+        <div className="border rounded-md p-4 flex flex-col gap-3 w-full items-center justify-center">
+        <h1 className="text-gray-700 font-light text-base">Select up to 3 categories that match your space</h1>
       <div
       className=" 
         pt-4
@@ -214,23 +229,24 @@ const handleSubmit = async (e: { preventDefault: () => void }) => {
       ))}
     </div>
       </div>
-    </div>
-     {/* Navigation buttons */}
-     <button disabled={selectedImages.length < 1 || selectedCategories.length < 1}
-      className={`
-      text-white text-xs leading-[30px] rounded-lg px-4 py-1
-      ${(selectedCategories.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
-      `} onClick={nextPage}>
-        Foward
-      </button>
-    </div>)
+      <div className='flex flex-row items-center justify-center gap-5'>
+        <button 
+         className={`
+        text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
+        `} type="button" onClick={prevPage}>Previous</button>
+        <button disabled={selectedCategories.length < 1} className={`
+        text-white text-xs leading-[30px] rounded-lg px-4 py-1
+        ${selectedCategories.length < 1 ? 'bg-gray-500' : 'bg-blue-500'}
+        `} type="button" onClick={nextPage}>Foward</button>
+        </div>
+      </div>
+      )
     }
-
     
-if (currentPage === 2) {
+if (currentPage === 3) {
     body = (
       <div className="flex flex-col items-center justify-start gap-8 w-full">
-       <div className='w-full md:grid lg:grid-cols-9 md:grid-cols-6 flex flex-col gap-5 items-start'>
+       <div className='w-full md:grid lg:grid-cols-9 md:grid-cols-6 flex flex-col min-h-[90%] border rounded-md p-4 gap-5 items-center'>
           <div className="flex flex-col md:col-span-3 w-full">
           <label className="text-[12px] text-blue-300 font-medium">
                 Space Name
@@ -324,6 +340,65 @@ if (currentPage === 2) {
           </div>
     </div>
    
+  <div className="md:col-span-3 w-full">
+  <div className="flex flex-col gap-1 items-start justify-center col-span-1">
+          <label className="text-[12px] text-blue-300 font-medium flex flex-row items-end gap-1">
+           Slots <h1 className="text-[10px]">(similar spaces)</h1> 
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-2 w-full text-center"
+      type="number"
+      name="slots"
+      value={formData.slots}
+      onChange={handleChange}
+      placeholder="How many slots are available"
+    />
+    </div>
+  </div>
+  <div className="md:col-span-3 w-full flex items-center">
+  <div className="flex flex-row items-center justify-start gap-3 col-span-1">
+    <input
+    className="bg-inherit"
+      type="checkbox"
+      name="slots"
+      onChange={() => setPhone(!phone)}
+    />
+    <h1 className="text-xs">Is Space phone number different from personal number?</h1> 
+    </div> </div>
+    <div className="md:col-span-3 w-full">
+    {phone && <div className="flex flex-col gap-1 items-start justify-center col-span-1">
+          <label className="text-[12px] text-blue-300 font-medium flex flex-row items-end gap-1">
+           Phone 
+          </label>
+    <input
+    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-2 w-full text-center"
+      type="number"
+      name="phone"
+      value={formData.phone}
+      onChange={handleChange}
+      placeholder="Space Phone Number"
+    />
+    </div>}
+  </div>
+      </div>
+        <div className='flex flex-row items-center justify-center gap-5'>
+        <button 
+         className={`
+        text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
+        `} type="button" onClick={prevPage}>Previous</button>
+        <button disabled={!formData.name || !formData.address } className={`
+        text-white text-xs leading-[30px] rounded-lg px-4 py-1
+        ${!formData.name || !formData.address ? 'bg-gray-500' : 'bg-blue-500'}
+        `} type="button" onClick={nextPage}>Foward</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (currentPage === 4) {
+    body = (
+      <div className="flex flex-col items-center justify-start gap-8 w-full">
+       <div className='w-full md:grid lg:grid-cols-9 md:grid-cols-6 flex flex-col min-h-[90%] border rounded-md p-4 gap-5 items-center'>
     <div className="flex flex-col gap-1 items-start justify-center md:col-span-3 w-full">
           <label className="text-[12px] text-blue-300 font-medium">
             Price per hour
@@ -393,64 +468,24 @@ if (currentPage === 2) {
             </div>
    
   </div>
-  <div className="md:col-span-3 w-full">
-  <div className="flex flex-col gap-1 items-start justify-center col-span-1">
-          <label className="text-[12px] text-blue-300 font-medium flex flex-row items-end gap-1">
-           Slots <h1 className="text-[10px]">(similar spaces)</h1> 
-          </label>
-    <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-2 w-full text-center"
-      type="number"
-      name="slots"
-      value={formData.slots}
-      onChange={handleChange}
-      placeholder="How many slots are available"
-    />
-    </div>
-  </div>
-  <div className="md:col-span-3 w-full">
-  <div className="flex flex-row items-center justify-start gap-3 col-span-1">
-    <input
-    className="bg-inherit"
-      type="checkbox"
-      name="slots"
-      onChange={() => setPhone(!phone)}
-    />
-    <h1 className="text-xs">Is Space phone number different from personal number?</h1> 
-    </div> </div>
-    <div className="md:col-span-3 w-full">
-    {phone && <div className="flex flex-col gap-1 items-start justify-center col-span-1">
-          <label className="text-[12px] text-blue-300 font-medium flex flex-row items-end gap-1">
-           Phone 
-          </label>
-    <input
-    className="bg-inherit border border-gray-300 focus:border-primary-blue text-small rounded-lg p-2 w-full text-center"
-      type="number"
-      name="phone"
-      value={formData.phone}
-      onChange={handleChange}
-      placeholder="Space Phone Number"
-    />
-    </div>}
-  </div>
       </div>
         <div className='flex flex-row items-center justify-center gap-5'>
         <button 
          className={`
         text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
-        `} onClick={prevPage}>Previous</button>
-        <button disabled={selectedImages.length < 1 || selectedOption.length < 1} className={`
+        `} type="button" onClick={prevPage}>Previous</button>
+        <button disabled={!formData.open || !formData.close || !formData.hours} className={`
         text-white text-xs leading-[30px] rounded-lg px-4 py-1
-        ${(!formData.name || selectedOption.length < 1) ? 'bg-gray-500' : 'bg-blue-500'}
-        `} onClick={lastPage}>Foward</button>
+        ${!formData.open || !formData.close || !formData.hours ? 'bg-gray-500' : 'bg-blue-500'}
+        `} type="button" onClick={lastPage}>Foward</button>
         </div>
       </div>
     );
   }
 
-  if (currentPage === 3) {
+  if (currentPage === 5) {
     body = ( 
-   <div className="grid grid-cols-1 md:grid-cols-10 gap-3">
+   <div className="grid grid-cols-1 md:grid-cols-10 gap-3 border rounded-md p-4">
     <div className="col-span-3 flex flex-col items-center justify-start gap-3">
     <div className="mb-4 flex items-center gap-4">
       {formData.images.map((url) => (
@@ -499,11 +534,11 @@ if (currentPage === 2) {
     <button 
      className={`
     text-white text-xs leading-[30px] rounded-lg px-4 py-1 bg-blue-500
-    `} onClick={prevPage}>Previous</button>
-    <button className={`
+    `} type="button" onClick={prevPage}>Previous</button>
+    <button type="button" onClick={handleSubmit} className={`
     text-white text-xs leading-[30px] rounded-lg px-4 py-1
     ${'bg-blue-500'}
-    `} type="submit">Submit</button>
+    `} >Submit</button>
     </div>
    </div>)
   }
@@ -511,7 +546,7 @@ if (currentPage === 2) {
   
   return (
    <>
-   <form onSubmit={handleSubmit} className="flex border rounded-md p-4 min-h-[60vh] items-center justify-center">
+   <form className="flex w-full min-h-[60vh]">
     {body}
    </form>
       </>

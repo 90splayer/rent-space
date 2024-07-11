@@ -50,9 +50,9 @@ const ProfileClient: React.FC<ProfileClientProps> = ({
   return ( 
     <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 md:h-screen pt-28">
       <div 
-        className="md:grid md:grid-cols-7 flex flex-col w-full items-center justify-start overflow-hidden"
+        className="md:grid md:grid-cols-7 border rounded-lg flex flex-col w-full items-center justify-start overflow-hidden"
       >
-        <div className="md:col-span-2 w-full flex flex-col gap-4 items-center justify-start pt-8 px-8 h-full divide-y-[1px] divide-gray-100">
+        <div className="md:col-span-2 w-full flex flex-col gap-4 items-center justify-start py-8 px-8 h-full divide-y-[1px] divide-gray-100">
         <div className="w-full flex flex-col gap-2 items-center justify-start">{currentUser?.image? <Image src={currentUser?.image} alt="space profile image" 
         className="rounded-full" height="70" width="70"/> : letter()}
         <h2 className="font-semibold text-sm">{fname} {lname}</h2>
@@ -70,7 +70,7 @@ const ProfileClient: React.FC<ProfileClientProps> = ({
         </div>
       </div>
 
-      <div className="md:col-span-5 w-full flex flex-col gap-5 md:h-full pt-8 px-8 overflow-y-scroll scrollbar-hide">
+      <div className="md:col-span-5 w-full flex flex-col gap-5 md:h-full py-8 px-8 overflow-y-scroll scrollbar-hide">
         <div className="flex flex-col items-start justify-start gap-3">
         <h1 className="text-sm font-semibold">Top Spaces</h1> 
         { listings == null || listings?.length <= 0? <div>No spaces added yet</div>:
